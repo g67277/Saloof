@@ -1,0 +1,9 @@
+platform :ios, '8.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+pod "Koloda"
+pod 'ActionSheetPicker-3.0'
+pod 'RealmSwift', '~> 0.94'
+pod 'SwiftyJSON', '~> 2.2.0'
+pod 'IQKeyboardManager', '~> 3.2'

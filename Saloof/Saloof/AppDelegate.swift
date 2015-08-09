@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import IQKeyboardManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        var navBarAppearance = UINavigationBar.appearance()
+        navBarAppearance.tintColor = UIColor.whiteColor()
+        navBarAppearance.translucent = false
+        navBarAppearance.barStyle = .Black
+        navBarAppearance.barTintColor = UIColor(red: 249/255, green: 99/255, blue: 50/255, alpha: 1)
+        IQKeyboardManager.sharedManager().enable = true
+
         return true
     }
 

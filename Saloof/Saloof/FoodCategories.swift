@@ -1,0 +1,148 @@
+//
+//  FoodCategories.swift
+//  Saloof
+//
+//  Created by Nazir Shuqair on 7/28/15.
+//  Copyright (c) 2015 SNASTek. All rights reserved.
+//
+
+import UIKit
+
+class FoodCategories: NSObject {
+    
+    override init() {
+        
+        
+    }
+    
+    func loadCategories() -> (Array<String>){
+        
+        
+        var categoryArray = [
+            "Afghan Restaurant",
+            "African Restaurant",
+            "American Restaurant",
+            "Arepa Restaurant",
+            "Argentinian Restaurant",
+            "Asian Restaurant",
+            "Australian Restaurant",
+            "Austrian Restaurant",
+            "BBQ Joint",
+            "Bagel Shop@",
+            "Bakery",
+            "Belgian Restaurant",
+            "Bistro",
+            "Brazilian Restaurant",
+            "Breakfast Spot",
+            "Bubble Tea Shop",
+            "Buffet",
+            "Burger Joint",
+            "Burrito Place",
+            "Cafeteria",
+            "Café",
+            "Cajun / Creole",
+            "Cambodian Restaurant",
+            "Caribbean Restaurant",
+            "Chinese Restaurant",
+            "Coffee Shop",
+            "Comfort Food Restaurant",
+            "Creperie",
+            "Cuban Restaurant",
+            "Cupcake Shop",
+            "Czech Restaurant",
+            "Deli / Bodega",
+            "Dessert Shop",
+            "Diner",
+            "Distillery",
+            "Donut Shop",
+            "Dumpling Restaurant",
+            "Eastern European Restaurant",
+            "English Restaurant",
+            "Ethiopian Restaurant",
+            "Falafel Restaurant",
+            "Fast Food Restaurant",
+            "Filipino Restaurant",
+            "Fish & Chips Shop",
+            "Fondue Restaurant",
+            "Food Truck",
+            "Food",
+            "French Restaurant",
+            "Fried Chicken Joint",
+            "Gastropub",
+            "German Restaurant",
+            "Gluten-free Restaurant",
+            "Greek Restaurant",
+            "Halal Restaurant",
+            "Hawaiian Restaurant",
+            "Himalayan Restaurant",
+            "Hot Dog Joint",
+            "Hotpot Restaurant",
+            "Hungarian Restaurant",
+            "Ice Cream Shop",
+            "Indian Restaurant",
+            "Indonesian Restaurant",
+            "Irish Pub",
+            "Italian Restaurant",
+            "Japanese Restaurant",
+            "Jewish Restaurant",
+            "Juice Bar",
+            "Korean Restaurant",
+            "Kosher Restaurant",
+            "Latin American Restaurant",
+            "Mac & Cheese Joint",
+            "Malaysian Restaurant",
+            "Mediterranean Restaurant",
+            "Mexican Restaurant",
+            "Middle Eastern Restaurant",
+            "Modern European Restaurant",
+            "Molecular Gastronomy Restaurant",
+            "Mongolian Restaurant",
+            "Moroccan Restaurant",
+            "New American Restaurant",
+            "Pakistani Restaurant",
+            "Persian Restaurant",
+            "Peruvian Restaurant",
+            "Pie Shop",
+            "Pizza Place",
+            "Polish Restaurant",
+            "Portuguese Restaurant",
+            "Ramen / Noodle House",
+            "Restaurant",
+            "Romanian Restaurant",
+            "Russian Restaurant",
+            "Salad Place",
+            "Sandwich Place",
+            "Scandinavian Restaurant",
+            "Seafood Restaurant",
+            "Snack Place",
+            "Soup Place",
+            "South American Restaurant",
+            "Southern / Soul Food Restaurant",
+            "Souvlaki Shop",
+            "Spanish Restaurant",
+            "Steakhouse",
+            "Sushi Restaurant",
+            "Swiss Restaurant",
+            "Taco Place",
+            "Tapas Restaurant",
+            "Tea Room",
+            "Thai Restaurant",
+            "Tibetan Restaurant",
+            "Turkish Restaurant",
+            "Ukrainian Restaurant",
+            "Vegetarian / Vegan Restaurant",
+            "Vietnamese Restaurant",
+            "Winery",
+            "Wings Joint",
+            "Frozen Yogurt",
+            "Nightlife Spot",
+            "Bar",
+            "Nightclub",
+            "Pub",
+            "Sports Bar"]
+        
+        return categoryArray
+        
+    }
+    
+}
