@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navBarAppearance.barStyle = .Black
         navBarAppearance.barTintColor = UIColor(red: 249/255, green: 99/255, blue: 50/255, alpha: 1)
         IQKeyboardManager.sharedManager().enable = true
+        IQKeyboardManager.sharedManager().disableToolbarInViewControllerClass(UserHomeVC)
 
         return true
     }

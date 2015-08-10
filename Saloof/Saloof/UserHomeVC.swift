@@ -4,7 +4,7 @@
 //
 //  Created by Angela Smith on 8/8/15.
 //  Copyright (c) 2015 SNASTek. All rights reserved.
-//
+// DC Lat: 38.9047  Lng -77.0164
 
 import UIKit
 import RealmSwift
@@ -26,10 +26,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     var locationManager : CLLocationManager!
     var venueLocations : [AnyObject] = []
     var venueItems : [[String: AnyObject]]?
-    var currentLocation: CLLocation!
     
     //View Properties
-    @IBOutlet var dealButton: UIBarButtonItem!
+    @IBOutlet var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchDisplayOverview: UIView!
     @IBOutlet weak var swipeableView: KolodaView!
     @IBOutlet var activityView: UIView!
@@ -37,7 +36,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     @IBOutlet var activityLabel: UILabel!
     var searchBarButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.orangeColor(), size: CGSize(width: 70, height: 70))
+    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.orangeColor(), size: CGSize(width: 100, height: 100))
     
     @IBOutlet var menuView: UIView!
     
@@ -51,8 +50,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     @IBOutlet var searchPicker: UIPickerView!
     
     // Search Properties
-    var searchActive : Bool = false
     var searchPrice : Bool = false
+    var searchQuery : Bool = false
     var searchString = ""
     var offsetCount: Int = 0
     var pickerDataSource = ["Any","$", "$$", "$$$", "$$$$"];
@@ -77,28 +76,29 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     }
     
     
+    @IBAction func displayMenu(sender: AnyObject) {
+        menuView.hidden = !menuView.hidden
+        shouldCloseSearch()
+        
+    }
     @IBAction func onClick(sender: UIButton) {
         if sender.tag == 3 {
-            //log out
+            //LOG OUT USER
             menuView.hidden = true
             prefs.setObject(nil, forKey: "TOKEN")
             self.dismissViewControllerAnimated(true, completion: nil)
             
         }
     }
-    
-    func displayMenu (){
-        menuView.hidden = !menuView.hidden
-        shouldCloseSearch()
-    }
+
     
     override func viewDidAppear(animated: Bool) {
         // Add the second button to the nav bar
-        let menuButton = UIBarButtonItem(image: UIImage(named: "menuButton"), style: .Plain, target: self, action: "displayMenu")
+        //let menuButton = UIBarButtonItem(image: UIImage(named: "menuButton"), style: .Plain, target: self, action: "displayMenu")
         searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
         cancelButton = UIBarButtonItem(image: UIImage(named: "closeIcon"), style: .Plain, target: self, action: "shouldCloseSearch")
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
-        self.navigationItem.setLeftBarButtonItems([menuButton, self.dealButton], animated: true)
+       // self.navigationItem.setLeftBarButtonItems([menuButton, self.dealButton], animated: true)
         
         burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
@@ -108,23 +108,14 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         searchView.roundCorners(.AllCorners, radius: 14)
         priceView.roundCorners(.AllCorners, radius: 14)
         if venueList.count == 0 {
+            // GET LOCATION
             getLocationPermissionAndData()
         }
     }
     
-    
-    func activityIndicatorDisplaying(appear: Bool, message: String) {
-        if appear {
-            activityView.hidden = false
-            activityIndicator.startAnimation()
-            activityLabel.text = message
-        } else {
-            activityView.hidden = true
-            activityIndicator.stopAnimation()
-        }
-    }
-    
+  
     func getLocationPermissionAndData() {
+        activityIndicator.startAnimation()
         // delete any items in the array
         venueList.removeAll()
         // delete any current venues
@@ -135,7 +126,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             self.realm.delete(unswipedVenues)
         }
         // Start getting the users location
-        //activityIndicatorDisplaying(true, message: "Locating...")
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.delegate = self
@@ -143,23 +133,23 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let status = CLLocationManager.authorizationStatus()
         if status == .NotDetermined {
             // Request access
+            activityIndicator.stopAnimation()
             locationManager.requestWhenInUseAuthorization()
-            activityIndicatorDisplaying(false, message: "")
         } else if status == CLAuthorizationStatus.AuthorizedWhenInUse
             || status == CLAuthorizationStatus.AuthorizedAlways {
                 // we have permission, get location
                 locationManager.startUpdatingLocation()
         } else {
             // We do not have premission, request it
+            activityIndicator.stopAnimation()
             requestLocationPermission()
-            //activityIndicatorDisplaying(false, message: "")
         }
         
     }
     
     /* --------  SEARCH BAR DISPLAY AND DELEGATE METHODS ---------- */
     
-    // -------------------- UIPICKERVIEW ----------------------------------
+    // -------------------- PRICE POINT UIPICKERVIEW ----------------------------------
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -173,35 +163,30 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        searchActive = true
+        searchQuery = false
         searchPrice = true
         switch row {
         case 0:
             priceTextField.text = "";
             searchString = ""
-            // reload search
-            didSelectPricePoint(false)
         case 1:
             priceTextField.text = "$";
             searchString = "1"
-            didSelectPricePoint(true)
         case 2:
             priceTextField.text = "$$";
             searchString = "2"
-            didSelectPricePoint(true)
         case 3:
             priceTextField.text = "$$$";
             searchString = "3"
-            didSelectPricePoint(true)
         case 4:
             priceTextField.text = "$$$$";
             searchString = "4"
-            didSelectPricePoint(true)
         default:
             priceTextField.text = ""
             searchString = ""
-            didSelectPricePoint(false)
         }
+        // reload search
+        didSelectPricePoint()
     }
     
     func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
@@ -233,7 +218,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         return pickerSpinnerView.bounds.width
     }
     
-    func didSelectPricePoint(shouldSearch: Bool) {
+    func didSelectPricePoint() {
         UIView.transitionWithView(searchPickerView, duration: 0.5, options:
             .CurveEaseOut | .TransitionCrossDissolve, animations: {
                 //...animations
@@ -243,15 +228,15 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
                     .CurveEaseOut | .TransitionCrossDissolve, animations: {
                         //...animations
                     }, completion: {_ in
-                        self.resetView(shouldSearch)
+                        self.resetView(true)
                         
                 })
         })
     }
-    
+
     func resetView(shouldSearch: Bool) {
+        activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
-        searchActive = shouldSearch
         searchPrice = shouldSearch
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         if shouldSearch {
@@ -270,7 +255,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     
     func shouldCloseSearch () {
         searchDisplayOverview.hidden = true
-        searchActive = false;
+        searchQuery = false;
+        searchPrice = false
         burgerTextField.text = ""
         burgerTextField.editing
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
@@ -295,7 +281,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             // Search
             if textField.text != "" {
                 searchString = textField.text
-                searchActive = true
+                searchQuery = true
+                searchPrice = false
                 textField.text = ""
                 pullNewSearchResults()
             }
@@ -316,7 +303,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         offsetCount = 0
         swipeableView.resetCurrentCardNumber()
         // get more foursquare items
-        fetchFoursquareVenues()
+        fetchSaloofVenues()
+        activityIndicator.stopAnimation()
         searchDisplayOverview.hidden = true
         swipeableView.reloadData()
     }
@@ -369,7 +357,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     
     func kolodaDidSwipedCardAtIndex(koloda: KolodaView, index: UInt, direction: SwipeResultDirection) {
         let swipedVenue: Venue = venueList[Int(index)]
-        println(swipedVenue)
         // check the direction
         if direction == SwipeResultDirection.Left {
             // set up for deletion
@@ -411,7 +398,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         
     }
-    
+    /*
     func removeRejectedVenues () {
         println("removing rejected venues")
         // remove each from the list
@@ -427,15 +414,29 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         // update the venues array (test to see if this handles the out of bounds issue)
         venues = Realm().objects(Venue)
-    }
+    }*/
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
         println("Ran out of cards, getting foursquare locations")
-        activityIndicatorDisplaying(true, message: "Saloofing...")
-        removeRejectedVenues()
+        activityIndicator.startAnimation()
+        resetSwipeableVieForReload()
+    }
+    
+    func resetSwipeableVieForReload() {
+    
+        venueList.removeAll()
+        // delete any current venues
+        var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        var unswipedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
+        realm.write {
+            self.realm.delete(rejectedVenues)
+            self.realm.delete(unswipedVenues)
+        }
         swipeableView.resetCurrentCardNumber()
-        // get more foursquare items
         fetchFoursquareVenues()
+        activityIndicator.stopAnimation()
+        swipeableView.reloadData()
+        
     }
     
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt) {
@@ -462,7 +463,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             (action) -> Void in
             let URL = NSURL(string: UIApplicationOpenSettingsURLString)
             UIApplication.sharedApplication().openURL(URL!)
-            //self.dismissViewControllerAnimated(true, completion: nil)
         })
         alertController.addAction(openSettings)
         presentViewController(alertController, animated: true, completion: nil)
@@ -492,79 +492,79 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
         // once we have locations, stop retrieving their location
         locationManager.stopUpdatingLocation()
-        // if we dont' have any locations, get some
-        if venueList.count == 0 {
-            //println("No restaurants stored")
-            //exploreFoursquareVenues()
-            //loadSaloofData()
-        } else {
-            // println("restaurants stored")
-        }
-        fetchSaloofVenues()
+        checkLocationAndAccess()
     }
     
     
+    func checkLocationAndAccess () {
+        activityIndicator.stopAnimation()
+        if Reachability.isConnectedToNetwork(){
+            
+            // check their location from D.C.
+            let currentLocation = self.locationManager.location
+            var dcLocation = CLLocation(latitude: 38.9, longitude: -77.0)
+            var distanceBetween: CLLocationDistance = currentLocation.distanceFromLocation(dcLocation!)
+            var distanceInMiles = distanceBetween / 1609.344
+            if distanceInMiles > 40 {
+                alertUser("No Saloof Locations", message: "Looks like you are outside our deals area, but we can still show you some great locations near you!")
+                // just look for foursquare locations
+                fetchFoursquareVenues()
+                swipeableView.reloadData()
+            } else {
+                // begin loading saloof & foursquare locations
+                let dealButton = UIBarButtonItem(image: UIImage(named: "dealsBtn"), style: .Plain, target: self, action: "loadDeals")
+                self.navigationItem.setLeftBarButtonItems([self.menuButton, dealButton], animated: true)
+                activityIndicator.startAnimation()
+                fetchSaloofVenues()
+            }
+        } else {
+            self.alertUser("No Network", message: "Please make sure you are connected then try again")
+        }
+
+    
+    }
+    
+    func loadDeals() {
+        let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
+        let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
+        navigationController?.pushViewController(dealsVC, animated: true)
+
+    
+    }
     func fetchSaloofVenues() {
+        activityIndicator.startAnimation()
         var token = prefs.stringForKey("TOKEN")
+        let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
+        let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
         let location = self.locationManager.location
-        var userLocation = "?lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
-        if APICalls.getLocalVenues(token!, location: userLocation){
-            println("Pulling data from saloof!!")
+        var userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
+        var urlParameters: String = ""
+        if searchQuery {
+            urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
+        } else if searchPrice {
+            urlParameters = "venue/GetVenuesByPriceTierNLocation?\(priceTier)&\(userLocation)"
+        } else {
+            urlParameters = "Venue/GetLocal?\(userLocation)"
+        }
+        //println(urlParameters)
+        if APICalls.getLocalVenues(token!, venueParameters: urlParameters){
+            //println("Pulling data from saloof!!")
             for venue in venues {
                 venueList.append(venue)
             }
-            fetchFoursquareVenues()
-            swipeableView.reloadData()
         } else {
-            println("Not Pulling data from saloof!!")
-            // pull from foursquare
-            fetchFoursquareVenues()
-            swipeableView.reloadData()
+            //println("No Locations saloof locations near this user")
         }
-        
+        fetchFoursquareVenues()
+        activityIndicator.stopAnimation()
+        swipeableView.reloadData()
     }
+
     
-    /*
-    func fetchSaloofVenues () {
-    let saloofUrl = NSURL(string: "http://www.justwalkingonwater.com/json/venueResponse.json")!
-    let response = NSData(contentsOfURL: saloofUrl)!
-    println(response)
-    let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
-    options: NSJSONReadingOptions(0),
-    error: nil) as! NSDictionary)["response"]
-    
-    if let object: AnyObject = json {
-    haveItems = true
-    var groups = object["groups"] as! [AnyObject]
-    //  get array of items
-    var venues = groups[0]["items"] as! [AnyObject]
-    for item in venues {
-    // get the venue
-    if let venue = item["venue"] as? JSONParameters {
-    println(venue)
-    let venueJson = JSON(venue)
-    // Parse the JSON file using SwiftlyJSON
-    parseJSON(venueJson, source: Constants.sourceTypeSaloof)
-    }
-    }
-    }
-    // see if we have at least 10 venues
-    if venues.count < 10 {
-    println("We have room for more venues, adding foursquare locations")
-    // load some foursquare locations
-    fetchFoursquareVenues()
-    } else {
-    println("We have enough saloof vanues, loading locations")
-    swipeableView.reloadData()
-    activityIndicatorDisplaying(false, message: "")
-    }
-    
-    }
-    */
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
-        // get the location & possible search string
-        let searchTerm = (searchActive) ? "&query=\(searchString)" : "&section=food"
+        // get the location & possible search
+        let searchTerm = (searchQuery) ? "&query=\(searchString)" : "&section=food"
         let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
         let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
@@ -574,7 +574,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
                 options: NSJSONReadingOptions(0),
                 error: nil) as! NSDictionary)["response"]
-            
             if let object: AnyObject = json {
                 haveItems = true
                 var groups = object["groups"] as! [AnyObject]
@@ -590,14 +589,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
                     }
                 }
                 println("Data gathering completed, retrieved \(venues.count) venues")
-                // swipeableView.reloadData()
-                activityIndicatorDisplaying(false, message: "")
             }
             offsetCount = offsetCount + 10
-        } else {
-            activityIndicatorDisplaying(false, message: "That's It!")
         }
-        // De-serialize the response to JSON
     }
     
     
@@ -617,6 +611,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         venue.distance = json["location"]["distance"].floatValue
         venue.priceTier = json["price"]["tier"].intValue
         venue.sourceType = source
+        venue.swipeValue = 0
         if source == Constants.sourceTypeSaloof {
             // get the default deal
             venue.defaultDealTitle = json["deals"]["deal"][0]["title"].stringValue
@@ -668,5 +663,17 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             // rehide the menu
             menuView.hidden = true
         }
+    }
+    
+    func alertUser(title: String, message: String) {
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = title
+        alertView.message = message
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
+
+    
+    
     }
 }

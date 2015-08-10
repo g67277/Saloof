@@ -724,11 +724,11 @@ SWIFT_CLASS("_TtC6Saloof15UserFavoritesVC")
 @end
 
 @class CLLocationManager;
-@class CLLocation;
 @class UIPickerView;
 @class NSAttributedString;
 @class KolodaView;
 @class NSError;
+@class CLLocation;
 
 SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @interface UserHomeVC : UIViewController <CLLocationManagerDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
@@ -738,8 +738,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @property (nonatomic) CLLocationManager * __null_unspecified locationManager;
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
-@property (nonatomic) CLLocation * __null_unspecified currentLocation;
-@property (nonatomic) IBOutlet UIBarButtonItem * __null_unspecified dealButton;
+@property (nonatomic) IBOutlet UIBarButtonItem * __null_unspecified menuButton;
 @property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
 @property (nonatomic, weak) IBOutlet KolodaView * __null_unspecified swipeableView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified activityView;
@@ -764,10 +763,9 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @property (nonatomic, readonly) NSUserDefaults * __nonnull prefs;
 - (void)viewDidLoad;
 - (void)didReceiveMemoryWarning;
+- (IBAction)displayMenu:(id __nonnull)sender;
 - (IBAction)onClick:(UIButton * __nonnull)sender;
-- (void)displayMenu;
 - (void)viewDidAppear:(BOOL)animated;
-- (void)activityIndicatorDisplaying:(BOOL)appear message:(NSString * __nonnull)message;
 - (void)getLocationPermissionAndData;
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView * __nonnull)pickerView;
 - (NSInteger)pickerView:(UIPickerView * __nonnull)pickerView numberOfRowsInComponent:(NSInteger)component;
@@ -791,6 +789,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (OverlayView * __nullable)kolodaViewForCardOverlayAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
 - (void)removeRejectedVenues;
 - (void)kolodaDidRunOutOfCards:(KolodaView * __nonnull)koloda;
+- (void)resetSwipeableVieForReload;
 - (void)kolodaDidSelectCardAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
 - (BOOL)kolodaShouldApplyAppearAnimation:(KolodaView * __nonnull)koloda;
 - (void)requestLocationPermission;
@@ -798,10 +797,13 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
+- (void)checkLocationAndAccess;
+- (void)loadDeals;
 - (void)fetchSaloofVenues;
 - (void)fetchFoursquareVenues;
 - (IBAction)shouldPushToSavedDeal:(id __nonnull)sender;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __nullable)sender;
+- (void)alertUser:(NSString * __nonnull)title message:(NSString * __nonnull)message;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end

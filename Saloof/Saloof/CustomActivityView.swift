@@ -44,11 +44,13 @@ class CustomActivityView: UIView {
         }
         self.layer.speed = 1
         self.animating = true
+        self.hidden = false
     }
     
     func stopAnimation() {
         self.layer.speed = 0
         self.animating = false
+        self.hidden = true
     }
     
     
@@ -67,7 +69,7 @@ class CustomActivityView: UIView {
         
         animation.keyTimes = [0, 0.5, 1]
         animation.timingFunctions = [timing, timing]
-        animation.values = [1, 0.7, 1]
+        animation.values = [1, 0.3, 1, 0.7, 1]
         animation.repeatCount = HUGE
         animation.removedOnCompletion = false
         

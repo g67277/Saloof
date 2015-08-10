@@ -230,46 +230,48 @@ public class APICalls {
         return nil
     }
     
-    class func getLocalVenues(token: NSString, location: NSString) ->(Bool){
+    class func getLocalVenues(token: NSString, venueParameters: NSString) ->(Bool){
         NSLog("Pulling local venues");
-        if Reachability.isConnectedToNetwork(){
-            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=38.907192&lng=-77.036871")!
-            
-            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
-            request.HTTPMethod = "GET"
-            request.timeoutInterval = 60
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            
-            var reponseError: NSError?
-            var response: NSURLResponse?
-            
-            var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
-            let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-            
-            if let returnedObjects = JSONObject as? [AnyObject] {
-                for venue in returnedObjects {
-                    //println(venue)
-                    let venueJson = JSON(venue)
-                    // Parse the JSON file using SwiftlyJSON
-                    APICalls.parseJSONVenues(venueJson)
-                }
-                return true
-                
-            }else {
-                println("There are no Saloof venues near this user")
-                return false
+        //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=38.907192&lng=-77.036871")!
+        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+       // var tempPriceUrl: NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?priceTier=3&lat=38.9047&lng=-77.0164")!
+        /*
+        Basic Locations in DC
+        http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=38.907192&lng=-77.036871
+        Venues with location & query
+        http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=38.907192&lng=-77.036871
+        Venues with price tier
+        http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?priceTier=2&lat=38.907192&lng=-77.036871
+        */
+        //println("Pulling venues from Saloof")
+        println("Saloof Url: \(url)")
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        
+        var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
+        let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+        
+        if let returnedObjects = JSONObject as? [AnyObject] {
+            println("Saloof returned \(returnedObjects.count) venues")
+            for venue in returnedObjects {
+                //println(venue)
+                let venueJson = JSON(venue)
+                // Parse the JSON file using SwiftlyJSON
+                APICalls.parseJSONVenues(venueJson)
             }
-        } else {
-            var alertView:UIAlertView = UIAlertView()
-            alertView.title = "No network"
-            alertView.message = "Please make sure you are connected then try again"
-            alertView.delegate = self
-            alertView.addButtonWithTitle("OK")
-            alertView.show()
+            return true
+            
+        }else {
+            println("There are no Saloof venues near this user")
+            return false
         }
-        return false
     }
     
     class func getLocalDeals(token: NSString, location: NSString) ->(Bool){
@@ -334,6 +336,7 @@ public class APICalls {
         venue.sourceType = Constants.sourceTypeSaloof
         venue.favorites = json["favourites"].intValue
         venue.likes = json["likes"].intValue
+        venue.swipeValue = 0
         // get the default deal
         let isActive = json["deals"][0]["active"].boolValue
         if isActive {
