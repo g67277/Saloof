@@ -4,7 +4,7 @@
   'roots': [
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/ActionSheetPicker_3_0.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/ActionSheetPicker_3_0.framework/Headers",
       'contents': [
         {
           'type': 'file',
@@ -49,7 +49,7 @@
         {
           'type': 'file',
           'name': "ActionSheetPicker_3_0-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/ActionSheetPicker_3_0.framework/Headers/ActionSheetPicker_3_0-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/ActionSheetPicker_3_0.framework/Headers/ActionSheetPicker_3_0-Swift.h"
         },
         {
           'type': 'file',
@@ -70,18 +70,18 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/ActionSheetPicker_3_0.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/ActionSheetPicker_3_0.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/ActionSheetPicker-3.0.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/ActionSheetPicker-3.0.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/IQKeyboardManager.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/IQKeyboardManager.framework/Headers",
       'contents': [
         {
           'type': 'file',
@@ -91,7 +91,7 @@
         {
           'type': 'file',
           'name': "IQKeyboardManager-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/IQKeyboardManager.framework/Headers/IQKeyboardManager-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/IQKeyboardManager.framework/Headers/IQKeyboardManager-Swift.h"
         },
         {
           'type': 'file',
@@ -177,23 +177,23 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/IQKeyboardManager.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/IQKeyboardManager.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/IQKeyboardManager.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/IQKeyboardManager.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Koloda.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Koloda.framework/Headers",
       'contents': [
         {
           'type': 'file',
           'name': "Koloda-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Koloda.framework/Headers/Koloda-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Koloda.framework/Headers/Koloda-Swift.h"
         },
         {
           'type': 'file',
@@ -204,23 +204,23 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Koloda.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Koloda.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/Koloda.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/Koloda.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Pods.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Pods.framework/Headers",
       'contents': [
         {
           'type': 'file',
           'name': "Pods-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Pods.framework/Headers/Pods-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Pods.framework/Headers/Pods-Swift.h"
         },
         {
           'type': 'file',
@@ -231,18 +231,18 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Pods.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Pods.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/Pods.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/Pods.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Realm.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Realm.framework/Headers",
       'contents': [
         {
           'type': 'file',
@@ -312,7 +312,7 @@
         {
           'type': 'file',
           'name': "Realm-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Realm.framework/Headers/Realm-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Realm.framework/Headers/Realm-Swift.h"
         },
         {
           'type': 'file',
@@ -323,18 +323,18 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Realm.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Realm.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/Realm.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/Realm.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/Realm.framework/PrivateHeaders",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/Realm.framework/PrivateHeaders",
       'contents': [
         {
           'type': 'file',
@@ -400,12 +400,12 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/RealmSwift.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/RealmSwift.framework/Headers",
       'contents': [
         {
           'type': 'file',
           'name': "RealmSwift-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/RealmSwift.framework/Headers/RealmSwift-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/RealmSwift.framework/Headers/RealmSwift-Swift.h"
         },
         {
           'type': 'file',
@@ -416,23 +416,23 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/RealmSwift.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/RealmSwift.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/RealmSwift.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/RealmSwift.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/SwiftyJSON.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/SwiftyJSON.framework/Headers",
       'contents': [
         {
           'type': 'file',
           'name': "SwiftyJSON-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/SwiftyJSON.framework/Headers/SwiftyJSON-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/SwiftyJSON.framework/Headers/SwiftyJSON-Swift.h"
         },
         {
           'type': 'file',
@@ -443,18 +443,18 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/SwiftyJSON.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/SwiftyJSON.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/SwiftyJSON.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/SwiftyJSON.build/module.modulemap"
         }
       ]
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/pop.framework/Headers",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/pop.framework/Headers",
       'contents': [
         {
           'type': 'file',
@@ -534,7 +534,7 @@
         {
           'type': 'file',
           'name': "pop-Swift.h",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/pop.framework/Headers/pop-Swift.h"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/pop.framework/Headers/pop-Swift.h"
         },
         {
           'type': 'file',
@@ -545,12 +545,12 @@
     },
     {
       'type': 'directory',
-      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphonesimulator/pop.framework/Modules",
+      'name': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Products/Debug-iphoneos/pop.framework/Modules",
       'contents': [
         {
           'type': 'file',
           'name': "module.modulemap",
-          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphonesimulator/pop.build/module.modulemap"
+          'external-contents': "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Build/Intermediates/Pods.build/Debug-iphoneos/pop.build/module.modulemap"
         }
       ]
     }
