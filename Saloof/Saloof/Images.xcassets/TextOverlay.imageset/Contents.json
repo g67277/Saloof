@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "favGrey.png"
+      "filename" : "TextOverlay.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "favGrey@2x.png"
+      "filename" : "TextOverlay@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "favGrey@3x.png"
+      "filename" : "TextOverlay@3x.png"
     }
   ],
   "info" : {

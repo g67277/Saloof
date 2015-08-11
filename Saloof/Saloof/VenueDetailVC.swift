@@ -26,7 +26,6 @@ class VenueDetailVC: UIViewController {
     @IBOutlet weak var dealDescLabel: UILabel!
     @IBOutlet weak var dealValueLabel: UILabel!
     
-    @IBOutlet var favoriteLikesView: UIView!
     @IBOutlet var favoritesLabel: UILabel!
     @IBOutlet var likesLabel: UILabel!
     
@@ -53,6 +52,13 @@ class VenueDetailVC: UIViewController {
                 setUpVenue(venue)
             }
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        dealImage.layer.masksToBounds = false
+        dealImage.layer.borderColor = UIColor.blackColor().CGColor
+        dealImage.layer.cornerRadius = dealImage.frame.height/2
+        dealImage.clipsToBounds = true
     }
     
     func setUpVenue(venue: Venue) {
