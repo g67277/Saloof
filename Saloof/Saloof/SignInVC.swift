@@ -29,6 +29,9 @@ class SignInVC: UIViewController {
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
+        
+        
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -41,6 +44,7 @@ class SignInVC: UIViewController {
             var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)
         }
+        
         
     }
     
@@ -62,6 +66,14 @@ class SignInVC: UIViewController {
             if validation.validateInput(userNameField.text, check: 3, title: "Too Short", message: "Please enter a valid username")
                 && validation.validateInput(passwordField.text, check: 0, title: "Empty Password", message: "Please enter a password"){
                     
+                    var containerView = CreateActivityView.createView(UIColor.blackColor())
+                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+                    aIView.center = containerView.center
+                    containerView.addSubview(aIView)
+                    containerView.center = self.view.center
+                    self.view.addSubview(containerView)
+                    aIView.startAnimation()
+                    
                     var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
                     
                     if authenticationCall.signIn(stringPost){
@@ -72,10 +84,12 @@ class SignInVC: UIViewController {
                         if prefs.boolForKey("ROLE"){
                             if apiCall.getMyRestaurant(token!){
                                 //self.performSegueWithIdentifier("toMain", sender: self)
+                                aIView.stopAnimation()
                                 var storyboard = UIStoryboard(name: "Business", bundle: nil)
                                 var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
                                 self.presentViewController(controller, animated: true, completion: nil)
                             }else{
+                                aIView.stopAnimation()
                                 var refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
                                 refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
                                     self.performSegueWithIdentifier("toReg2", sender: nil)
@@ -85,6 +99,7 @@ class SignInVC: UIViewController {
                                 self.presentViewController(refreshAlert, animated: true, completion: nil)
                             }
                         }else{
+                            aIView.stopAnimation()
                             validation.displayAlert("No Permission", message: "Please create a business account to access the business side")
                         }
                     }
