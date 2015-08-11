@@ -24,7 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navBarAppearance.barTintColor = UIColor(red: 249/255, green: 99/255, blue: 50/255, alpha: 1)
         IQKeyboardManager.sharedManager().enable = true
         IQKeyboardManager.sharedManager().disableToolbarInViewControllerClass(UserHomeVC)
-
+        IQKeyboardManager.sharedManager().disableToolbarInViewControllerClass(VenueDealsVC)
+        
+        // Custom back icon
+        UINavigationBar.appearance().backIndicatorImage = UIImage(named: "backBtn");
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(named: "backBtn");
         return true
     }
 

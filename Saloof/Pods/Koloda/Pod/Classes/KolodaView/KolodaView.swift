@@ -17,9 +17,9 @@ public enum SwipeResultDirection {
 
 //Default values
 private let defaultCountOfVisibleCards = 3
-private let backgroundCardsTopMargin: CGFloat = 4.0
+private let backgroundCardsTopMargin: CGFloat = 1.0
 private let backgroundCardsScalePercent: CGFloat = 0.95
-private let backgroundCardsLeftMargin: CGFloat = 8.0
+private let backgroundCardsLeftMargin: CGFloat = 4.0
 private let backgroundCardFrameAnimationDuration: NSTimeInterval = 0.2
 
 //Opacity values
@@ -127,9 +127,9 @@ public class KolodaView: UIView, DraggableCardDelegate {
     //MARK: Frames
     private func frameForCardAtIndex(index: UInt) -> CGRect {
         let bottomOffset:CGFloat = 0
-        let topOffset = backgroundCardsTopMargin * CGFloat(self.countOfVisibleCards - 1)
-        let xOffset = backgroundCardsLeftMargin * CGFloat(index)
-        let scalePercent = backgroundCardsScalePercent
+        let topOffset = 5 * CGFloat(self.countOfVisibleCards - 1)
+        let xOffset = 5 * CGFloat(index)
+        let scalePercent: CGFloat = 0.97
         let width = CGRectGetWidth(self.frame) * pow(scalePercent, CGFloat(index))
         let height = (CGRectGetHeight(self.frame) - bottomOffset - topOffset) * pow(scalePercent, CGFloat(index))
         let multiplier: CGFloat = index > 0 ? 1.0 : 0.0
@@ -291,7 +291,8 @@ public class KolodaView: UIView, DraggableCardDelegate {
                 
                 let lastCardContentView = dataSource.kolodaViewForCardAtIndex(self, index: UInt(shownCardsCount - 1))
                 let lastCardOverlayView = dataSource.kolodaViewForCardOverlayAtIndex(self, index: UInt(shownCardsCount - 1))
-                let lastCardView = DraggableCardView()
+                let lastCardFrame = frameForCardAtIndex(UInt(currentCardNumber + visibleCards.count))
+                let lastCardView = DraggableCardView(frame: lastCardFrame)
                 
                 lastCardView.hidden = true
                 lastCardView.userInteractionEnabled = true
@@ -399,6 +400,10 @@ public class KolodaView: UIView, DraggableCardDelegate {
             }
         }
         
+        reconfigureCards()
+    }
+    
+    private func reconfigureCards() {
         for index in 0..<visibleCards.count {
             if let dataSource = self.dataSource {
                 
@@ -438,16 +443,7 @@ public class KolodaView: UIView, DraggableCardDelegate {
             
         } else {
             
-            for index in 0..<visibleCards.count {
-                if let dataSource = self.dataSource {
-                    
-                    let currentCardContentView = dataSource.kolodaViewForCardAtIndex(self, index: UInt(currentCardNumber + index))
-                    let overlayView = dataSource.kolodaViewForCardOverlayAtIndex(self, index: UInt(currentCardNumber + index))
-                    let currentCardView = visibleCards[index]
-                    
-                    currentCardView.configure(currentCardContentView, overlayView: overlayView)
-                }
-            }
+            reconfigureCards()
         }
     }
     

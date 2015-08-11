@@ -11,7 +11,7 @@ import RealmSwift
 import CoreLocation
 import SwiftyJSON
 
-class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     // View properties
     @IBOutlet weak var collectionView: UICollectionView!
@@ -31,6 +31,27 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     @IBOutlet weak var singleDealValue: UILabel!
     
     @IBOutlet var cardButtonsView: UIView!
+    @IBOutlet var indicatorView: UIView!
+    var searchBarButton: UIBarButtonItem!
+    var cancelButton: UIBarButtonItem!
+    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor(red:0.98, green:0.39, blue:0.2, alpha:1), size: CGSize(width: 100, height: 100))
+    
+    // Search
+    @IBOutlet weak var searchDisplayOverview: UIView!
+    @IBOutlet var burgerTextField: UITextField!
+    @IBOutlet var searchView: UIView!
+    @IBOutlet var priceView: UIView!
+    @IBOutlet var priceTextField: UITextField!
+    @IBOutlet var searchPickerView: UIView!
+    @IBOutlet var pickerSpinnerView: UIView!
+    @IBOutlet var searchPicker: UIPickerView!
+    
+    // Search Properties
+    var searchPrice : Bool = false
+    var searchQuery : Bool = false
+    var searchString = ""
+    var offsetCount: Int = 0
+    var pickerDataSource = ["Any","$", "$$", "$$$", "$$$$"];
     
     // top deal timer
     @IBOutlet weak var timeLimitLabel: TTCounterLabel!
@@ -64,7 +85,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     let defaults = NSUserDefaults.standardUserDefaults()
     
     
-    /* -----------------------  VIEW CONTROLLER  METHODS --------------------------- */
+    /* -----------------------  INITIAL LOAD  METHODS --------------------------- */
     
     override func viewWillAppear(animated: Bool) {
         // Hide the navigation bar to display the full location image
@@ -72,7 +93,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         if navBar != nil{
             navBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
             navBar.shadowImage = UIImage()
-            navBar.backgroundColor = UIColor.clearColor()
         }
         // delete expired deals
         var expiredDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(2)")
@@ -92,7 +112,22 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
     }
     
-    
+    override func viewDidAppear(animated: Bool) {
+        
+        if !loadSingleDeal {
+            searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
+            cancelButton = UIBarButtonItem(image: UIImage(named: "closeIcon"), style: .Plain, target: self, action: "shouldCloseSearch")
+            self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
+            
+            burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+            
+            priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+            searchView.roundCorners(.AllCorners, radius: 14)
+            priceView.roundCorners(.AllCorners, radius: 14)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         if loadSingleDeal {
@@ -163,6 +198,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         setSavedDealTimer(savedDeal)
     }
     
+    
+    // -------------------------  BUTTON ACTIONS  ------------------------
     
     @IBAction func userPressedSaveSwapButton(sender: UIButton) {
         
@@ -290,6 +327,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
     }
     
+    
+    //  -------------------------------------  LOADING DEALS  ------------------------------------------------
     func loadSaloofData () {
         let saloofUrl = NSURL(string: "http://www.justwalkingonwater.com/json/venueResponse.json")!
         let response = NSData(contentsOfURL: saloofUrl)!
@@ -507,7 +546,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     // ------------------- USER LOCATION PERMISSION REQUEST  ----------------------
     
     func showErrorAlert(error: NSError) {
-        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try agian later.", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try again later.", preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "Ok", style: .Default, handler: {
             (action) -> Void in
         })
@@ -551,4 +590,167 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             }*/
         }
     }
+    
+    //  ------------------  SEARCH TAGS AND PRICE PICKER METHODS ----------------------------
+    
+
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerDataSource.count;
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return pickerDataSource[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        searchQuery = false
+        searchPrice = true
+        switch row {
+        case 0:
+            priceTextField.text = "";
+            searchString = ""
+        case 1:
+            priceTextField.text = "$";
+            searchString = "1"
+        case 2:
+            priceTextField.text = "$$";
+            searchString = "2"
+        case 3:
+            priceTextField.text = "$$$";
+            searchString = "3"
+        case 4:
+            priceTextField.text = "$$$$";
+            searchString = "4"
+        default:
+            priceTextField.text = ""
+            searchString = ""
+        }
+        // reload search
+        didSelectPricePoint()
+    }
+    
+    func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let titleData = pickerDataSource[row]
+        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+        return myTitle
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int,
+        reusingView view: UIView!) -> UIView {
+            var pickerLabel = view as! UILabel!
+            if view == nil {  //if no label there yet
+                pickerLabel = UILabel()
+            }
+            let titleData = pickerDataSource[row]
+            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 18.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+            pickerLabel!.attributedText = myTitle
+            pickerLabel.textAlignment = .Center
+            return pickerLabel
+            
+    }
+    
+    //size the components of the UIPickerView
+    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 30
+    }
+    
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return pickerSpinnerView.bounds.width
+    }
+    
+    func didSelectPricePoint() {
+        UIView.transitionWithView(searchPickerView, duration: 0.5, options:
+            .CurveEaseOut | .TransitionCrossDissolve, animations: {
+                //...animations
+            }, completion: {_ in
+                self.searchPickerView.hidden = true
+                UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
+                    .CurveEaseOut | .TransitionCrossDissolve, animations: {
+                        //...animations
+                    }, completion: {_ in
+                        self.resetView(true)
+                        
+                })
+        })
+    }
+    
+    func resetView(shouldSearch: Bool) {
+        activityIndicator.startAnimation()
+        searchDisplayOverview.hidden = true
+        searchPrice = shouldSearch
+        self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
+        if shouldSearch {
+            // reload search
+           pullNewSearchResults()
+        }
+    }
+    
+    
+    func shouldOpenSearch () {
+        searchDisplayOverview.hidden = false
+        self.navigationItem.setRightBarButtonItem(cancelButton, animated: true)
+        
+    }
+    
+    func shouldCloseSearch () {
+        searchDisplayOverview.hidden = true
+        searchQuery = false;
+        searchPrice = false
+        burgerTextField.text = ""
+        burgerTextField.editing
+        self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
+        
+    }
+    
+    func pullNewSearchResults () {
+        dealList.removeAll()
+        // delete any current venues
+        var pulledVenues = Realm().objects(VenueDeal)
+        realm.write {
+            self.realm.delete(pulledVenues)
+        }
+        // reset values
+        lastDealRestId = ""
+        topBidIndex = 0
+        currentDealIndex = 0
+        topDealReached = false
+        // pull new venues
+        loadSaloofData()
+        activityIndicator.stopAnimation()
+        searchDisplayOverview.hidden = true
+    }
+
+    
+    //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if textField.tag == 4 {
+            textField.resignFirstResponder()
+            // display the picker view
+            searchPickerView.hidden = false
+        }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        println("Textfield returned")
+        textField.endEditing(true)
+        //self.view.endEditing(true)
+        self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
+        // see which text field was entered
+        if textField.tag == 3 {
+            // Search
+            if textField.text != "" {
+                searchString = textField.text
+                searchQuery = true
+                searchPrice = false
+                textField.text = ""
+                pullNewSearchResults()
+            }
+        }
+        return false
+    }
+
 }

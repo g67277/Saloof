@@ -1470,7 +1470,7 @@
                                             <constraint firstAttribute="width" constant="123" id="Ysh-db-ALm"/>
                                             <constraint firstAttribute="height" constant="32" id="nZi-JI-EIU"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="11"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <state key="normal" title="Terms &amp; Conditions">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1496,7 +1496,7 @@
                                                 <variation key="heightClass=regular-widthClass=compact" constant="49"/>
                                             </constraint>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <state key="normal" title="Log In">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1686,7 +1686,8 @@
                                                 <exclude reference="g4a-CM-mYr"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="1" width="570" height="1"/>
                                             <mask key="constraints">
                                                 <exclude reference="Vfp-l5-TGB"/>
                                                 <include reference="g4a-CM-mYr"/>
@@ -1710,7 +1711,8 @@
                                                 <exclude reference="eYa-5B-o7G"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="495" y="15" width="67" height="30"/>
                                             <mask key="constraints">
                                                 <include reference="Inq-Ed-DQr"/>
                                                 <include reference="eYa-5B-o7G"/>
@@ -1737,7 +1739,8 @@
                                                 <exclude reference="gwa-DL-f3u"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="8" y="19" width="118" height="26"/>
                                             <mask key="constraints">
                                                 <include reference="FF7-Bc-X0J"/>
                                                 <include reference="gwa-DL-f3u"/>
@@ -1774,7 +1777,8 @@
                                         <exclude reference="zNo-6O-7Fq"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="15" y="540" width="570" height="60"/>
                                     <mask key="subviews">
                                         <include reference="ljx-hL-zaO"/>
                                         <include reference="4cL-g7-A9a"/>
@@ -1795,12 +1799,18 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="dH7-PA-gl7">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="86" y="50" width="279" height="108"/>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saloof" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUJ-3E-Jdy">
                                         <rect key="frame" x="0.0" y="33" width="500" height="55"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Hairline" family="Montserrat" pointSize="40"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="68" y="166" width="315" height="48"/>
+                                        </variation>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1830,7 +1840,8 @@
                                         <exclude reference="ua1-EY-liK"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="75" y="0.0" width="450" height="240"/>
                                     <mask key="subviews">
                                         <include reference="dH7-PA-gl7"/>
                                         <include reference="mUJ-3E-Jdy"/>
@@ -1852,6 +1863,9 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="pCs-jG-flX" userLabel="username img">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="39" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="vwv-D4-8QA">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -1865,7 +1879,8 @@
                                                 <exclude reference="yAb-2P-z0k"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="50" width="25" height="27"/>
                                             <mask key="constraints">
                                                 <include reference="bxp-bW-2B2"/>
                                                 <include reference="yAb-2P-z0k"/>
@@ -1874,6 +1889,9 @@
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="uJ7-0h-Ynt">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="95" width="496" height="49"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Password" translatesAutoresizingMaskIntoConstraints="NO" id="ztO-K1-xiX">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -1887,7 +1905,8 @@
                                                 <exclude reference="rAW-Nr-eQC"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="106" width="29" height="28"/>
                                             <mask key="constraints">
                                                 <include reference="CRj-C5-M9J"/>
                                                 <include reference="rAW-Nr-eQC"/>
@@ -1901,6 +1920,9 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="152" width="496" height="48"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onClick:" destination="hbj-O5-pbv" eventType="touchUpInside" id="7a9-O0-AaY"/>
                                             <action selector="onClick:" destination="LX8-67-ET0" eventType="touchUpInside" id="Ck3-ec-9qG"/>
@@ -1911,12 +1933,18 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="140" y="40" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Za1-di-rTa">
                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="140" y="97" width="372" height="45"/>
+                                        </variation>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2001,7 +2029,8 @@
                                         <exclude reference="Jhq-RG-Ezr"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="39" y="245" width="522" height="210"/>
                                     <mask key="subviews">
                                         <include reference="pCs-jG-flX"/>
                                         <include reference="vwv-D4-8QA"/>
@@ -2057,7 +2086,8 @@
                                                 <exclude reference="3Ch-eO-v5d"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="30" y="0.0" width="480" height="28"/>
                                             <mask key="constraints">
                                                 <include reference="3Ch-eO-v5d"/>
                                             </mask>
@@ -2087,7 +2117,8 @@
                                         <exclude reference="oFP-a1-B0N"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="30" y="470" width="540" height="60"/>
                                     <mask key="subviews">
                                         <include reference="Clc-iO-Uq1"/>
                                     </mask>
@@ -2203,6 +2234,9 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BusinessBg2" translatesAutoresizingMaskIntoConstraints="NO" id="MjA-l1-uXp">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                </variation>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Indicator1" translatesAutoresizingMaskIntoConstraints="NO" id="uHA-CI-LvH">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -2214,7 +2248,8 @@
                                         <exclude reference="GFM-rt-ko3"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="105" y="28" width="390" height="25"/>
                                     <mask key="constraints">
                                         <include reference="GFM-rt-ko3"/>
                                     </mask>
@@ -2235,7 +2270,8 @@
                                         <exclude reference="qi9-ft-VYN"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="220" y="199" width="161" height="21"/>
                                     <mask key="constraints">
                                         <include reference="50e-QM-2pV"/>
                                         <include reference="qi9-ft-VYN"/>
@@ -2260,7 +2296,8 @@
                                                 <exclude reference="qls-yr-4xV"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="2" width="216" height="30"/>
                                             <mask key="constraints">
                                                 <include reference="qls-yr-4xV"/>
                                             </mask>
@@ -2281,7 +2318,8 @@
                                                 <exclude reference="AbX-5k-QCI"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="336" y="2" width="144" height="30"/>
                                             <mask key="constraints">
                                                 <include reference="AbX-5k-QCI"/>
                                             </mask>
@@ -2314,7 +2352,8 @@
                                         <exclude reference="az0-ph-WuL"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="60" y="558" width="480" height="42"/>
                                     <mask key="subviews">
                                         <include reference="6Zv-BQ-Ybu"/>
                                         <include reference="FQv-aX-3IX"/>
@@ -2334,6 +2373,9 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="GwK-38-shP" userLabel="username img">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="8" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ajk-vi-BQO">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -2347,7 +2389,8 @@
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="19" width="25" height="27"/>
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>
@@ -2359,9 +2402,15 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="127" y="9" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="gKp-GK-Z16" userLabel="email img">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="64" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mail" translatesAutoresizingMaskIntoConstraints="NO" id="Xso-JP-LLb">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -2375,7 +2424,8 @@
                                                 <exclude reference="xrR-lJ-xd9"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="75" width="25" height="27"/>
                                             <mask key="constraints">
                                                 <include reference="bnC-Pn-Ba8"/>
                                                 <include reference="xrR-lJ-xd9"/>
@@ -2387,9 +2437,15 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="127" y="65" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="nxS-iJ-B7h" userLabel="pass img">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="120" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Password" translatesAutoresizingMaskIntoConstraints="NO" id="l3K-dl-l1q">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -2403,7 +2459,8 @@
                                                 <exclude reference="eqU-1Q-3fP"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="130" width="29" height="28"/>
                                             <mask key="constraints">
                                                 <include reference="BEE-Jo-iWy"/>
                                                 <include reference="eqU-1Q-3fP"/>
@@ -2415,9 +2472,15 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="127" y="121" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="63q-9p-11R" userLabel="cpass img">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="176" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Password" translatesAutoresizingMaskIntoConstraints="NO" id="RRh-qh-GFP">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -2431,7 +2494,8 @@
                                                 <exclude reference="yzk-nh-3Gq"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="186" width="29" height="28"/>
                                             <mask key="constraints">
                                                 <include reference="XiB-aB-ZMz"/>
                                                 <include reference="yzk-nh-3Gq"/>
@@ -2443,6 +2507,9 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="127" y="177" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4h-xF-bsr">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -2451,6 +2518,9 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="232" width="496" height="48"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onClick:" destination="foX-Kk-FrC" eventType="touchUpInside" id="MhZ-dg-2TM"/>
                                         </connections>
@@ -2578,7 +2648,8 @@
                                         <exclude reference="wSt-T3-ec9"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="39" y="250" width="522" height="300"/>
                                     <mask key="subviews">
                                         <include reference="GwK-38-shP"/>
                                         <include reference="ajk-vi-BQO"/>
@@ -2644,6 +2715,9 @@
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="G1N-mf-y3k">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="210" y="83" width="180" height="60"/>
+                                </variation>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.92389641609999995" alpha="1" colorSpace="calibratedWhite"/>
@@ -5325,6 +5399,9 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="XoK-G1-nku">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="162" y="30" width="216" height="108"/>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password Reset" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSz-Qf-4ip">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
@@ -5341,7 +5418,8 @@
                                                 <exclude reference="fWG-uP-uwK"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="186" y="224" width="168" height="21"/>
                                             <mask key="constraints">
                                                 <include reference="E61-wM-GOR"/>
                                                 <include reference="fWG-uP-uwK"/>
@@ -5372,7 +5450,8 @@
                                         <exclude reference="PoJ-Eg-FiC"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="30" y="20" width="540" height="270"/>
                                     <mask key="subviews">
                                         <include reference="XoK-G1-nku"/>
                                         <include reference="kSz-Qf-4ip"/>
@@ -5392,6 +5471,9 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="if5-Gb-4bK">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="30" width="496" height="48"/>
+                                        </variation>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nLJ-hs-M1h">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -5400,6 +5482,9 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="13" y="86" width="496" height="48"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onClick:" destination="XRj-RH-BJU" eventType="touchUpInside" id="xwP-4W-PEw"/>
                                         </connections>
@@ -5421,7 +5506,8 @@
                                                 <exclude reference="d0T-xf-Nx7"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="181" y="154" width="161" height="47"/>
                                             <mask key="constraints">
                                                 <include reference="4po-Ap-vHY"/>
                                                 <include reference="d0T-xf-Nx7"/>
@@ -5443,7 +5529,8 @@
                                                 <exclude reference="aia-se-krk"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="28" y="41" width="25" height="27"/>
                                             <mask key="constraints">
                                                 <include reference="Mjb-eG-b94"/>
                                                 <include reference="aia-se-krk"/>
@@ -5455,6 +5542,9 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="127" y="31" width="372" height="46"/>
+                                        </variation>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5507,7 +5597,8 @@
                                         <exclude reference="sJN-va-KWv"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="39" y="305" width="522" height="240"/>
                                     <mask key="subviews">
                                         <include reference="if5-Gb-4bK"/>
                                         <include reference="nLJ-hs-M1h"/>

@@ -51,8 +51,8 @@ class FavoritesCell: UITableViewCell {
     
     func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: Float) {
         
-        likesLabel.text = "\(likes)"
-        favoritesLabel.text = "\(favorites)"
+        likesLabel.text = " \(likes)"
+        favoritesLabel.text = " \(favorites)"
         // Number Labels
         if var tierLabel = priceDistanceLabel {
             var priceTierValue = price
@@ -72,7 +72,7 @@ class FavoritesCell: UITableViewCell {
             var userDistance = distance
             var miles = userDistance/5280
             let distance = Int(floor(miles))
-            tierLabel.text = (distance == 1) ? "\(priceString)  \(distance) mile" : "\(priceString)  \(distance) miles"
+            tierLabel.text = (distance == 1) ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
             
         }
         

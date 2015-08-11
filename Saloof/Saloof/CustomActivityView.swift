@@ -54,21 +54,21 @@ class CustomActivityView: UIView {
     
     
     func setUpAnimationInLayer(layer: CALayer, size: CGSize, color: UIColor) {
-        let circleSpacing: CGFloat = 4
+        let circleSpacing: CGFloat = 6
         let circleSize = (size.width - circleSpacing * 2) / 3
         let x = (layer.bounds.size.width - size.width) / 2
         let y = (layer.bounds.size.height - size.height) / 2
-        let durations = [0.96, 0.93, 1.19, 1.13, 1.34, 0.94, 1.2, 0.82, 1.19]
+        let durations = [1.96, 1.93, 2.19, 2.13, 2.34, 1.94, 2.2, 1.82, 2.19]
+
         let beginTime = CACurrentMediaTime()
         let beginTimes = [0.36, 0.4, 0.68, 0.41, 0.71, -0.15, -0.12, 0.01, 0.32]
         let timing = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
         
         // Animation
         let animation = CAKeyframeAnimation(keyPath: "opacity")
-        
-        animation.keyTimes = [0, 0.5, 1]
+        animation.keyTimes = [0, 0.25, 0.5, 0.75, 1]
         animation.timingFunctions = [timing, timing]
-        animation.values = [1, 0.3, 1, 0.7, 1]
+        animation.values = [1, 0.7, 0.35, 0.7, 1]
         animation.repeatCount = HUGE
         animation.removedOnCompletion = false
         
@@ -91,8 +91,9 @@ class CustomActivityView: UIView {
             let circle = createRingLayer(size: CGSize(width: circleSize, height: circleSize), color: color)
             // create the frame
             let frame = CGRect(x: x + (circleSize / 2 + circleSpacing) + circleSize * CGFloat(i) + circleSpacing * CGFloat(i), y: y + circleSize + circleSpacing, width: circleSize, height: circleSize)
-            animation.duration = durations[3 * i]
-            animation.beginTime = beginTime + beginTimes[3 * i]
+            let randomIndex = Int(arc4random_uniform(UInt32(durations.count)))
+            animation.duration = durations[randomIndex * i]
+            animation.beginTime = beginTime + beginTimes[randomIndex * i]
             circle.frame = frame
             circle.addAnimation(animation, forKey: "animation")
             layer.addSublayer(circle)
@@ -103,8 +104,9 @@ class CustomActivityView: UIView {
             let circle = createRingLayer(size: CGSize(width: circleSize, height: circleSize), color: color)
             // create the frame
             let frame = CGRect(x: x + (circleSize + circleSpacing) + circleSize * CGFloat(i) + circleSpacing * CGFloat(i), y: y + (circleSize + circleSpacing) * 2, width: circleSize, height: circleSize)
-            animation.duration = durations[3 * i]
-            animation.beginTime = beginTime + beginTimes[3 * i]
+            let randomIndex = Int(arc4random_uniform(UInt32(durations.count)))
+            animation.duration = durations[randomIndex]
+            animation.beginTime = beginTime + beginTimes[randomIndex]
             circle.frame = frame
             circle.addAnimation(animation, forKey: "animation")
             layer.addSublayer(circle)
@@ -116,7 +118,7 @@ class CustomActivityView: UIView {
     func createRingLayer(# size: CGSize, color: UIColor) -> CALayer {
         let layer: CAShapeLayer = CAShapeLayer()
         var path: UIBezierPath = UIBezierPath()
-        let lineWidth: CGFloat = 2
+        let lineWidth: CGFloat = 4
         
         
         path.addArcWithCenter(CGPoint(x: size.width / 2, y: size.height / 2),

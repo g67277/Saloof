@@ -7,15 +7,15 @@ class-members:
 - "awakeFromNib"
 - "setSelected"
 top-level:
-- "Bool"
 - "UITableViewCell"
+- "Bool"
 member-access:
-- "CSo11UIResponder"
 - "PSs9AnyObject"
-- "CSo8NSObject"
-- "CSo6UIView"
+- "CSo11UIResponder"
 - "CSo15UITableViewCell"
 - "C6Saloof18FavoriteHeaderCell"
+- "CSo8NSObject"
+- "CSo6UIView"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

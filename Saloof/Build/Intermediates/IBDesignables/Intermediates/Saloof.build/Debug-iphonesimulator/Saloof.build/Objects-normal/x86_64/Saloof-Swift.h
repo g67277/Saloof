@@ -208,6 +208,14 @@ SWIFT_CLASS("_TtC6Saloof18CustomActivityView")
 - (CALayer * __nonnull)createRingLayerWithSize:(CGSize)size color:(UIColor * __nonnull)color;
 @end
 
+
+SWIFT_CLASS("_TtC6Saloof18CustomSwipableView")
+@interface CustomSwipableView : KolodaView
+- (CGRect)frameForCardAtIndex:(NSUInteger)index;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class VenueDeal;
 
 SWIFT_CLASS("_TtC6Saloof12DealCardCell")
@@ -432,7 +440,7 @@ SWIFT_CLASS("_TtC6Saloof15InitialScreenVC")
 
 SWIFT_CLASS("_TtC6Saloof10LikedVenue")
 @interface LikedVenue : Object
-@property (nonatomic, copy) NSString * __nonnull venueId;
+@property (nonatomic, copy) NSString * __nonnull likedId;
 + (NSString * __nonnull)primaryKey;
 - (SWIFT_NULLABILITY(nonnull) instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithValue:(id __nonnull)value OBJC_DESIGNATED_INITIALIZER;
@@ -738,7 +746,6 @@ SWIFT_CLASS("_TtC6Saloof15UserFavoritesVC")
 @class CLLocationManager;
 @class UIPickerView;
 @class NSAttributedString;
-@class KolodaView;
 @class NSError;
 @class CLLocation;
 
@@ -751,15 +758,14 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
 @property (nonatomic) IBOutlet UIBarButtonItem * __null_unspecified menuButton;
-@property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
 @property (nonatomic, weak) IBOutlet KolodaView * __null_unspecified swipeableView;
-@property (nonatomic) IBOutlet UIView * __null_unspecified activityView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified indicatorView;
-@property (nonatomic) IBOutlet UILabel * __null_unspecified activityLabel;
 @property (nonatomic) UIBarButtonItem * __null_unspecified searchBarButton;
+@property (nonatomic) UIBarButtonItem * __null_unspecified dealsButton;
 @property (nonatomic) UIBarButtonItem * __null_unspecified cancelButton;
 @property (nonatomic, readonly) CustomActivityView * __nonnull activityIndicator;
 @property (nonatomic) IBOutlet UIView * __null_unspecified menuView;
+@property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
 @property (nonatomic) IBOutlet UITextField * __null_unspecified burgerTextField;
 @property (nonatomic) IBOutlet UIView * __null_unspecified searchView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified priceView;
@@ -879,7 +885,7 @@ SWIFT_CLASS("_TtC6Saloof9VenueDeal")
 @class TTCounterLabel;
 
 SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
-@interface VenueDealsVC : UIViewController <CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface VenueDealsVC : UIViewController <CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (nonatomic, weak) IBOutlet UICollectionView * __null_unspecified collectionView;
 @property (nonatomic) IBOutlet UIButton * __null_unspecified bestButton;
 @property (nonatomic) IBOutlet UIButton * __null_unspecified oldestButton;
@@ -893,6 +899,23 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified singleDealDesc;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified singleDealValue;
 @property (nonatomic) IBOutlet UIView * __null_unspecified cardButtonsView;
+@property (nonatomic) IBOutlet UIView * __null_unspecified indicatorView;
+@property (nonatomic) UIBarButtonItem * __null_unspecified searchBarButton;
+@property (nonatomic) UIBarButtonItem * __null_unspecified cancelButton;
+@property (nonatomic, readonly) CustomActivityView * __nonnull activityIndicator;
+@property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
+@property (nonatomic) IBOutlet UITextField * __null_unspecified burgerTextField;
+@property (nonatomic) IBOutlet UIView * __null_unspecified searchView;
+@property (nonatomic) IBOutlet UIView * __null_unspecified priceView;
+@property (nonatomic) IBOutlet UITextField * __null_unspecified priceTextField;
+@property (nonatomic) IBOutlet UIView * __null_unspecified searchPickerView;
+@property (nonatomic) IBOutlet UIView * __null_unspecified pickerSpinnerView;
+@property (nonatomic) IBOutlet UIPickerView * __null_unspecified searchPicker;
+@property (nonatomic) BOOL searchPrice;
+@property (nonatomic) BOOL searchQuery;
+@property (nonatomic, copy) NSString * __nonnull searchString;
+@property (nonatomic) NSInteger offsetCount;
+@property (nonatomic, copy) NSArray * __nonnull pickerDataSource;
 @property (nonatomic, weak) IBOutlet TTCounterLabel * __null_unspecified timeLimitLabel;
 @property (nonatomic, copy) NSArray * __nonnull plistObjects;
 @property (nonatomic) /* Results<VenueDeal> */ validDeals;
@@ -917,6 +940,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic, readonly) NSUserDefaults * __nonnull defaults;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
 - (void)viewDidLoad;
 - (void)setButtonTitle:(NSString * __nonnull)title;
 - (void)setUpDefaultDeal;
@@ -942,6 +966,21 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)showErrorAlert:(NSError * __nonnull)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView * __nonnull)pickerView;
+- (NSInteger)pickerView:(UIPickerView * __nonnull)pickerView numberOfRowsInComponent:(NSInteger)component;
+- (NSString * __null_unspecified)pickerView:(UIPickerView * __nonnull)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+- (void)pickerView:(UIPickerView * __nonnull)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
+- (NSAttributedString * __nullable)pickerView:(UIPickerView * __nonnull)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component;
+- (UIView * __nonnull)pickerView:(UIPickerView * __nonnull)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView * __null_unspecified)view;
+- (CGFloat)pickerView:(UIPickerView * __nonnull)pickerView rowHeightForComponent:(NSInteger)component;
+- (CGFloat)pickerView:(UIPickerView * __nonnull)pickerView widthForComponent:(NSInteger)component;
+- (void)didSelectPricePoint;
+- (void)resetView:(BOOL)shouldSearch;
+- (void)shouldOpenSearch;
+- (void)shouldCloseSearch;
+- (void)pullNewSearchResults;
+- (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
+- (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -970,6 +1009,7 @@ SWIFT_CLASS("_TtC6Saloof13VenueDetailVC")
 @property (nonatomic) FavoriteVenue * __nullable favVenue;
 @property (nonatomic) BOOL isFavorite;
 @property (nonatomic) BOOL doesLike;
+@property (nonatomic) BOOL doesFavorite;
 @property (nonatomic, copy) NSString * __nonnull thisVenueId;
 - (void)viewDidLoad;
 - (void)setUpVenue:(Venue * __nonnull)venue;

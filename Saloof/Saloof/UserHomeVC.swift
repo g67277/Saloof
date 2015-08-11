@@ -29,18 +29,17 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     
     //View Properties
     @IBOutlet var menuButton: UIBarButtonItem!
-    @IBOutlet weak var searchDisplayOverview: UIView!
     @IBOutlet weak var swipeableView: KolodaView!
-    @IBOutlet var activityView: UIView!
     @IBOutlet var indicatorView: UIView!
-    @IBOutlet var activityLabel: UILabel!
     var searchBarButton: UIBarButtonItem!
+    var dealsButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.orangeColor(), size: CGSize(width: 100, height: 100))
+    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor(red:0.98, green:0.39, blue:0.2, alpha:1), size: CGSize(width: 100, height: 100))
     
     @IBOutlet var menuView: UIView!
     
     // Search
+    @IBOutlet weak var searchDisplayOverview: UIView!
     @IBOutlet var burgerTextField: UITextField!
     @IBOutlet var searchView: UIView!
     @IBOutlet var priceView: UIView!
@@ -68,6 +67,23 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         indicatorView.addSubview(activityIndicator)
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
+        
+        // Add the second button to the nav bar
+        dealsButton = UIBarButtonItem(image: UIImage(named: "dealIcon"), style: .Plain, target: self, action: "loadDeals")
+        searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
+        cancelButton = UIBarButtonItem(image: UIImage(named: "closeIcon"), style: .Plain, target: self, action: "shouldCloseSearch")
+        self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
+        // self.navigationItem.setLeftBarButtonItems([menuButton, self.dealButton], animated: true)
+        
+        burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+        
+        priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+        searchView.roundCorners(.AllCorners, radius: 14)
+        priceView.roundCorners(.AllCorners, radius: 14)
+        // GET LOCATION
+        getLocationPermissionAndData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -93,24 +109,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
 
     
     override func viewDidAppear(animated: Bool) {
-        // Add the second button to the nav bar
-        //let menuButton = UIBarButtonItem(image: UIImage(named: "menuButton"), style: .Plain, target: self, action: "displayMenu")
-        searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
-        cancelButton = UIBarButtonItem(image: UIImage(named: "closeIcon"), style: .Plain, target: self, action: "shouldCloseSearch")
-        self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
-       // self.navigationItem.setLeftBarButtonItems([menuButton, self.dealButton], animated: true)
-        
-        burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
-            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
-        
-        priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
-            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
-        searchView.roundCorners(.AllCorners, radius: 14)
-        priceView.roundCorners(.AllCorners, radius: 14)
-        if venueList.count == 0 {
-            // GET LOCATION
-            getLocationPermissionAndData()
-        }
     }
     
   
@@ -274,6 +272,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         println("Textfield returned")
+        textField.endEditing(true)
         self.view.endEditing(true)
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
         // see which text field was entered
@@ -332,6 +331,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         
         var cardView = CardContentView(frame: self.swipeableView.bounds)
         var contentView = NSBundle.mainBundle().loadNibNamed("CardContentView", owner: self, options: nil).first! as! UIView
+        // stop the imageview from filling out the whole view
+        
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         let restaurant: Venue = venueList[Int(index)]
@@ -343,8 +344,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let views = ["contentView": contentView, "cardView": cardView]
         cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView(width)]", options: .AlignAllLeft, metrics: metrics, views: views))
         cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView(height)]", options: .AlignAllLeft, metrics: metrics, views: views))
-        
-        cardView.roundCorners( .AllCorners, radius: 14)
+         cardView.roundCorners( .AllCorners, radius: 14)
         return cardView
     }
     
@@ -453,7 +453,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     }
     
     func showErrorAlert(error: NSError) {
-        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try agian later.", preferredStyle: .Alert)
+        activityIndicator.stopAnimation()
+        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try again later.", preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "Ok", style: .Default, handler: {
             (action) -> Void in
         })
@@ -496,8 +497,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
                 swipeableView.reloadData()
             } else {
                 // begin loading saloof & foursquare locations
-                let dealButton = UIBarButtonItem(image: UIImage(named: "dealsBtn"), style: .Plain, target: self, action: "loadDeals")
-                self.navigationItem.setLeftBarButtonItems([self.menuButton, dealButton], animated: true)
+                self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
                 activityIndicator.startAnimation()
                 fetchSaloofVenues()
             }
@@ -511,6 +511,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     func loadDeals() {
         let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
         let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
+        dealsVC.navigationItem.title = nil
         navigationController?.pushViewController(dealsVC, animated: true)
 
     
@@ -536,6 +537,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             for venue in venues {
                 venueList.append(venue)
             }
+            //makesure the deals button is viewable
+            self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
         } else {
             //println("No Locations saloof locations near this user")
         }
@@ -628,6 +631,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             dealsVC.loadSingleDeal = true
             dealsVC.setUpForSaved = true
             dealsVC.savedDeal = savedDeal!
+            dealsVC.navigationItem.title = nil
             navigationController?.pushViewController(dealsVC, animated: true)
         } else {
             // Alert them there isn't a current valid saved deal

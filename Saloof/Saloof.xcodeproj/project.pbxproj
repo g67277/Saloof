@@ -15,6 +15,7 @@
 		81F8C0531B67BA7D001B9203 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0521B67BA7D001B9203 /* Images.xcassets */; };
 		81F8C0561B67BA7D001B9203 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0541B67BA7D001B9203 /* LaunchScreen.xib */; };
 		81F8C0621B67BA7D001B9203 /* SaloofTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0611B67BA7D001B9203 /* SaloofTests.swift */; };
+		9965B0371B7A7B33003426A0 /* CustomSwipableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */; };
 		998DB9151B7709B1005B7E2E /* Business.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9141B7709B1005B7E2E /* Business.storyboard */; };
 		998DB9171B7709BD005B7E2E /* User.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9161B7709BD005B7E2E /* User.storyboard */; };
 		998DB9191B770AA7005B7E2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 998DB9181B770AA7005B7E2E /* CoreLocation.framework */; };
@@ -99,6 +100,7 @@
 		81F8C05B1B67BA7D001B9203 /* SaloofTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaloofTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F8C0601B67BA7D001B9203 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81F8C0611B67BA7D001B9203 /* SaloofTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaloofTests.swift; sourceTree = "<group>"; };
+		9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSwipableView.swift; sourceTree = "<group>"; };
 		998443B936F6F44EEF246EA9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		998DB9141B7709B1005B7E2E /* Business.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Business.storyboard; sourceTree = "<group>"; };
 		998DB9161B7709BD005B7E2E /* User.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = User.storyboard; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 				998DB9631B77146D005B7E2E /* GradientView.swift */,
 				998DB9651B771495005B7E2E /* FavoriteHeaderCell.swift */,
 				998DB9671B7714BC005B7E2E /* DealCardCell.swift */,
+				9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				99BCBA1F1B771C59004890E2 /* ProfileModel.swift in Sources */,
 				99BCBA1C1B771C32004890E2 /* BusinessDeal.swift in Sources */,
 				998DB9441B770DD2005B7E2E /* RegisterRestaurantVC3.swift in Sources */,
+				9965B0371B7A7B33003426A0 /* CustomSwipableView.swift in Sources */,
 				998DB93C1B770D2D005B7E2E /* InitialScreenVC.swift in Sources */,
 				81F8C04C1B67BA7D001B9203 /* Saloof.xcdatamodeld in Sources */,
 				99BCBA311B771DCC004890E2 /* ProfileVC.swift in Sources */,

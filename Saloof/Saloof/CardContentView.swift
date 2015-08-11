@@ -30,14 +30,11 @@ class CardContentView: UIView {
     func setup() {
         // Shadow
         layer.shadowColor = UIColor.blackColor().CGColor
-        layer.shadowOpacity = 0.33
-        layer.shadowOffset = CGSizeMake(0, 1.5)
+        layer.shadowOpacity = 0.6
+        layer.shadowOffset = CGSizeMake(1, 1.5)
         layer.shadowRadius = 4.0
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.mainScreen().scale
-        
-        // Corner Radius
-        layer.cornerRadius = 10.0;
     }
     
     func setUpRestaurant(contentView: UIView, dataObject: Venue){
@@ -58,7 +55,7 @@ class CardContentView: UIView {
                 // set up default image
                 locationImage.contentMode = UIViewContentMode.ScaleAspectFill
                 locationImage.clipsToBounds = true
-                locationImage.image = UIImage(named: "redHen")
+                locationImage.image = UIImage(named: "fiola")
             }
         }
     }

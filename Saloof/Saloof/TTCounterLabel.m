@@ -48,9 +48,9 @@
     /*self.font = [UIFont systemFontOfSize:55];
     self.boldFont = [UIFont boldSystemFontOfSize:55];
     self.regularFont = [UIFont systemFontOfSize:55];*/
-    self.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14];
-    self.boldFont = [UIFont fontWithName:@"AvenirNext-Bold" size:14];
-    self.regularFont = [UIFont fontWithName:@"AvenirNext-Regular" size:14];
+    self.font = [UIFont fontWithName:@"Montserrat-UltraLight" size:24];
+    self.boldFont = [UIFont fontWithName:@"Montserrat-Bold" size:24];
+    self.regularFont = [UIFont fontWithName:@"Montserrat-UltraLight" size:24];
     self.countDirection = kCountDirectionUp;
     self.value = 0;
     self.startValue = 0;

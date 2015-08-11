@@ -8,20 +8,20 @@ class-members:
 top-level:
 - !private "overlayRightImageName"
 - "UIImageView"
-- "OverlayView"
 - !private "UIImage"
+- "OverlayView"
 - "StringLiteralType"
 - !private "overlayLeftImageName"
 - "OverlayMode"
 member-access:
-- !private "CSo11UIResponder"
-- !private "Sb"
-- !private "CSo7UIImage"
-- "C6Saloof15CardOverlayView"
 - !private "CSo8NSObject"
+- !private "CSo7UIImage"
 - !private "CSo11UIImageView"
-- !private "CSo6UIView"
+- !private "Sb"
+- "C6Saloof15CardOverlayView"
 - "PSs9AnyObject"
+- !private "CSo11UIResponder"
+- !private "CSo6UIView"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/Swift.swiftmodule"

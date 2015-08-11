@@ -28,7 +28,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableview.rowHeight = 121
+        tableview.rowHeight = 105
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
     }

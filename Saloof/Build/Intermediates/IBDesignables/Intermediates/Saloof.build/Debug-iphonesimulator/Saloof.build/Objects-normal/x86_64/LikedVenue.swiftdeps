@@ -5,17 +5,17 @@ nominals:
 - "C6Saloof10LikedVenue"
 class-members:
 - "primaryKey"
-- "venueId"
+- "likedId"
 top-level:
+- "Object"
 - "StringLiteralType"
 - "String"
-- "Object"
 member-access:
-- "CSo13RLMObjectBase"
 - "PSs9AnyObject"
-- "C6Saloof10LikedVenue"
+- "CSo13RLMObjectBase"
 - "CSo8NSObject"
 - "C10RealmSwift6Object"
+- "C6Saloof10LikedVenue"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"
