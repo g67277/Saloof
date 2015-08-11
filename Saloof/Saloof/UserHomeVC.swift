@@ -398,23 +398,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         
     }
-    /*
-    func removeRejectedVenues () {
-        println("removing rejected venues")
-        // remove each from the list
-        for venue in venueList {
-            if venue.swipeValue == 2 {
-                venueList.delete(venue)
-            }
-        }
-        // get all the rejected venues from realm
-        var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
-        realm.write {
-            self.realm.delete(rejectedVenues)
-        }
-        // update the venues array (test to see if this handles the out of bounds issue)
-        venues = Realm().objects(Venue)
-    }*/
+
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
         println("Ran out of cards, getting foursquare locations")
