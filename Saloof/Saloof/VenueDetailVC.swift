@@ -54,6 +54,8 @@ class VenueDetailVC: UIViewController {
         }
     }
     
+    
+    
     override func viewDidLayoutSubviews() {
         dealImage.layer.masksToBounds = false
         dealImage.layer.borderColor = UIColor.blackColor().CGColor

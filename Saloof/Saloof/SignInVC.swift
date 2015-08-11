@@ -29,6 +29,9 @@ class SignInVC: UIViewController {
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
+        
+        
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -40,6 +43,20 @@ class SignInVC: UIViewController {
             var storyboard = UIStoryboard(name: "Business", bundle: nil)
             var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)
+        }
+        
+        var containerView = UIView(frame: CGRectMake(30, 100, 200, 200))
+        containerView.center = self.view.center
+        containerView.backgroundColor = .blackColor()
+        let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+        containerView.addSubview(aIView)
+        self.view.addSubview(containerView)
+        aIView.startAnimation()
+        
+        let delay = 4.5 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue()) {
+            aIView.stopAnimation()
         }
         
     }

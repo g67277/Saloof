@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8183BB2A1B799E13002EC6C8 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183BB291B799E13002EC6C8 /* JSONParser.swift */; };
 		81F8C0491B67BA7D001B9203 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0481B67BA7D001B9203 /* AppDelegate.swift */; };
 		81F8C04C1B67BA7D001B9203 /* Saloof.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C04A1B67BA7D001B9203 /* Saloof.xcdatamodeld */; };
 		81F8C0511B67BA7D001B9203 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C04F1B67BA7D001B9203 /* Main.storyboard */; };
@@ -84,6 +85,7 @@
 
 /* Begin PBXFileReference section */
 		3F7AA3BCBDD174ECE2056454 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		8183BB291B799E13002EC6C8 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		81F8C0431B67BA7D001B9203 /* Saloof.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Saloof.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F8C0471B67BA7D001B9203 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81F8C0481B67BA7D001B9203 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 				99BCBA191B771BF4004890E2 /* FoodCategories.swift */,
 				99BCBA201B771C9B004890E2 /* APICalls.swift */,
 				99BCBA221B771CBB004890E2 /* DataSaving.swift */,
+				8183BB291B799E13002EC6C8 /* JSONParser.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				998DB96B1B7714FA005B7E2E /* VenueDeal.swift in Sources */,
 				998DB96D1B77150F005B7E2E /* Venue.swift in Sources */,
 				998DB9621B77143E005B7E2E /* FavoritesCell.swift in Sources */,
+				8183BB2A1B799E13002EC6C8 /* JSONParser.swift in Sources */,
 				998DB94A1B770E2F005B7E2E /* RegisterUserVC.swift in Sources */,
 				998DB9531B770F00005B7E2E /* AuthenticationCalls.swift in Sources */,
 				99BCBA211B771C9B004890E2 /* APICalls.swift in Sources */,
