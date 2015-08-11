@@ -1,5 +1,5 @@
 //
-//  ProfileVC.swift
+//  Profile.swift
 //  Saloof
 //
 //  Created by Nazir Shuqair on 8/7/15.
@@ -19,6 +19,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBOutlet weak var imgView: UIImageView!
     var imgURI = NSURL()
     var newMedia: Bool?
+    var newImage = false
     var validImage = false
     @IBOutlet weak var contactField: UITextField!
     //Category
@@ -108,11 +109,21 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             data?.contactName = self.contactField.text
             data?.category = category!
             data?.priceTier = self.priceControls.selectedSegmentIndex
-            data?.weekdayO = wkO!
-            data?.weekdayC = wkC!
-            data?.weekendO = wknO!
-            data?.weekendC = wknC!
-            data?.imgUri = "\(self.imgURI)"
+            if wkO != nil{
+                data?.weekdayO = wkO!
+            }
+            if wkC != nil{
+                data?.weekdayC = wkC!
+            }
+            if wknO != nil{
+                data?.weekendO = wknO!
+            }
+            if wknC != nil{
+                data?.weekendC = wknC!
+            }
+            if self.newImage{
+                data?.imgUri = "\(self.imgURI)"
+            }
         })
         
         var alertView:UIAlertView = UIAlertView()
@@ -287,6 +298,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
             imgURI = info[UIImagePickerControllerReferenceURL] as! NSURL
+            newImage = true
             //println(test.debugDescription)
             imgView.image = image
             validImage = true

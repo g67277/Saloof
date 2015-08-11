@@ -2,7 +2,6 @@
 //  DealDetailsVC.swift
 //  Saloof
 //
-//
 //  Created by Nazir Shuqair on 7/18/15.
 //  Copyright (c) 2015 SNASTek. All rights reserved.
 //

@@ -65,8 +65,8 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
             && validation.validateInput(descTextView.text, check: 5, title: "Too Short", message: "Please add some more details to the description")
             && validImage{
                 
-                var callPart2 = "\"ContactName\":\"\(contactName.text)\"}"
-                var completeCall = "\(callPart1), \(callPart2)"
+                var callPart2 = "{\"ContactName\":\"\(contactName.text)\""
+                var completeCall = "\(callPart2), \(callPart1)"
                 var token = prefs.stringForKey("TOKEN")
                 if authentication.registerRestaurant(completeCall, token: token!){
                     

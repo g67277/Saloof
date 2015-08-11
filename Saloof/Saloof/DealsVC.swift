@@ -25,6 +25,8 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        navigationController?.navigationBarHidden = false
+        
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         if savedDealsArray.count > 0{
             dealsArray.removeAll(keepCapacity: true)
