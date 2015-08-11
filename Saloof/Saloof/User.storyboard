@@ -1877,8 +1877,7 @@
                                                 <exclude reference="Zoa-bx-Phx"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="367" y="163" width="25" height="22"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="2cV-gX-dvg"/>
                                                 <include reference="Zoa-bx-Phx"/>
@@ -3013,8 +3012,7 @@ launch special!</string>
                                                 <exclude reference="Sar-Wb-AXv"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="375" y="178" width="25" height="22"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="67u-sf-5fQ"/>
                                                 <include reference="JXQ-cP-xGC"/>

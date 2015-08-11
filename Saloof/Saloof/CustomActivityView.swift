@@ -37,7 +37,6 @@ class CustomActivityView: UIView {
         }
     }
     
-    
     func startAnimation() {
         if (self.layer.sublayers == nil) {
             setUpAnimationInLayer(self.layer, size: self.size, color: self.color)
