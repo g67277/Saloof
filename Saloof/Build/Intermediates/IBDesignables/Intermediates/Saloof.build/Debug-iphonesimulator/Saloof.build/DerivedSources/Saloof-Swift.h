@@ -430,6 +430,17 @@ SWIFT_CLASS("_TtC6Saloof15InitialScreenVC")
 @end
 
 
+SWIFT_CLASS("_TtC6Saloof10LikedVenue")
+@interface LikedVenue : Object
+@property (nonatomic, copy) NSString * __nonnull venueId;
++ (NSString * __nonnull)primaryKey;
+- (SWIFT_NULLABILITY(nonnull) instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithValue:(id __nonnull)value OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithRealm:(RLMRealm * __nonnull)realm schema:(RLMObjectSchema * __nonnull)schema OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithValue:(id __nonnull)value schema:(RLMSchema * __nonnull)schema OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
 SWIFT_CLASS("_TtC6Saloof12ProfileModel")
 @interface ProfileModel : Object
 @property (nonatomic, copy) NSString * __nonnull restaurantName;
@@ -466,6 +477,7 @@ SWIFT_CLASS("_TtC6Saloof9ProfileVC")
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified RestaurantTitleLabel;
 @property (nonatomic, weak) IBOutlet UIImageView * __null_unspecified imgView;
 @property (nonatomic) NSURL * __nonnull imgURI;
+@property (nonatomic) BOOL newImage;
 @property (nonatomic) BOOL validImage;
 @property (nonatomic, weak) IBOutlet UITextField * __null_unspecified contactField;
 @property (nonatomic, weak) IBOutlet UIButton * __null_unspecified catButton;
@@ -755,8 +767,8 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @property (nonatomic) IBOutlet UIView * __null_unspecified searchPickerView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified pickerSpinnerView;
 @property (nonatomic) IBOutlet UIPickerView * __null_unspecified searchPicker;
-@property (nonatomic) BOOL searchActive;
 @property (nonatomic) BOOL searchPrice;
+@property (nonatomic) BOOL searchQuery;
 @property (nonatomic, copy) NSString * __nonnull searchString;
 @property (nonatomic) NSInteger offsetCount;
 @property (nonatomic, copy) NSArray * __nonnull pickerDataSource;
@@ -775,7 +787,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (UIView * __nonnull)pickerView:(UIPickerView * __nonnull)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView * __null_unspecified)view;
 - (CGFloat)pickerView:(UIPickerView * __nonnull)pickerView rowHeightForComponent:(NSInteger)component;
 - (CGFloat)pickerView:(UIPickerView * __nonnull)pickerView widthForComponent:(NSInteger)component;
-- (void)didSelectPricePoint:(BOOL)shouldSearch;
+- (void)didSelectPricePoint;
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
@@ -787,7 +799,6 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (NSUInteger)kolodaNumberOfCards:(KolodaView * __nonnull)koloda;
 - (UIView * __nonnull)kolodaViewForCardAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
 - (OverlayView * __nullable)kolodaViewForCardOverlayAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
-- (void)removeRejectedVenues;
 - (void)kolodaDidRunOutOfCards:(KolodaView * __nonnull)koloda;
 - (void)resetSwipeableVieForReload;
 - (void)kolodaDidSelectCardAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
@@ -950,17 +961,21 @@ SWIFT_CLASS("_TtC6Saloof13VenueDetailVC")
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified dealTitleLabel;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified dealDescLabel;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified dealValueLabel;
-@property (nonatomic) IBOutlet UIView * __null_unspecified favoriteLikesView;
 @property (nonatomic) IBOutlet UILabel * __null_unspecified favoritesLabel;
 @property (nonatomic) IBOutlet UILabel * __null_unspecified likesLabel;
+@property (nonatomic) IBOutlet UIButton * __null_unspecified likeButton;
+@property (nonatomic) IBOutlet UIButton * __null_unspecified favoriteButton;
 @property (nonatomic) IBOutlet UIImageView * __null_unspecified dealImage;
 @property (nonatomic) Venue * __nullable thisVenue;
 @property (nonatomic) FavoriteVenue * __nullable favVenue;
 @property (nonatomic) BOOL isFavorite;
+@property (nonatomic) BOOL doesLike;
+@property (nonatomic, copy) NSString * __nonnull thisVenueId;
 - (void)viewDidLoad;
 - (void)setUpVenue:(Venue * __nonnull)venue;
 - (void)setUpFavoriteVenue:(FavoriteVenue * __nonnull)venue;
 - (void)didReceiveMemoryWarning;
+- (void)setUpLikeNFavoriteButtons;
 - (IBAction)onClick:(UIButton * __nonnull)sender;
 - (VenueDeal * __nonnull)createDealForDetailView;
 - (IBAction)shouldPushToSavedDeal:(id __nonnull)sender;

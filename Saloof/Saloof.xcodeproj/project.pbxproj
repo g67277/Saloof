@@ -70,6 +70,7 @@
 		99BCBA2C1B771D6A004890E2 /* DealDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA2B1B771D6A004890E2 /* DealDetailsVC.swift */; };
 		99BCBA2F1B771DA3004890E2 /* DealsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA2E1B771DA3004890E2 /* DealsCell.swift */; };
 		99BCBA311B771DCC004890E2 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA301B771DCC004890E2 /* ProfileVC.swift */; };
+		99F961BA1B7996EF00D01F4D /* LikedVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F961B91B7996EF00D01F4D /* LikedVenue.swift */; };
 		F4CA0662F73964C28F1E54B2 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC0F7C383A865C408CA68AA9 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -156,6 +157,7 @@
 		99BCBA2B1B771D6A004890E2 /* DealDetailsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealDetailsVC.swift; sourceTree = "<group>"; };
 		99BCBA2E1B771DA3004890E2 /* DealsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealsCell.swift; sourceTree = "<group>"; };
 		99BCBA301B771DCC004890E2 /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		99F961B91B7996EF00D01F4D /* LikedVenue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikedVenue.swift; sourceTree = "<group>"; };
 		EC0F7C383A865C408CA68AA9 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -380,6 +382,7 @@
 				998DB96C1B77150F005B7E2E /* Venue.swift */,
 				998DB96E1B771526005B7E2E /* SavedDeal.swift */,
 				998DB9701B77155F005B7E2E /* FavoriteVenue.swift */,
+				99F961B91B7996EF00D01F4D /* LikedVenue.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				99BCBA231B771CBB004890E2 /* DataSaving.swift in Sources */,
 				998DB9421B770DAD005B7E2E /* RegisterRestaurantVC2.swift in Sources */,
 				99BCBA281B771D1D004890E2 /* StoreVC.swift in Sources */,
+				99F961BA1B7996EF00D01F4D /* LikedVenue.swift in Sources */,
 				998DB96F1B771526005B7E2E /* SavedDeal.swift in Sources */,
 				998DB9511B770EB4005B7E2E /* Validation.swift in Sources */,
 				998DB9741B7715A3005B7E2E /* UserHomeVC.swift in Sources */,

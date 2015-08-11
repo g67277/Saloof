@@ -7,24 +7,24 @@ nominals:
 - "C10RealmSwift6Schema"
 class-members:
 top-level:
+- "Printable"
+- "=="
 - "String"
-- "Equatable"
-- "Bool"
+- "ObjectSchema"
 - !private "RLMObjectSchema"
+- "Bool"
 - "Schema"
 - "RLMSchema"
-- "=="
-- "ObjectSchema"
-- "Printable"
+- "Equatable"
 member-access:
-- "PSs9AnyObject"
-- !private "CSo9RLMSchema"
 - "C10RealmSwift6Schema"
-- !private "Sa"
-- "PSs9Equatable"
+- !private "CSo9RLMSchema"
+- "PSs9AnyObject"
 - !private "CSo8NSObject"
 - !private "C10RealmSwift12ObjectSchema"
+- !private "Sa"
 - "PSs9Printable"
+- "PSs9Equatable"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

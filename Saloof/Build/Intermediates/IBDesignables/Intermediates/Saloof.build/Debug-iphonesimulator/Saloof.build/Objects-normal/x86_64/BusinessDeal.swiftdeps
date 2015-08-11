@@ -4,26 +4,26 @@ provides:
 nominals:
 - "C6Saloof12BusinessDeal"
 class-members:
-- "id"
-- "value"
-- "title"
-- "timeLimit"
-- "restaurantID"
 - "desc"
+- "timeLimit"
+- "value"
+- "restaurantID"
 - "restaurant"
+- "id"
+- "title"
 - "primaryKey"
 top-level:
-- "ProfileModel"
-- "StringLiteralType"
 - "Object"
 - "String"
+- "StringLiteralType"
+- "ProfileModel"
 member-access:
-- "C6Saloof12BusinessDeal"
-- !private "Sq"
 - "CSo8NSObject"
-- "PSs9AnyObject"
-- "CSo13RLMObjectBase"
+- !private "Sq"
 - "C10RealmSwift6Object"
+- "C6Saloof12BusinessDeal"
+- "CSo13RLMObjectBase"
+- "PSs9AnyObject"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

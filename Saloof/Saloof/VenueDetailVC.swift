@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class VenueDetailVC: UIViewController {
-
+    
     @IBOutlet weak var locationImage: UIImageView!
     @IBOutlet weak var priceTierlabel: UILabel!
     @IBOutlet weak var locationDistanceLabel: UILabel!
@@ -29,12 +29,19 @@ class VenueDetailVC: UIViewController {
     @IBOutlet var favoritesLabel: UILabel!
     @IBOutlet var likesLabel: UILabel!
     
+    @IBOutlet var likeButton: UIButton!
+    @IBOutlet var favoriteButton: UIButton!
     @IBOutlet var dealImage: UIImageView!
     
+    let realm = Realm()
     var thisVenue: Venue?
     var favVenue: FavoriteVenue?
+    // Determines if came from favoritesVC
     var isFavorite: Bool = false
-    
+    // Determines if this user likes/favorites this venue
+    var doesLike: Bool = false
+    var doesFavorite: Bool = false
+    var thisVenueId: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,24 +51,21 @@ class VenueDetailVC: UIViewController {
         
         // Do any additional setup after loading the view.
         if isFavorite {
-            if let venue: FavoriteVenue = favVenue {
+                if let venue: FavoriteVenue = favVenue {
+                thisVenueId = venue.identifier
+                    println("Id: \(thisVenueId)")
                 setUpFavoriteVenue(venue)
             }
         } else {
             if let venue: Venue = thisVenue {
+                thisVenueId = venue.identifier
+                 println("Id: \(thisVenueId)")
                 setUpVenue(venue)
             }
         }
+        setUpLikeNFavoriteButtons()
     }
     
-    
-    
-    override func viewDidLayoutSubviews() {
-        dealImage.layer.masksToBounds = false
-        dealImage.layer.borderColor = UIColor.blackColor().CGColor
-        dealImage.layer.cornerRadius = dealImage.frame.height/2
-        dealImage.clipsToBounds = true
-    }
     
     func setUpVenue(venue: Venue) {
         if var locationLabel = locationName {
@@ -154,7 +158,6 @@ class VenueDetailVC: UIViewController {
         } else {
             // hide the deal and favorites views
             dealView.hidden = true
-            // favoriteLikesView.hidden = true
         }
         
     }
@@ -180,16 +183,12 @@ class VenueDetailVC: UIViewController {
         
         // Images
         if var imageView = locationImage {
-            //imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            //imageView.clipsToBounds = true
             if venue.hasImage {
                 imageView.image = venue.image
             } else {
                 imageView.image = UIImage(named: "redHen")
             }
             if var dealImageView = dealImage {
-                //dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
-                //dealImageView.clipsToBounds = true
                 if venue.hasImage {
                     dealImageView.image = venue.image
                 } else {
@@ -255,26 +254,145 @@ class VenueDetailVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // -------------------- LIKING / UNLIKING  / FAVORITING  / UNFAVORITING  ----------------------
+    func setUpLikeNFavoriteButtons() {
+        // And favorites button
+        // Check if this venue is included in the liked or favorites lists
+        var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
+        if likedVenue != nil {
+            // set the liked button on
+            doesLike = true
+            likeButton.selected = true
+        } else {
+            doesLike = false
+            likeButton.selected = true
+        }
+        var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+        if favoriteVenue != nil {
+            // set the favorite button on
+            favoriteButton.selected = true
+            doesFavorite = true
+        } else {
+            favoriteButton.selected = false
+            doesFavorite = false
+        }
+        
+    }
+    
+    
     @IBAction func onClick(sender: UIButton) {
-        if sender.tag == 1 {
-            // user pressed favorite this restaurant
-        } else if sender.tag == 2 {
-            // user pressed like button
+        println("This venue id: \(thisVenueId)")
+        // like == 2, favorite == 3
+        if sender.tag == 2 {
+            if doesLike {
+                println("Unliking")
+                // unlike/unselect this venue
+                var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
+                if likedVenue != nil {
+                    realm.write {
+                        self.realm.delete(likedVenue!)
+                    }
+                }
+                doesLike = false
+                likeButton.selected = false
+            } else {
+                println("Liking")
+                // like and select
+                var newVenueLike = LikedVenue()
+                newVenueLike.likedId = thisVenueId
+                realm.write {
+                    realm.create(LikedVenue.self, value: newVenueLike, update: true)
+                }
+                likeButton.selected = true
+                doesLike = true
+            }
+        } else if sender.tag == 3 {
+            // remove this venue
+            if doesFavorite {
+                println("unfavoriting")
+                // unlike/unselect this venue
+                var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                if favVenue != nil {
+                    realm.write {
+                        self.realm.delete(favVenue!)
+                    }
+                }
+                favoriteButton.selected = false
+                doesFavorite = false
+            } else {
+                println("favoriting")
+                // fav and select
+                // make sure there is a favorite venue saved
+                var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                if favoriteVenue == nil {
+                    if isFavorite {
+                        println("Resaving venue as favorite")
+                        // create the whole object
+                        var favorite = FavoriteVenue()
+                        // create from the current favorite object
+                        favorite.name = favVenue!.name
+                        favorite.phone = favVenue!.phone
+                        favorite.webUrl = favVenue!.webUrl
+                        favorite.image = favVenue!.image
+                        favorite.distance = favVenue!.distance
+                        favorite.identifier = favVenue!.identifier
+                        favorite.address = favVenue!.address
+                        favorite.priceTier = favVenue!.priceTier
+                        favorite.hours = favVenue!.hours
+                        favorite.swipeValue = 1
+                        favorite.hasImage = favVenue!.hasImage
+                        favorite.sourceType = favVenue!.sourceType
+                        // save deal
+                        if favVenue!.sourceType == Constants.sourceTypeSaloof {
+                            favorite.defaultDealTitle = favVenue!.defaultDealTitle
+                            favorite.defaultDealID = favVenue!.defaultDealID
+                            favorite.defaultDealValue = favVenue!.defaultDealValue
+                            favorite.defaultDealDesc = favVenue!.defaultDealDesc
+                        }
+                        favorite.favorites =  favVenue!.favorites
+                        favorite.likes =  favVenue!.likes
+                        realm.write {
+                            self.realm.create(FavoriteVenue.self, value: favorite, update: true)
+                        }
+                        
+                    } else {
+                        println("Saving new venue from tinder ui as favorite")
+                        var favorite = Venue()
+                        // create from the current favorite object
+                        favorite.name = thisVenue!.name
+                        favorite.phone = thisVenue!.phone
+                        favorite.webUrl = thisVenue!.webUrl
+                        favorite.image = thisVenue!.image
+                        favorite.distance = thisVenue!.distance
+                        favorite.identifier = thisVenue!.identifier
+                        favorite.address = thisVenue!.address
+                        favorite.priceTier = thisVenue!.priceTier
+                        favorite.hours = thisVenue!.hours
+                        favorite.swipeValue = 1
+                        favorite.hasImage = thisVenue!.hasImage
+                        favorite.sourceType = thisVenue!.sourceType
+                        // save deal
+                        if thisVenue!.sourceType == Constants.sourceTypeSaloof {
+                            favorite.defaultDealTitle = thisVenue!.defaultDealTitle
+                            favorite.defaultDealID = thisVenue!.defaultDealID
+                            favorite.defaultDealValue = thisVenue!.defaultDealValue
+                            favorite.defaultDealDesc = thisVenue!.defaultDealDesc
+                        }
+                        favorite.favorites =  thisVenue!.favorites
+                        favorite.likes =  thisVenue!.likes
+                        realm.write {
+                            self.realm.create(FavoriteVenue.self, value: favorite, update: true)
+                        }
+                        
+                    }
+                }
+                favoriteButton.selected = true
+                isFavorite = true
+            }
         }
     }
     
-    /* -------------------------  SEGUE  -------------------------- */
-    /*  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    
-    if segue.identifier == "shouldViewVenueDefaultDeal" {
-    let detailVC = segue.destinationViewController as! RestaurantDealDetaislVC
-    //create a temporary default deal
-    var deal = createDealForDetailView()
-    detailVC.thisDeal = deal
-    detailVC.setUpForDefault = true
-    detailVC.setUpForSaved = false
-    }
-    }*/
     
     func createDealForDetailView()-> VenueDeal {
         let venueDeal = VenueDeal()
@@ -345,8 +463,4 @@ class VenueDetailVC: UIViewController {
         navigationController?.pushViewController(dealsVC, animated: true)
         
     }
-    
-    
-    
 }
-
