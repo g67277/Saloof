@@ -10,12 +10,11 @@ import UIKit
 
 public class CreateActivityView{
     
-    class func createView(backgroundColor: UIColor?) -> (UIView){
+    class func createView(backgroundColor: UIColor?, frame: CGRect) -> (UIView){
         
-        var container = UIView(frame: CGRectMake(0, 0, 150, 150))
-        container.roundCorners(.AllCorners, radius: 14)
+        var container = UIView(frame: frame)
         container.backgroundColor = backgroundColor
-        container.alpha = 0.5
+        container.alpha = 0.7
         
         return container
     }

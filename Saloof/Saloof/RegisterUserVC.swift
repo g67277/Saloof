@@ -54,7 +54,7 @@ class RegisterUserVC: UIViewController {
                 && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
                     var post:NSString = "{\"UserName\":\"\(usernameField.text)\",\"Email\":\"\(emailField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"false\"}"
                     
-                    var containerView = CreateActivityView.createView(UIColor.blackColor())
+                    var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
                     var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
@@ -62,26 +62,32 @@ class RegisterUserVC: UIViewController {
                     self.view.addSubview(containerView)
                     aIView.startAnimation()
                     
-                    authenticationCall.registerUser(post){ result in
-                        
-                        if result{
-                            var stringPost="grant_type=password&username=\(self.usernameField.text)&password=\(self.passwordField.text)"
+                    if Reachability.isConnectedToNetwork(){
+                        authenticationCall.registerUser(post){ result in
                             
-                            self.authenticationCall.signIn(stringPost){ result in
-                                if result {
-                                    dispatch_async(dispatch_get_main_queue()){
-                                        aIView.stopAnimation()
-                                        containerView.removeFromSuperview()
-                                        self.navigationController?.popViewControllerAnimated(false)
-                                    }
-                                }else{
-                                    dispatch_async(dispatch_get_main_queue()){
-                                        aIView.stopAnimation()
-                                        containerView.removeFromSuperview()
+                            if result{
+                                var stringPost="grant_type=password&username=\(self.usernameField.text)&password=\(self.passwordField.text)"
+                                
+                                self.authenticationCall.signIn(stringPost){ result in
+                                    if result {
+                                        dispatch_async(dispatch_get_main_queue()){
+                                            aIView.stopAnimation()
+                                            containerView.removeFromSuperview()
+                                            self.navigationController?.popViewControllerAnimated(false)
+                                        }
+                                    }else{
+                                        dispatch_async(dispatch_get_main_queue()){
+                                            aIView.stopAnimation()
+                                            containerView.removeFromSuperview()
+                                        }
                                     }
                                 }
                             }
                         }
+                    }else{
+                        aIView.stopAnimation()
+                        containerView.removeFromSuperview()
+                        validation.displayAlert("Oops", message: "Looks like you're offline, try again later")
                     }
             }
             

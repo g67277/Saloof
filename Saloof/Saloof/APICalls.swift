@@ -33,6 +33,7 @@ public class APICalls {
             NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
                 /* Your code */
                 let res = response as! NSHTTPURLResponse!
+                if res != nil{
                 println(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300{
                     var error: NSError?
@@ -76,6 +77,17 @@ public class APICalls {
                     alertView.delegate = self
                     alertView.addButtonWithTitle("OK")
                     alertView.show()
+                    completion(false)
+                }
+                }else{
+                    dispatch_async(dispatch_get_main_queue()) {
+                        var alertView:UIAlertView = UIAlertView()
+                        alertView.title = "Our bad"
+                        alertView.message = "Looks like we are updating the server, please try again later"
+                        alertView.delegate = self
+                        alertView.addButtonWithTitle("OK")
+                        alertView.show()
+                    }
                     completion(false)
                 }
             })
@@ -146,6 +158,11 @@ public class APICalls {
         
     }
     
+    func getBalance(id: String, token: String, completion: Bool -> ()){
+        
+        
+        
+    }
     
     func getBalance(id: String, token: NSString) ->(JSON){
         

@@ -65,7 +65,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
             && validation.validateInput(descTextView.text, check: 5, title: "Too Short", message: "Please add some more details to the description")
             && validImage{
                 
-                var containerView = CreateActivityView.createView(UIColor.blackColor())
+                var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
                 var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
                 aIView.center = containerView.center
                 containerView.addSubview(aIView)
@@ -76,25 +76,30 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                 var callPart2 = "{\"ContactName\":\"\(contactName.text)\""
                 var completeCall = "\(callPart2), \(callPart1)"
                 var token = prefs.stringForKey("TOKEN")
-                
-                authentication.registerRestaurant(completeCall, token: token!){ result in
-                    if result{
-                        APICalls.getMyRestaurant(token!){ result in
-                            self.saveData()
-                            dispatch_async(dispatch_get_main_queue()){
-                                aIView.stopAnimation()
-                                containerView.removeFromSuperview()
-                                var refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
-                                refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
-                                    self.backThree()
-                                }))
-                                self.presentViewController(refreshAlert, animated: true, completion: nil)
+                if Reachability.isConnectedToNetwork(){
+                    authentication.registerRestaurant(completeCall, token: token!){ result in
+                        if result{
+                            APICalls.getMyRestaurant(token!){ result in
+                                self.saveData()
+                                dispatch_async(dispatch_get_main_queue()){
+                                    aIView.stopAnimation()
+                                    containerView.removeFromSuperview()
+                                    var refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
+                                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
+                                        self.backThree()
+                                    }))
+                                    self.presentViewController(refreshAlert, animated: true, completion: nil)
+                                }
                             }
                         }
+                        
+                        aIView.stopAnimation()
+                        containerView.removeFromSuperview()
                     }
-                    
+                }else{
                     aIView.stopAnimation()
                     containerView.removeFromSuperview()
+                    validation.displayAlert("Oops", message: "Looks like you're offline, try again later")
                 }
                 
         }else if !validImage{

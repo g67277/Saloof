@@ -75,7 +75,7 @@ class RegisterRestaurantVC: UIViewController {
             && validation.validateEmail(emailAddressField.text)
             && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
                 
-                var containerView = CreateActivityView.createView(UIColor.blackColor())
+                var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
                 var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
                 aIView.center = containerView.center
                 containerView.addSubview(aIView)
@@ -83,25 +83,31 @@ class RegisterRestaurantVC: UIViewController {
                 self.view.addSubview(containerView)
                 aIView.startAnimation()
                 
-                var post:NSString = "{\"UserName\":\"\(userName.text)\",\"Email\":\"\(emailAddressField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"true\"}"
-                authenticationCall.registerUser(post) { result in
-                    var stringPost="grant_type=password&username=\(self.userName.text)&password=\(self.passwordField.text)"
-                    if result{
-                        self.authenticationCall.signIn(stringPost){result in
-                            if result{
-                                dispatch_async(dispatch_get_main_queue()){
-                                    aIView.stopAnimation()
-                                    containerView.removeFromSuperview()
-                                    self.performSegueWithIdentifier("toRegister2", sender: nil)
+                if Reachability.isConnectedToNetwork(){
+                    var post:NSString = "{\"UserName\":\"\(userName.text)\",\"Email\":\"\(emailAddressField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"true\"}"
+                    authenticationCall.registerUser(post) { result in
+                        var stringPost="grant_type=password&username=\(self.userName.text)&password=\(self.passwordField.text)"
+                        if result{
+                            self.authenticationCall.signIn(stringPost){result in
+                                if result{
+                                    dispatch_async(dispatch_get_main_queue()){
+                                        aIView.stopAnimation()
+                                        containerView.removeFromSuperview()
+                                        self.performSegueWithIdentifier("toRegister2", sender: nil)
+                                    }
                                 }
                             }
-                        }
-                    }else{
-                        dispatch_async(dispatch_get_main_queue()){
-                            aIView.stopAnimation()
-                            containerView.removeFromSuperview()
+                        }else{
+                            dispatch_async(dispatch_get_main_queue()){
+                                aIView.stopAnimation()
+                                containerView.removeFromSuperview()
+                            }
                         }
                     }
+                }else{
+                    aIView.stopAnimation()
+                    containerView.removeFromSuperview()
+                    validation.displayAlert("Oops", message: "Looks like you're offline, try again later")
                 }
         }
     }

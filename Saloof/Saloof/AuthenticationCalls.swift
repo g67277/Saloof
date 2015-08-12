@@ -19,7 +19,7 @@ public class AuthenticationCalls {
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.HTTPBody = postData
-        request.timeoutInterval = 60
+        request.timeoutInterval = 10
         request.setValue(postLength as String, forHTTPHeaderField: "Content-Length")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -30,6 +30,7 @@ public class AuthenticationCalls {
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             /* Your code */
             let res = response as! NSHTTPURLResponse!
+            if res != nil{
             println(res.statusCode)
             if res.statusCode >= 200 && res.statusCode < 300{
                 
@@ -94,6 +95,17 @@ public class AuthenticationCalls {
                 }
                 completion(false)
             }
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Our bad"
+                    alertView.message = "Looks like we are updating the server, please try again later"
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                }
+                completion(false)
+            }
         })
         
     }
@@ -119,6 +131,7 @@ public class AuthenticationCalls {
             /* Your code */
             /* Your code */
             let res = response as! NSHTTPURLResponse!
+            if res != nil{
             println(res.statusCode)
             if res.statusCode >= 200 && res.statusCode < 300{
                 completion(true)
@@ -132,6 +145,17 @@ public class AuthenticationCalls {
                 alertView.addButtonWithTitle("OK")
                 alertView.show()
                 debugPrint(json["error_description"].string!)
+                completion(false)
+            }
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Our bad"
+                    alertView.message = "Looks like we are updating the server, please try again later"
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                }
                 completion(false)
             }
             
@@ -231,6 +255,7 @@ public class AuthenticationCalls {
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             /* Your code */
             let res = response as! NSHTTPURLResponse!
+            if res != nil{
             println(res.statusCode)
             if res.statusCode >= 200 && res.statusCode < 300{
                 if res.statusCode == 200{
@@ -263,7 +288,19 @@ public class AuthenticationCalls {
                 alertView.addButtonWithTitle("OK")
                 alertView.show()
             }
-            completion(false)
+                completion(false)
+
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Our bad"
+                    alertView.message = "Looks like we are updating the server, please try again later"
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                }
+                completion(false)
+                }
         })
     }
     

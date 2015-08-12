@@ -72,7 +72,7 @@ class SignInUserVC: UIViewController {
             if validation.validateInput(userNameField.text, check: 3, title: "Too Short", message: "Please enter a valid username")
                 && validation.validateInput(passwordField.text, check: 0, title: "Empty Password", message: "Please enter a password"){
                     
-                    var containerView = CreateActivityView.createView(UIColor.blackColor())
+                    var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
                     var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
@@ -81,26 +81,31 @@ class SignInUserVC: UIViewController {
                     aIView.startAnimation()
                     
                     var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
-                    
-                    authenticationCall.signIn(stringPost){ result in
-                        
-                        if result{
-                            dispatch_async(dispatch_get_main_queue()){
-                                aIView.stopAnimation()
-                                containerView.removeFromSuperview()
-                                self.userNameField.text = ""
-                                self.passwordField.text = ""
-                                self.prefs.setObject(self.userNameField.text, forKey: "USERNAME")
-                                var storyboard = UIStoryboard(name: "User", bundle: nil)
-                                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
-                                self.presentViewController(controller, animated: true, completion: nil)
-                            }
-                        }else{
-                            dispatch_async(dispatch_get_main_queue()){
-                                aIView.stopAnimation()
-                                containerView.removeFromSuperview()
+                    if Reachability.isConnectedToNetwork(){
+                        authenticationCall.signIn(stringPost){ result in
+                            
+                            if result{
+                                dispatch_async(dispatch_get_main_queue()){
+                                    aIView.stopAnimation()
+                                    containerView.removeFromSuperview()
+                                    self.userNameField.text = ""
+                                    self.passwordField.text = ""
+                                    self.prefs.setObject(self.userNameField.text, forKey: "USERNAME")
+                                    var storyboard = UIStoryboard(name: "User", bundle: nil)
+                                    var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
+                                    self.presentViewController(controller, animated: true, completion: nil)
+                                }
+                            }else{
+                                dispatch_async(dispatch_get_main_queue()){
+                                    aIView.stopAnimation()
+                                    containerView.removeFromSuperview()
+                                }
                             }
                         }
+                    }else{
+                        aIView.stopAnimation()
+                        containerView.removeFromSuperview()
+                        validation.displayAlert("Oops", message: "Looks like you're offline, try again later")
                     }
             }
             
