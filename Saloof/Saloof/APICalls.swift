@@ -15,6 +15,72 @@ public class APICalls {
     
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
+    class func getMyRestaurant(token: NSString, completion: Bool -> ()){
+        
+        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/MyVenue")!
+        
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+            
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+                /* Your code */
+                let res = response as! NSHTTPURLResponse!
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300{
+                    var error: NSError?
+                    
+                    let json = JSON(data: urlData!)
+                    
+                    if(json["Id"] != nil){
+                        
+                        debugPrint("Data Recieved")
+                        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                        prefs.setObject(json["Id"].string, forKey: "restID")
+                        prefs.synchronize()
+                        DataSaving.saveRestaurantProfile(json)
+                        
+                        completion(true)
+                    } else {
+                        var error_msg:NSString
+                        if json["error_message"] != nil {
+                            error_msg = json["error_message"].string!
+                            debugPrint("error response")
+                        } else {
+                            error_msg = "Unknown Error"
+                            debugPrint("Unknown Error")
+                        }
+                        
+                        var alertView:UIAlertView = UIAlertView()
+                        alertView.title = "Sign in Failed!"
+                        alertView.message = error_msg as String
+                        alertView.delegate = self
+                        alertView.addButtonWithTitle("OK")
+                        alertView.show()
+                        completion(false)
+                    }
+                }else {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Sign in Failed!"
+                    alertView.message = "Connection Failure"
+                    if let error = reponseError {
+                        alertView.message = (error.localizedDescription)
+                    }
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                    completion(false)
+                }
+            })
+    }
+    
     
     func getMyRestaurant(token: NSString) ->(Bool){
         
@@ -141,19 +207,12 @@ public class APICalls {
                     
                     var error: NSError?
                     let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
-                    
-                    var alertView:UIAlertView = UIAlertView()
-                    alertView.title = "Sign in Failed!"
-                    alertView.message = jsonData["error_description"] as? String
-                    alertView.delegate = self
-                    alertView.addButtonWithTitle("OK")
-                    alertView.show()
-                    debugPrint("another error")
+                    println(jsonData["error_description"] as? String)
                     return false
                 }
             }else{
                 var alertView:UIAlertView = UIAlertView()
-                alertView.title = "Sign in Failed!"
+                alertView.title = "Upload failed"
                 alertView.message = "Connection Failure"
                 if let error = reponseError {
                     alertView.message = (error.localizedDescription)
@@ -230,6 +289,75 @@ public class APICalls {
         return nil
     }
     
+    class func uploadBalance(credits: Int, restID: String) -> (Bool){
+        
+        if Reachability.isConnectedToNetwork(){
+            
+            var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(credits)"
+            var url:NSURL = NSURL(string: call)!
+            
+            var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
+            
+            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "POST"
+            request.HTTPBody = postData
+            request.timeoutInterval = 60
+            //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            var reponseError: NSError?
+            var response: NSURLResponse?
+            
+            var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
+            
+            if ( urlData != nil ) {
+                let res = response as! NSHTTPURLResponse!;
+                
+                NSLog("Response code: %ld", res.statusCode);
+                println(res.debugDescription)
+                
+                if (res.statusCode >= 200 && res.statusCode < 300){
+                    
+                    return true
+                    
+                }else {
+                    
+                    var error: NSError?
+                    let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                    
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Sign in Failed!"
+                    alertView.message = jsonData["error_description"] as? String
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                    debugPrint("another error")
+                    return false
+                }
+            }else{
+                var alertView:UIAlertView = UIAlertView()
+                alertView.title = "Sign in Failed!"
+                alertView.message = "Connection Failure"
+                if let error = reponseError {
+                    alertView.message = (error.localizedDescription)
+                }
+                alertView.delegate = self
+                alertView.addButtonWithTitle("OK")
+                alertView.show()
+                return false
+            }
+        }else{
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "No network"
+            alertView.message = "Please make sure you are connected then try again"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+        }
+        return false
+    }
+    
     class func getLocalVenues(token: NSString, venueParameters: NSString) ->(Bool){
         NSLog("Pulling local venues");
         //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=38.907192&lng=-77.036871")!
@@ -290,20 +418,27 @@ public class APICalls {
             var response: NSURLResponse?
             
             var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
-            let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+            //let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+            let json = JSON(data: urlData!)
             
-            if let returnedVenues = JSONObject as? [AnyObject] {
-                for venue in returnedVenues {
-                    let venueJson = JSON(venue)
-                    // Parse the JSON file using SwiftlyJSON
-                    APICalls.parseJSONDeals(venueJson)
-                }
-                return true
-                
-            }else {
-                println("There are no Saloof deals near this user")
-                return false
+            if json != nil{
+                APICalls.parseJSONDeals2(json)
             }
+
+
+//            if let returnedVenues = JSONObject as? [AnyObject] {
+//                for venue in returnedVenues {
+//                    let venueJson = JSON(venue)
+//                    // Parse the JSON file using SwiftlyJSON
+//                    APICalls.parseJSONDeals(venueJson)
+//                }
+//
+//                return true
+//                
+//            }else {
+//                println("There are no Saloof deals near this user")
+//                return false
+//            }
         } else {
             var alertView:UIAlertView = UIAlertView()
             alertView.title = "No network"
@@ -314,6 +449,8 @@ public class APICalls {
         }
         return false
     }
+    
+    
     
     class func parseJSONVenues(json: JSON) {
         let venue = Venue()
@@ -358,6 +495,21 @@ public class APICalls {
             realm.create(Venue.self, value: venue, update: true)
             
         }
+    }
+    
+    class func parseJSONDeals2(json: JSON){
+        
+        var dealsNVenues : [Venue] = []
+        
+        for venue in json{
+            println(venue.1["name"])
+            var dealObjects = venue.1["deals"].array
+            println(venue.1["deals"])
+//            for deal in dealObjects{
+//
+//            }
+        }
+        
     }
     
     class func parseJSONDeals(json: JSON) {

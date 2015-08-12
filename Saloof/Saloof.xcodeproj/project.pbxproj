@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810028241B7AE00100C8BA80 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 810028231B7AE00100C8BA80 /* StoreKit.framework */; };
 		8183BB2A1B799E13002EC6C8 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183BB291B799E13002EC6C8 /* JSONParser.swift */; };
 		8183BB601B79AE44002EC6C8 /* CreateActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183BB5F1B79AE44002EC6C8 /* CreateActivityView.swift */; };
 		81F8C0491B67BA7D001B9203 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0481B67BA7D001B9203 /* AppDelegate.swift */; };
@@ -20,7 +21,6 @@
 		998DB9171B7709BD005B7E2E /* User.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9161B7709BD005B7E2E /* User.storyboard */; };
 		998DB9191B770AA7005B7E2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 998DB9181B770AA7005B7E2E /* CoreLocation.framework */; };
 		998DB91B1B770AAF005B7E2E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 998DB91A1B770AAF005B7E2E /* QuartzCore.framework */; };
-		998DB91D1B770AB5005B7E2E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 998DB91C1B770AB5005B7E2E /* StoreKit.framework */; };
 		998DB92C1B770CA8005B7E2E /* CustomActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB91F1B770CA8005B7E2E /* CustomActivityView.swift */; };
 		998DB92D1B770CA8005B7E2E /* Montserrat-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9201B770CA8005B7E2E /* Montserrat-Black.otf */; };
 		998DB92E1B770CA8005B7E2E /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9211B770CA8005B7E2E /* Montserrat-Bold.otf */; };
@@ -88,6 +88,7 @@
 
 /* Begin PBXFileReference section */
 		3F7AA3BCBDD174ECE2056454 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		810028231B7AE00100C8BA80 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8183BB291B799E13002EC6C8 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		8183BB5F1B79AE44002EC6C8 /* CreateActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateActivityView.swift; sourceTree = "<group>"; };
 		81F8C0431B67BA7D001B9203 /* Saloof.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Saloof.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,7 +107,6 @@
 		998DB9161B7709BD005B7E2E /* User.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = User.storyboard; sourceTree = "<group>"; };
 		998DB9181B770AA7005B7E2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		998DB91A1B770AAF005B7E2E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		998DB91C1B770AB5005B7E2E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		998DB91F1B770CA8005B7E2E /* CustomActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomActivityView.swift; sourceTree = "<group>"; };
 		998DB9201B770CA8005B7E2E /* Montserrat-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Black.otf"; sourceTree = "<group>"; };
 		998DB9211B770CA8005B7E2E /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.otf"; sourceTree = "<group>"; };
@@ -170,10 +170,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				998DB91D1B770AB5005B7E2E /* StoreKit.framework in Frameworks */,
 				998DB91B1B770AAF005B7E2E /* QuartzCore.framework in Frameworks */,
 				998DB9191B770AA7005B7E2E /* CoreLocation.framework in Frameworks */,
 				F4CA0662F73964C28F1E54B2 /* Pods.framework in Frameworks */,
+				810028241B7AE00100C8BA80 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +263,7 @@
 		9133ADD13CBCD5A48EC06279 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				998DB91C1B770AB5005B7E2E /* StoreKit.framework */,
+				810028231B7AE00100C8BA80 /* StoreKit.framework */,
 				998DB91A1B770AAF005B7E2E /* QuartzCore.framework */,
 				998DB9181B770AA7005B7E2E /* CoreLocation.framework */,
 				EC0F7C383A865C408CA68AA9 /* Pods.framework */,
@@ -497,6 +497,12 @@
 				TargetAttributes = {
 					81F8C0421B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 9J676A68SR;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					81F8C05A1B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
@@ -782,10 +788,13 @@
 			baseConfigurationReference = 3F7AA3BCBDD174ECE2056454 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Saloof/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Debug;
@@ -795,10 +804,13 @@
 			baseConfigurationReference = 998443B936F6F44EEF246EA9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Saloof/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Release;

@@ -103,10 +103,7 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         func saveTransation(price: Int){
             
             var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-            var creditsAvailable:Int = prefs.integerForKey("credits") as Int
-            creditsAvailable += price
-            prefs.setInteger(creditsAvailable, forKey: "credits")
-            prefs.synchronize()
+            APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!)
         }
         
         if transaction.payment.productIdentifier == "com.snastek.tier1" {

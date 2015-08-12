@@ -56,11 +56,14 @@ class RegisterUserVC: UIViewController {
                     if authenticationCall.registerUser(post) {
                         var stringPost="grant_type=password&username=\(usernameField.text)&password=\(passwordField.text)"
                         
-                        if authenticationCall.signIn(stringPost){
-                            self.navigationController?.popViewControllerAnimated(false)
+                        authenticationCall.signIn(stringPost){ result in
+                            if result {
+                                dispatch_async(dispatch_get_main_queue()){
+                                    self.navigationController?.popViewControllerAnimated(false)
+                                }
+                            }
                         }
                     }
-                    
             }
             
         }else if _sender.tag == 1{

@@ -195,7 +195,8 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
                 deal.id = NSUUID().UUIDString
             }
             
-            var call = "{\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit)}"
+            //var call = "{\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"DealId\":\"\(deal.id)\"}"
+            var call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit)}"
             apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             realm.write{
                 self.realm.add(deal, update: self.editingMode)

@@ -74,15 +74,12 @@ class BusinessHome: UIViewController {
             //var credits = json["CreditAvailable"].int!
             var dealsSelected = json["TotalDealsPurchased"].int!
             var dealSwapped = json["TotalDealsSwapped"].int!
-            //creditBalanceLabel.text = "\(credits)"
-            let creditsAvailable:Int = prefs.integerForKey("credits") as Int
+            var creditsAvailable = json["CreditAvailable"].int!
             if creditsAvailable > 0 {
                 creditBalanceLabel.text = "\(creditsAvailable)C"
             }else{
                 creditBalanceLabel.text = "No Credits"
             }
-            //prefs.setInteger(credits, forKey: "credits")
-            prefs.synchronize()
             dealsSelectedLabel.text = "\(dealsSelected)"
             dealsSwapedLabel.text = "\(dealSwapped)"
         }else{
@@ -94,12 +91,9 @@ class BusinessHome: UIViewController {
             alertView.addButtonWithTitle("OK")
             alertView.show()
             
-            let creditsAvailable:Int = prefs.integerForKey("credits") as Int
-            if creditsAvailable > 0 {
-                creditBalanceLabel.text = "\(creditsAvailable)C"
-            }else{
-                creditBalanceLabel.text = "No Credits"
-            }
+            creditBalanceLabel.text = "Offline"
+            dealsSelectedLabel.text = "Offline"
+            dealsSwapedLabel.text = "Offline"
         }
         
     }

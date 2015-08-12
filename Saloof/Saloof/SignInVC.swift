@@ -76,33 +76,71 @@ class SignInVC: UIViewController {
                     
                     var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
                     
-                    if authenticationCall.signIn(stringPost){
-                        self.userNameField.text = ""
-                        self.passwordField.text = ""
-                        prefs.setObject(userNameField.text, forKey: "USERNAME")
-                        var token = prefs.stringForKey("TOKEN")
-                        if prefs.boolForKey("ROLE"){
-                            if apiCall.getMyRestaurant(token!){
-                                //self.performSegueWithIdentifier("toMain", sender: self)
-                                aIView.stopAnimation()
-                                var storyboard = UIStoryboard(name: "Business", bundle: nil)
-                                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
-                                self.presentViewController(controller, animated: true, completion: nil)
+                    authenticationCall.signIn(stringPost){ result in
+                        if result{
+                            var token = self.prefs.stringForKey("TOKEN")
+                            if self.prefs.boolForKey("ROLE"){
+                                APICalls.getMyRestaurant(token!, completion: { result in
+                                    
+                                    if result{
+                                        dispatch_async(dispatch_get_main_queue()){
+                                            var storyboard = UIStoryboard(name: "Business", bundle: nil)
+                                            var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
+                                            self.presentViewController(controller, animated: true, completion: nil)
+                                        }
+                                    }else{
+                                        dispatch_async(dispatch_get_main_queue()){
+                                            var refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
+                                            refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
+                                                self.performSegueWithIdentifier("toReg2", sender: nil)
+                                            }))
+                                            refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction!) in
+                                            }))
+                                            self.presentViewController(refreshAlert, animated: true, completion: nil)
+                                        }
+                                    }
+                                })
                             }else{
-                                aIView.stopAnimation()
-                                var refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
-                                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
-                                    self.performSegueWithIdentifier("toReg2", sender: nil)
-                                }))
-                                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction!) in
-                                }))
-                                self.presentViewController(refreshAlert, animated: true, completion: nil)
+                                dispatch_async(dispatch_get_main_queue()){
+                                    self.validation.displayAlert("No Permission", message: "Please create a business account to access the business side")
+
+                                }
                             }
-                        }else{
+                        }
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.userNameField.text = ""
+                            self.passwordField.text = ""
                             aIView.stopAnimation()
-                            validation.displayAlert("No Permission", message: "Please create a business account to access the business side")
+                            containerView.removeFromSuperview()
                         }
                     }
+                    
+//                    if authenticationCall.signIn(stringPost){
+//                        
+//                        prefs.setObject(userNameField.text, forKey: "USERNAME")
+//                        var token = prefs.stringForKey("TOKEN")
+//                        if prefs.boolForKey("ROLE"){
+//                            if apiCall.getMyRestaurant(token!){
+//                                //self.performSegueWithIdentifier("toMain", sender: self)
+//                                aIView.stopAnimation()
+//                                var storyboard = UIStoryboard(name: "Business", bundle: nil)
+//                                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
+//                                self.presentViewController(controller, animated: true, completion: nil)
+//                            }else{
+//                                aIView.stopAnimation()
+//                                var refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
+//                                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
+//                                    self.performSegueWithIdentifier("toReg2", sender: nil)
+//                                }))
+//                                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction!) in
+//                                }))
+//                                self.presentViewController(refreshAlert, animated: true, completion: nil)
+//                            }
+//                        }else{
+//                            aIView.stopAnimation()
+//                            validation.displayAlert("No Permission", message: "Please create a business account to access the business side")
+//                        }
+//                    }
             }
         } else if _sender.tag == 1{
             if (prefs.objectForKey("TOKEN") == nil) {

@@ -31,6 +31,8 @@ class Venue: Object {
     dynamic var defaultDealID = ""
     dynamic var defaultDealDesc = ""
     dynamic var defaultDealValue: Float = 0.0
+    dynamic var venueDeal: VenueDeal?
+
     
     // Saloof analytics
     dynamic var favorites: Int = 0

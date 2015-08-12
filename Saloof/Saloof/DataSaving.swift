@@ -23,6 +23,7 @@ public class DataSaving{
         for restaurant in restArray{
             if restaurant.id == prefs.stringForKey("restID"){
                 updateObject = true
+                break
             }
         }
         

@@ -73,14 +73,19 @@ class SignInUserVC: UIViewController {
                 && validation.validateInput(passwordField.text, check: 0, title: "Empty Password", message: "Please enter a password"){
                     
                     var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
-                    if authenticationCall.signIn(stringPost){
-                        self.userNameField.text = ""
-                        self.passwordField.text = ""
-                        prefs.setObject(userNameField.text, forKey: "USERNAME")
-                        var storyboard = UIStoryboard(name: "User", bundle: nil)
-                        var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
-                         self.presentViewController(controller, animated: true, completion: nil)
-                        //self.performSegueWithIdentifier("toUserMain", sender: self)
+                    
+                    authenticationCall.signIn(stringPost){ result in
+                        
+                        if result{
+                            dispatch_async(dispatch_get_main_queue()){
+                                self.userNameField.text = ""
+                                self.passwordField.text = ""
+                                self.prefs.setObject(self.userNameField.text, forKey: "USERNAME")
+                                var storyboard = UIStoryboard(name: "User", bundle: nil)
+                                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
+                                self.presentViewController(controller, animated: true, completion: nil)
+                            }
+                        }
                     }
             }
             

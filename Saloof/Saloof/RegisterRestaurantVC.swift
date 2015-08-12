@@ -71,30 +71,39 @@ class RegisterRestaurantVC: UIViewController {
         passwordCField.text = "Test@123"
         // Delete above
         
+        var containerView = CreateActivityView.createView(UIColor.blackColor())
+        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+        aIView.center = containerView.center
+        containerView.addSubview(aIView)
+        containerView.center = self.view.center
+        self.view.addSubview(containerView)
+        aIView.startAnimation()
         
         
         if validation.validateInput(userName.text, check: 2, title: "Somethings Missing", message: "Please enter a valid username")
             && validation.validateEmail(emailAddressField.text)
             && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
                 
-                
                 var post:NSString = "{\"UserName\":\"\(userName.text)\",\"Email\":\"\(emailAddressField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"true\"}"
-                
-                if (prefs.objectForKey("TOKEN") == nil){
-                    if authenticationCall.registerUser(post) {
-                        var stringPost="grant_type=password&username=\(userName.text)&password=\(passwordField.text)"
-                        
-                        if authenticationCall.signIn(stringPost){
-                            self.performSegueWithIdentifier("toRegister2", sender: nil)
+                if authenticationCall.registerUser(post) {
+                    var stringPost="grant_type=password&username=\(userName.text)&password=\(passwordField.text)"
+                    authenticationCall.signIn(stringPost){result in
+                        if result{
+                            dispatch_async(dispatch_get_main_queue()){
+                                aIView.stopAnimation()
+                                containerView.removeFromSuperview()
+                                self.performSegueWithIdentifier("toRegister2", sender: nil)
+                            }
+                        }else{
+                            dispatch_async(dispatch_get_main_queue()){
+                                aIView.stopAnimation()
+                                containerView.removeFromSuperview()
+                            }
                         }
+                        
                     }
-                }else{
-                    self.performSegueWithIdentifier("toRegister2", sender: nil)
                 }
-                
         }
-        
-        
     }
     
     
