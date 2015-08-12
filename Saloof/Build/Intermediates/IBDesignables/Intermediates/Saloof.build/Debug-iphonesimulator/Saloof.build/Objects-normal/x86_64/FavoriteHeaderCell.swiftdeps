@@ -11,10 +11,10 @@ top-level:
 - "UITableViewCell"
 member-access:
 - "C6Saloof18FavoriteHeaderCell"
-- "CSo8NSObject"
-- "CSo15UITableViewCell"
-- "CSo6UIView"
 - "CSo11UIResponder"
+- "CSo15UITableViewCell"
+- "CSo8NSObject"
+- "CSo6UIView"
 - "PSs9AnyObject"
 dynamic-lookup:
 cross-module:

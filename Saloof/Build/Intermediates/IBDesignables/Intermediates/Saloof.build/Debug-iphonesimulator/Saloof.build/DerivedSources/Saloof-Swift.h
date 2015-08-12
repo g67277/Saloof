@@ -216,6 +216,16 @@ SWIFT_CLASS("_TtC6Saloof18CustomSwipableView")
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class NSTextContainer;
+
+SWIFT_CLASS("_TtC6Saloof14CustomTextView")
+@interface CustomTextView : UITextView
+@property (nonatomic, getter=contentSize, setter=setContentSize:) CGSize contentSize;
+- (void)layoutSubviews;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer * __nullable)textContainer OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class VenueDeal;
 
 SWIFT_CLASS("_TtC6Saloof12DealCardCell")
@@ -232,7 +242,6 @@ SWIFT_CLASS("_TtC6Saloof12DealCardCell")
 @end
 
 @class UIImage;
-@class UITextView;
 @class UITextField;
 @class UISegmentedControl;
 
@@ -993,9 +1002,9 @@ SWIFT_CLASS("_TtC6Saloof13VenueDetailVC")
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified priceTierlabel;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified locationDistanceLabel;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified locationName;
-@property (nonatomic, weak) IBOutlet UITextView * __null_unspecified addressTextview;
-@property (nonatomic, weak) IBOutlet UITextView * __null_unspecified phoneTextView;
-@property (nonatomic, weak) IBOutlet UITextView * __null_unspecified websiteUrlTextView;
+@property (nonatomic, weak) IBOutlet CustomTextView * __null_unspecified addressTextview;
+@property (nonatomic, weak) IBOutlet CustomTextView * __null_unspecified phoneTextView;
+@property (nonatomic, weak) IBOutlet CustomTextView * __null_unspecified websiteUrlTextView;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified hoursStatusLabel;
 @property (nonatomic, weak) IBOutlet UIView * __null_unspecified dealView;
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified dealTitleLabel;

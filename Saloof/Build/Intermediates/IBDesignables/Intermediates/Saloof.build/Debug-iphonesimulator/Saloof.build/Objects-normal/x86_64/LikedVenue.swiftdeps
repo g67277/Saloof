@@ -4,17 +4,17 @@ provides:
 nominals:
 - "C6Saloof10LikedVenue"
 class-members:
-- "primaryKey"
 - "likedId"
+- "primaryKey"
 top-level:
-- "StringLiteralType"
-- "Object"
 - "String"
+- "Object"
+- "StringLiteralType"
 member-access:
 - "C10RealmSwift6Object"
+- "CSo13RLMObjectBase"
 - "C6Saloof10LikedVenue"
 - "PSs9AnyObject"
-- "CSo13RLMObjectBase"
 - "CSo8NSObject"
 dynamic-lookup:
 cross-module:

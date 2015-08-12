@@ -17,6 +17,7 @@
 		81F8C0561B67BA7D001B9203 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0541B67BA7D001B9203 /* LaunchScreen.xib */; };
 		81F8C0621B67BA7D001B9203 /* SaloofTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0611B67BA7D001B9203 /* SaloofTests.swift */; };
 		9965B0371B7A7B33003426A0 /* CustomSwipableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */; };
+		9980FF141B7BE3760091F286 /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980FF131B7BE3760091F286 /* CustomTextView.swift */; };
 		998DB9151B7709B1005B7E2E /* Business.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9141B7709B1005B7E2E /* Business.storyboard */; };
 		998DB9171B7709BD005B7E2E /* User.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9161B7709BD005B7E2E /* User.storyboard */; };
 		998DB9191B770AA7005B7E2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 998DB9181B770AA7005B7E2E /* CoreLocation.framework */; };
@@ -102,6 +103,7 @@
 		81F8C0601B67BA7D001B9203 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81F8C0611B67BA7D001B9203 /* SaloofTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaloofTests.swift; sourceTree = "<group>"; };
 		9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSwipableView.swift; sourceTree = "<group>"; };
+		9980FF131B7BE3760091F286 /* CustomTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		998443B936F6F44EEF246EA9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		998DB9141B7709B1005B7E2E /* Business.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Business.storyboard; sourceTree = "<group>"; };
 		998DB9161B7709BD005B7E2E /* User.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = User.storyboard; sourceTree = "<group>"; };
@@ -310,13 +312,14 @@
 			name = "Signing In/Up";
 			sourceTree = "<group>";
 		};
-		998DB9371B770CAE005B7E2E /* Activity Indicator */ = {
+		998DB9371B770CAE005B7E2E /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
 				998DB91F1B770CA8005B7E2E /* CustomActivityView.swift */,
 				8183BB5F1B79AE44002EC6C8 /* CreateActivityView.swift */,
+				9980FF131B7BE3760091F286 /* CustomTextView.swift */,
 			);
-			name = "Activity Indicator";
+			name = Subclasses;
 			sourceTree = "<group>";
 		};
 		998DB9381B770CBF005B7E2E /* Font */ = {
@@ -348,7 +351,7 @@
 		998DB93A1B770CE9005B7E2E /* Helper Classes */ = {
 			isa = PBXGroup;
 			children = (
-				998DB9371B770CAE005B7E2E /* Activity Indicator */,
+				998DB9371B770CAE005B7E2E /* Subclasses */,
 				998DB9381B770CBF005B7E2E /* Font */,
 				998DB9391B770CC8005B7E2E /* Timer Label */,
 			);
@@ -640,6 +643,7 @@
 				99BCBA281B771D1D004890E2 /* StoreVC.swift in Sources */,
 				99F961BA1B7996EF00D01F4D /* LikedVenue.swift in Sources */,
 				998DB96F1B771526005B7E2E /* SavedDeal.swift in Sources */,
+				9980FF141B7BE3760091F286 /* CustomTextView.swift in Sources */,
 				998DB9511B770EB4005B7E2E /* Validation.swift in Sources */,
 				8183BB601B79AE44002EC6C8 /* CreateActivityView.swift in Sources */,
 				998DB9741B7715A3005B7E2E /* UserHomeVC.swift in Sources */,
