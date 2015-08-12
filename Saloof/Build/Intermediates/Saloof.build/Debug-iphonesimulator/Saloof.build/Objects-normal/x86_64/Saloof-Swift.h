@@ -216,6 +216,14 @@ SWIFT_CLASS("_TtC6Saloof18CustomSwipableView")
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class NSTextContainer;
+
+SWIFT_CLASS("_TtC6Saloof14CustomTextView")
+@interface CustomTextView : UITextView
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer * __nullable)textContainer OBJC_DESIGNATED_INITIALIZER;
+- (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class VenueDeal;
 
 SWIFT_CLASS("_TtC6Saloof12DealCardCell")
@@ -232,7 +240,6 @@ SWIFT_CLASS("_TtC6Saloof12DealCardCell")
 @end
 
 @class UIImage;
-@class UITextView;
 @class UITextField;
 @class UISegmentedControl;
 

@@ -1,5 +1,5 @@
 version: "Apple Swift version 1.2 (swiftlang-602.0.53.1 clang-602.0.53)"
-options: "94d55321b3c49cbf5b9d6f8b67c2606c"
+options: "ce642e51434ebd35d6cfa311cfd7e479"
 inputs: 
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/RegisterRestaurantVC.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/GradientView.swift"
@@ -26,6 +26,7 @@ inputs:
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/StoreVC.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/LikedVenue.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/SavedDeal.swift"
+- "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/CustomTextView.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/Validation.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/CreateActivityView.swift"
 - "/Users/angelasmith/Desktop/SourceTree/SaloofDevelop/Saloof/Saloof/UserHomeVC.swift"

@@ -7,15 +7,15 @@ class-members:
 - "primaryKey"
 - "likedId"
 top-level:
-- "String"
 - "Object"
+- "String"
 - "StringLiteralType"
 member-access:
-- "CSo8NSObject"
 - "C10RealmSwift6Object"
 - "PSs9AnyObject"
 - "C6Saloof10LikedVenue"
 - "CSo13RLMObjectBase"
+- "CSo8NSObject"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

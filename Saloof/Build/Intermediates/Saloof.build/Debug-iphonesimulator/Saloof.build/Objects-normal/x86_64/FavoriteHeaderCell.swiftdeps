@@ -7,14 +7,14 @@ class-members:
 - "awakeFromNib"
 - "setSelected"
 top-level:
-- "UITableViewCell"
 - "Bool"
+- "UITableViewCell"
 member-access:
-- "CSo15UITableViewCell"
-- "CSo6UIView"
 - "C6Saloof18FavoriteHeaderCell"
-- "PSs9AnyObject"
 - "CSo11UIResponder"
+- "CSo15UITableViewCell"
+- "PSs9AnyObject"
+- "CSo6UIView"
 - "CSo8NSObject"
 dynamic-lookup:
 cross-module:
