@@ -15,10 +15,11 @@ class VenueDetailVC: UIViewController {
     @IBOutlet weak var priceTierlabel: UILabel!
     @IBOutlet weak var locationDistanceLabel: UILabel!
     @IBOutlet weak var locationName: UILabel!
-    @IBOutlet weak var addressTextview: UITextView!
     
-    @IBOutlet weak var phoneTextView: UITextView!
-    @IBOutlet weak var websiteUrlTextView: UITextView!
+    @IBOutlet weak var addressTextview: CustomTextView!
+    @IBOutlet weak var phoneTextView: CustomTextView!
+    @IBOutlet weak var websiteUrlTextView: CustomTextView!
+    
     @IBOutlet weak var hoursStatusLabel: UILabel!
     
     @IBOutlet weak var dealView: UIView!
