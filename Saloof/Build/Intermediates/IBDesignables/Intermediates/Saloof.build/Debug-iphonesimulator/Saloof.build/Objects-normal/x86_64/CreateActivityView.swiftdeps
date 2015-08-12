@@ -9,13 +9,13 @@ top-level:
 - "UIView"
 - "UIColor"
 member-access:
-- "C6Saloof18CreateActivityView"
-- !private "V12CoreGraphics7CGFloat"
-- "PSs9AnyObject"
-- !private "CSo8NSObject"
-- !private "CSo6UIView"
 - !private "CSo11UIResponder"
+- "C6Saloof18CreateActivityView"
+- !private "CSo6UIView"
+- !private "V12CoreGraphics7CGFloat"
+- !private "CSo8NSObject"
 - !private "VSC12UIRectCorner"
+- "PSs9AnyObject"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

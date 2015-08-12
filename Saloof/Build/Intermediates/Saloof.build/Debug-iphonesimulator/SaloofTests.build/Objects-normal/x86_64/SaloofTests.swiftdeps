@@ -14,11 +14,11 @@ top-level:
 - "XCTestCase"
 - !private "StringLiteralType"
 member-access:
-- "CSo6XCTest"
 - "PSs9AnyObject"
-- "CSo10XCTestCase"
-- "CSo8NSObject"
+- "CSo6XCTest"
 - !private "C11SaloofTests11SaloofTests"
+- "CSo8NSObject"
+- "CSo10XCTestCase"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

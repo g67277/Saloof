@@ -844,6 +844,7 @@ SWIFT_CLASS("_TtC6Saloof5Venue")
 @property (nonatomic, copy) NSString * __nonnull defaultDealID;
 @property (nonatomic, copy) NSString * __nonnull defaultDealDesc;
 @property (nonatomic) float defaultDealValue;
+@property (nonatomic) VenueDeal * __nullable venueDeal;
 @property (nonatomic) NSInteger favorites;
 @property (nonatomic) NSInteger likes;
 @property (nonatomic) UIImage * __nullable image;
