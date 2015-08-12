@@ -5,8 +5,8 @@ provides:
 nominals:
 class-members:
 top-level:
-- "RLMPropertyType"
 - "RLMNotificationToken"
+- "RLMPropertyType"
 member-access:
 dynamic-lookup:
 cross-module:
