@@ -53,13 +53,32 @@ class RegisterUserVC: UIViewController {
                 && validation.validateEmail(emailField.text)
                 && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
                     var post:NSString = "{\"UserName\":\"\(usernameField.text)\",\"Email\":\"\(emailField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"false\"}"
-                    if authenticationCall.registerUser(post) {
-                        var stringPost="grant_type=password&username=\(usernameField.text)&password=\(passwordField.text)"
+                    
+                    var containerView = CreateActivityView.createView(UIColor.blackColor())
+                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+                    aIView.center = containerView.center
+                    containerView.addSubview(aIView)
+                    containerView.center = self.view.center
+                    self.view.addSubview(containerView)
+                    aIView.startAnimation()
+                    
+                    authenticationCall.registerUser(post){ result in
                         
-                        authenticationCall.signIn(stringPost){ result in
-                            if result {
-                                dispatch_async(dispatch_get_main_queue()){
-                                    self.navigationController?.popViewControllerAnimated(false)
+                        if result{
+                            var stringPost="grant_type=password&username=\(self.usernameField.text)&password=\(self.passwordField.text)"
+                            
+                            self.authenticationCall.signIn(stringPost){ result in
+                                if result {
+                                    dispatch_async(dispatch_get_main_queue()){
+                                        aIView.stopAnimation()
+                                        containerView.removeFromSuperview()
+                                        self.navigationController?.popViewControllerAnimated(false)
+                                    }
+                                }else{
+                                    dispatch_async(dispatch_get_main_queue()){
+                                        aIView.stopAnimation()
+                                        containerView.removeFromSuperview()
+                                    }
                                 }
                             }
                         }
