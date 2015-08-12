@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Light.otf</string>
+		<string>Montserrat-Bold.otf</string>
+		<string>Montserrat-Hairline.otf</string>
+		<string>Montserrat-UltraLight.otf</string>
+		<string>Montserrat-Regular.otf</string>
+		<string>Avenir.ttc</string>
+	</array>
+</dict>
+</plist>

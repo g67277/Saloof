@@ -591,9 +591,13 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let imagePrefix = json["photos"]["groups"][0]["items"][0]["prefix"].stringValue
         let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
         let imageName = imagePrefix + "400x400" +  imageSuffix
-        var locationAddress = json["location"]["formattedAddress"][0].stringValue
-        var cityAddress = json["location"]["formattedAddress"][1].stringValue
-        venue.address = locationAddress + "\n" + cityAddress
+        // Address
+        var locationStreet = json["location"]["address"].stringValue
+        var locationCity = json["location"]["city"].stringValue
+        var locationState = json["location"]["state"].stringValue
+        var locationZip = json["location"]["postalCode"].stringValue
+        var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
+        venue.address = address
         venue.hours = json["hours"]["status"].stringValue
         venue.distance = json["location"]["distance"].floatValue
         venue.priceTier = json["price"]["tier"].intValue
@@ -616,7 +620,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         
         realm.write {
-            //self.realm.add(venue)
             self.realm.create(Venue.self, value: venue, update: true)
         }
         venueList.append(venue)
