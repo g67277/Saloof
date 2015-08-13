@@ -210,7 +210,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
             && validation.category(selectedCategory!){
                 
                 //call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"10am - 10pm\",\"WeekEndHours\":\"10am - 10pm\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\"}"
-                call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"10AM-10PM\",\"WeekEndHours\":\"10AM-12AM\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\"}"
+                call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"10AM-10PM\",\"WeekEndHours\":\"10AM-12AM\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\""
                 self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum.toInt()!, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
         }else {
             errorLabel.hidden = false

@@ -189,6 +189,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             deal.value = (valueTF.text as NSString).doubleValue
             deal.timeLimit = hours
             deal.restaurantID = prefs.stringForKey("restID")!
+            println(deal.restaurantID)
             if editingMode {
                 deal.id = dealID
             }else{

@@ -219,6 +219,26 @@ public class APICalls {
         return nil
     }
     
+    func uploadImg(imgData: UIImage, imgName: String, completion: Bool -> ()){
+        
+        let url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Image"
+        let data: NSData = UIImageJPEGRepresentation(imgData, 1)
+        println(data.length)
+        
+        sendFile(url, fileName: imgName, data: data, completionHandler: { (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            
+            let res = response as! NSHTTPURLResponse!
+            
+            println("uploaded")
+            println(res.statusCode)
+            if res.statusCode == 200{
+                completion(true)
+            }else{
+                completion(false)
+            }
+        })
+    }
+    
     class func uploadBalance(credits: Int, restID: String) -> (Bool){
         
         if Reachability.isConnectedToNetwork(){
@@ -348,27 +368,22 @@ public class APICalls {
             var response: NSURLResponse?
             
             var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
-            //let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-            let json = JSON(data: urlData!)
-            
-            if json != nil{
-                APICalls.parseJSONDeals2(json)
+            let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+
+
+            if let returnedVenues = JSONObject as? [AnyObject] {
+                for venue in returnedVenues {
+                    let venueJson = JSON(venue)
+                    // Parse the JSON file using SwiftlyJSON
+                    APICalls.parseJSONDeals(venueJson)
+                }
+
+                return true
+                
+            }else {
+                println("There are no Saloof deals near this user")
+                return false
             }
-
-
-//            if let returnedVenues = JSONObject as? [AnyObject] {
-//                for venue in returnedVenues {
-//                    let venueJson = JSON(venue)
-//                    // Parse the JSON file using SwiftlyJSON
-//                    APICalls.parseJSONDeals(venueJson)
-//                }
-//
-//                return true
-//                
-//            }else {
-//                println("There are no Saloof deals near this user")
-//                return false
-//            }
         } else {
             var alertView:UIAlertView = UIAlertView()
             alertView.title = "No network"
@@ -377,9 +392,47 @@ public class APICalls {
             alertView.addButtonWithTitle("OK")
             alertView.show()
         }
-        return false
+        //var nilArray: [Venue] = []
+        return (false)
     }
     
+    class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
+        
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
+        var url:NSURL = NSURL(string: callString)!
+        
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            /* Your code */
+            let res = response as! NSHTTPURLResponse!
+            if res != nil{
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300{
+                    //let json = JSON(data: urlData!)
+                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+
+                    if let returnedVenues = JSONObject as? [AnyObject] {
+                        for venue in returnedVenues {
+                            let venueJson = JSON(venue)
+                            // Parse the JSON file using SwiftlyJSON
+                            APICalls.parseJSONDeals(venueJson)
+                            completion(true)
+                        }
+                    }
+                }
+            }
+        })
+    }
     
     
     class func parseJSONVenues(json: JSON) {
@@ -425,21 +478,6 @@ public class APICalls {
             realm.create(Venue.self, value: venue, update: true)
             
         }
-    }
-    
-    class func parseJSONDeals2(json: JSON){
-        
-        var dealsNVenues : [Venue] = []
-        
-        for venue in json{
-            println(venue.1["name"])
-            var dealObjects = venue.1["deals"].array
-            println(venue.1["deals"])
-//            for deal in dealObjects{
-//
-//            }
-        }
-        
     }
     
     class func parseJSONDeals(json: JSON) {
@@ -539,6 +577,88 @@ public class APICalls {
             }
         }
         
+    }
+    
+    func sendFile(
+        urlPath:String,
+        fileName:String,
+        data:NSData,
+        completionHandler: (NSURLResponse!, NSData!, NSError!) -> Void){
+            
+            var url: NSURL = NSURL(string: urlPath)!
+            var request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            
+            request1.HTTPMethod = "POST"
+            
+            
+            let boundary = generateBoundaryString()
+            let fullData = photoDataToFormData(data,boundary:boundary,fileName:fileName)
+            
+            request1.setValue("multipart/form-data; boundary=" + boundary,
+                forHTTPHeaderField: "Content-Type")
+            request1.setValue(fileName, forHTTPHeaderField: "ImageId")
+            
+            
+            // REQUIRED!
+            request1.setValue(String(fullData.length), forHTTPHeaderField: "Content-Length")
+            
+            request1.HTTPBody = fullData
+            request1.HTTPShouldHandleCookies = false
+            
+            let queue:NSOperationQueue = NSOperationQueue()
+            
+            NSURLConnection.sendAsynchronousRequest(
+                request1,
+                queue: queue,
+                completionHandler:completionHandler)
+    }
+    
+    // this is a very verbose version of that function
+    // you can shorten it, but i left it as-is for clarity
+    // and as an example
+    func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
+        var fullData = NSMutableData()
+        
+        // 1 - Boundary should start with --
+        let lineOne = "--" + boundary + "\r\n"
+        fullData.appendData(lineOne.dataUsingEncoding(
+            NSUTF8StringEncoding,
+            allowLossyConversion: false)!)
+        
+        // 2
+        let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + ".jpg\"\r\n"
+        NSLog(lineTwo)
+        fullData.appendData(lineTwo.dataUsingEncoding(
+            NSUTF8StringEncoding,
+            allowLossyConversion: false)!)
+        
+        // 3
+        let lineThree = "Content-Type: image/jpg\r\n\r\n"
+        fullData.appendData(lineThree.dataUsingEncoding(
+            NSUTF8StringEncoding,
+            allowLossyConversion: false)!)
+        
+        // 4
+        fullData.appendData(data)
+        
+        // 5
+        let lineFive = "\r\n"
+        fullData.appendData(lineFive.dataUsingEncoding(
+            NSUTF8StringEncoding,
+            allowLossyConversion: false)!)
+        
+        // 6 - The end. Notice -- at the start and at the end
+        let lineSix = "--" + boundary + "--\r\n"
+        fullData.appendData(lineSix.dataUsingEncoding(
+            NSUTF8StringEncoding,
+            allowLossyConversion: false)!)
+        
+        return fullData
+    }
+    
+    func generateBoundaryString() -> String {
+        return "Boundary-\(NSUUID().UUIDString)"
+        //return "------WebKitFormBoundaryghAVpvGCFLS36e1D"
     }
     
 }

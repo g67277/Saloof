@@ -79,8 +79,8 @@ class RegisterRestaurantVC: UIViewController {
         //testing only
         //username.text = "naz"
         //emailAddressField.text = "naz@naz.com"
-        passwordField.text = "Test@123"
-        passwordCField.text = "Test@123"
+//        passwordField.text = "Test@123"
+//        passwordCField.text = "Test@123"
         // Delete above
         
         if validation.validateInput(userName.text, check: 2, title: "Somethings Missing", message: "Please enter a valid username")

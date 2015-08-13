@@ -58,6 +58,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     let realm = Realm()
     var plistObjects: [AnyObject] = []
     // get access to all the current deals
+    var validDeals2 = Realm().objects(Venue)
     var validDeals = Realm().objects(VenueDeal)
     var haveItems: Bool = false;
     var loadSingleDeal: Bool = false
@@ -84,32 +85,20 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     
     let defaults = NSUserDefaults.standardUserDefaults()
     
+    //Testing
+    let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    var userLocation = ""
+    var token = ""
     
     /* -----------------------  INITIAL LOAD  METHODS --------------------------- */
     
     override func viewWillAppear(animated: Bool) {
-        // Hide the navigation bar to display the full location image
-        let navBar:UINavigationBar! =  self.navigationController?.navigationBar
-        if navBar != nil{
-            navBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-            navBar.shadowImage = UIImage()
-        }
         // delete expired deals
         var expiredDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(2)")
         realm.write {
             self.realm.delete(expiredDeals)
         }
         
-    }
-    
-    
-    override func viewWillDisappear(animated: Bool) {
-        // restore the navigation bar to origional
-        let navBar:UINavigationBar! =  self.navigationController?.navigationBar
-        if navBar != nil{
-            navBar.setBackgroundImage(nil, forBarMetrics: UIBarMetrics.Default)
-            navBar.shadowImage = nil
-        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -130,6 +119,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        token = prefs.stringForKey("TOKEN")!
         if loadSingleDeal {
             
             // Set up view for a single deal
@@ -150,11 +140,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             singleDealView.hidden = true
             collectionCardView.hidden = false
             cardButtonsView.hidden = false
-            // Start getting the users location
-            locationManager = CLLocationManager()
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.delegate = self
-            locationManager.startUpdatingLocation()
+            initialDeals()
         }
         
     }
@@ -329,37 +315,37 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     
     
     //  -------------------------------------  LOADING DEALS  ------------------------------------------------
-    func loadSaloofData () {
-        let saloofUrl = NSURL(string: "http://www.justwalkingonwater.com/json/venueResponse.json")!
-        let response = NSData(contentsOfURL: saloofUrl)!
-        let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
-            options: NSJSONReadingOptions(0),
-            error: nil) as! NSDictionary)["response"]
-        
-        if let object: AnyObject = json {
-            haveItems = true
-            var groups = object["groups"] as! [AnyObject]
-            //  get array of items
-            var venues = groups[0]["items"] as! [AnyObject]
-            for item in venues {
-                // get the venue
-                if let venue = item["venue"] as? [String: AnyObject] {
-                    // get each deal
-                    let venueJson = JSON(venue)
-                    // Parse the JSON file using SwiftlyJSON
-                    JSONParser.parseJSON(venueJson, source: Constants.sourceTypeSaloof)
-                }
-            }
-            // FINISHED CREATING DATA OBJECTS
-            // get a list of all deal objects in Realm
-            validDeals = Realm().objects(VenueDeal)
-            // Sort all deals by value
-            let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
-            validDeals = sortedDeals
-            //println("Sorted Deals from ParseJSON \(sortedDeals)")
-            biddingStart()
-        }
-    }
+//    func loadSaloofData () {
+//        let saloofUrl = NSURL(string: "http://www.justwalkingonwater.com/json/venueResponse.json")!
+//        let response = NSData(contentsOfURL: saloofUrl)!
+//        let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
+//            options: NSJSONReadingOptions(0),
+//            error: nil) as! NSDictionary)["response"]
+//        
+//        if let object: AnyObject = json {
+//            haveItems = true
+//            var groups = object["groups"] as! [AnyObject]
+//            //  get array of items
+//            var venues = groups[0]["items"] as! [AnyObject]
+//            for item in venues {
+//                // get the venue
+//                if let venue = item["venue"] as? [String: AnyObject] {
+//                    // get each deal
+//                    let venueJson = JSON(venue)
+//                    // Parse the JSON file using SwiftlyJSON
+//                    JSONParser.parseJSON(venueJson, source: Constants.sourceTypeSaloof)
+//                }
+//            }
+//            // FINISHED CREATING DATA OBJECTS
+//            // get a list of all deal objects in Realm
+//            validDeals = Realm().objects(VenueDeal)
+//            // Sort all deals by value
+//            let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
+//            validDeals = sortedDeals
+//            //println("Sorted Deals from ParseJSON \(sortedDeals)")
+//            biddingStart()
+//        }
+//    }
     
     
     
@@ -418,7 +404,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.biddingStart()
-            
+            self.collectionView.reloadData()
         })
         
     }
@@ -567,34 +553,56 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             println("We don't have any deals yet")
             
             
+            println("Have location, gather local deals")
+            //loadSaloofData()
+            // get  local deals
             
-            if dealList.count == 0 {
-                println("Have location, gather local deals")
-                //loadSaloofData()
-                // get  local deals
-                
-                let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-                var token = prefs.stringForKey("TOKEN")
-                let location = self.locationManager.location
-                var userLocation = "?lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
-                if APICalls.getLocalDeals(token!, location: userLocation) {
-                    println("Retrieved deals from Saloof")
-                    haveItems = true
-                    //FINISHED CREATING DATA OBJECTS
-                    //get a list of all deal objects in Realm
-                    validDeals = Realm().objects(VenueDeal)
-                    println("We have \(validDeals.count) returned deals")
-                    //Sort all deals by value
-                    let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
-                    validDeals = sortedDeals
-                    //println("Sorted Deals from ParseJSON \(sortedDeals)")
-                    biddingStart()
-                    //pullLocalDeals()
-                } else {
-                    println("Unable to retrieved deals from Saloof")
-                }
+            let location = self.locationManager.location
+            userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
+            
+        }
+    }
+    
+    func initialDeals(){
+    
+        dealList.removeAll()
+        // delete any current venues
+        var pulledVenues = Realm().objects(VenueDeal)
+        if pulledVenues.count < 1{
+            realm.write {
+                self.realm.delete(pulledVenues)
             }
         }
+        
+        // Start getting the users location
+        locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+        
+        if APICalls.getLocalDeals(token, location: userLocation) {
+            self.refreshDataArray()
+        } else {
+            println("Unable to retrieved deals from Saloof")
+        }
+    }
+    
+    func refreshDataArray(){
+        
+        println("Retrieved deals from Saloof")
+        haveItems = true
+        //FINISHED CREATING DATA OBJECTS
+        //get a list of all deal objects in Realm
+        validDeals = Realm().objects(VenueDeal)
+        
+        println("We have \(validDeals.count) returned deals")
+        println("We have \(validDeals.count) returned deals")
+        //Sort all deals by value
+        let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
+        validDeals = sortedDeals
+        //println("Sorted Deals from ParseJSON \(sortedDeals)")
+        biddingStart()
+        //pullLocalDeals()
     }
     
     //  ------------------  SEARCH TAGS AND PRICE PICKER METHODS ----------------------------
@@ -713,19 +721,39 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func pullNewSearchResults () {
+        
         dealList.removeAll()
         // delete any current venues
         var pulledVenues = Realm().objects(VenueDeal)
-        realm.write {
-            self.realm.delete(pulledVenues)
+        if pulledVenues.count < 1{
+            realm.write {
+                self.realm.delete(pulledVenues)
+            }
         }
+        
+        // Start getting the users location
+        locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+        
         // reset values
         lastDealRestId = ""
         topBidIndex = 0
         currentDealIndex = 0
         topDealReached = false
+        
+
+        var call = "category=\(searchString)&\(userLocation)"
+        
+        APICalls.getLocalDealsByCategory(token, call: call){ result in
+            if result{
+                self.refreshDataArray()
+            }
+        }
+        
         // pull new venues
-        loadSaloofData()
+        //loadSaloofData()
         activityIndicator.stopAnimation()
         searchDisplayOverview.hidden = true
     }

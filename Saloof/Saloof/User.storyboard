@@ -2540,8 +2540,7 @@ DC 20007</string>
                                                                 <exclude reference="cgA-Jm-AMD"/>
                                                             </mask>
                                                         </variation>
-                                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                            <rect key="frame" x="68" y="135" width="320" height="40"/>
+                                                        <variation key="heightClass=regular-widthClass=compact">
                                                             <mask key="constraints">
                                                                 <include reference="cgA-Jm-AMD"/>
                                                             </mask>
@@ -3752,6 +3751,9 @@ launch special!</string>
                                                                                     <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     <nil key="highlightedColor"/>
+                                                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                                        <rect key="frame" x="0.0" y="1" width="191" height="32"/>
+                                                                                    </variation>
                                                                                 </label>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

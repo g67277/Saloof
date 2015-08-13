@@ -19,6 +19,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     var imgUri:NSURL = NSURL()
     var newMedia: Bool?
     var validImage = false
+    var imageName = ""
     @IBOutlet weak var contactName: UITextField!
     @IBOutlet weak var descTextView: UITextView!
     @IBOutlet weak var indicatorContainer: UIView!
@@ -75,26 +76,36 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                 self.view.addSubview(containerView)
                 aIView.startAnimation()
                 
+                imageName = self.randomStringWithLength(15) as String
                 var callPart2 = "{\"ContactName\":\"\(contactName.text)\""
-                var completeCall = "\(callPart2), \(callPart1)"
+                var callPart3 = "\"ImageName\":\"\(imageName)\"}"
+                var completeCall = "\(callPart2), \(callPart1), \(callPart3)"
                 var token = prefs.stringForKey("TOKEN")
                 if Reachability.isConnectedToNetwork(){
                     authentication.registerRestaurant(completeCall, token: token!){ result in
                         if result{
                             APICalls.getMyRestaurant(token!){ result in
-                                self.saveData()
-                                dispatch_async(dispatch_get_main_queue()){
-                                    aIView.stopAnimation()
-                                    containerView.removeFromSuperview()
-                                    var refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
-                                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
-                                        self.backThree()
-                                    }))
-                                    self.presentViewController(refreshAlert, animated: true, completion: nil)
+                                if result{
+                                    self.apiCall.uploadImg(self.imgView.image!, imgName: self.imageName){ result in
+                                        if result{
+                                            self.saveData()
+                                            dispatch_async(dispatch_get_main_queue()){
+                                                aIView.stopAnimation()
+                                                containerView.removeFromSuperview()
+                                                var refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
+                                                refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
+                                                    self.backThree()
+                                                }))
+                                                self.presentViewController(refreshAlert, animated: true, completion: nil)
+                                            }
+                                        }else{
+                                            
+                                        }
+                                    }
                                 }
+                                
                             }
                         }
-                        
                         aIView.stopAnimation()
                         containerView.removeFromSuperview()
                     }
@@ -108,6 +119,21 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
             validation.displayAlert("No Picture", message: "Please add a picture")
         }
         
+    }
+    
+    func randomStringWithLength (len : Int) -> NSString {
+        
+        let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        
+        var randomString : NSMutableString = NSMutableString(capacity: len)
+        
+        for (var i=0; i < len; i++){
+            var length = UInt32 (letters.length)
+            var rand = arc4random_uniform(length)
+            randomString.appendFormat("%C", letters.characterAtIndex(Int(rand)))
+        }
+        
+        return randomString
     }
     
     func saveData(){
