@@ -62,7 +62,7 @@ class RegisterUserVC: UIViewController {
                     var post:NSString = "{\"UserName\":\"\(usernameField.text)\",\"Email\":\"\(emailField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"false\"}"
                     
                     var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 70, height: 70), color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
                     containerView.center = self.view.center
