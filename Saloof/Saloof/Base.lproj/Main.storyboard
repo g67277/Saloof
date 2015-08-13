@@ -2839,8 +2839,7 @@
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="24" y="27" width="25" height="27"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>

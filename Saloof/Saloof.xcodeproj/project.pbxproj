@@ -496,7 +496,7 @@
 				TargetAttributes = {
 					81F8C0421B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 9J676A68SR;
+						DevelopmentTeam = 56R6M4W3X8;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -795,7 +795,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bfe7457d-f398-4398-b993-0dfaf85a60e9";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Debug;
@@ -811,7 +811,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bfe7457d-f398-4398-b993-0dfaf85a60e9";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Release;
@@ -833,7 +833,7 @@
 				INFOPLIST_FILE = SaloofTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bfe7457d-f398-4398-b993-0dfaf85a60e9";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Saloof.app/Saloof";
 			};
 			name = Debug;
@@ -851,7 +851,7 @@
 				INFOPLIST_FILE = SaloofTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bfe7457d-f398-4398-b993-0dfaf85a60e9";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Saloof.app/Saloof";
 			};
 			name = Release;
