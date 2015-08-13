@@ -31,6 +31,18 @@ class RegisterRestaurantVC: UIViewController {
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
+        userName.attributedPlaceholder = NSAttributedString(string:"Username",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        
+        passwordField.attributedPlaceholder = NSAttributedString(string:"Password",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        emailAddressField.attributedPlaceholder = NSAttributedString(string:"Email Address",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        
+        passwordCField.attributedPlaceholder = NSAttributedString(string:"Confirm Password",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        
+        
     }
     
     

@@ -36,6 +36,8 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
         super.viewDidLoad()
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
+        contactName.attributedPlaceholder = NSAttributedString(string:"Contact Person's Full Name",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
         
     }
     
