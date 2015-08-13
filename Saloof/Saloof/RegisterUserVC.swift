@@ -27,7 +27,14 @@ class RegisterUserVC: UIViewController {
         // Addes guesture to hide keyboard when tapping on the view
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
-        
+        usernameField.attributedPlaceholder = NSAttributedString(string:"Username",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        emailField.attributedPlaceholder = NSAttributedString(string:"Email Address",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        passwordField.attributedPlaceholder = NSAttributedString(string:"Password",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        passwordCField.attributedPlaceholder = NSAttributedString(string:"Confirm Password",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
     }
     
     override func viewDidLayoutSubviews() {
