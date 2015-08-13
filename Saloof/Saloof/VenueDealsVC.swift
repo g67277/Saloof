@@ -62,11 +62,13 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     var validDeals = Realm().objects(VenueDeal)
     var haveItems: Bool = false;
     var loadSingleDeal: Bool = false
+    
     // Location objects
     var locationManager : CLLocationManager!
     var venueLocations : [AnyObject] = []
     var venueItems : [[String: AnyObject]]?
     var currentLocation: CLLocation!
+    var haveLocation: Bool = false
     
     var setUpForSaved: Bool = false
     var setUpForDefault: Bool = false
@@ -144,7 +146,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.delegate = self
             locationManager.startUpdatingLocation()
-            initialDeals()
+            setUpForInitialDeals()
         }
         
     }
@@ -552,22 +554,18 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
         locationManager.stopUpdatingLocation()
+        // update this location
+        let location = self.locationManager.location
+        userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
         // if we dont' have any locations, get some
-        if haveItems == false {
-            println("We don't have any deals yet")
-            
-            
-            println("Have location, gather local deals")
-            //loadSaloofData()
-            // get  local deals
-            
-            let location = self.locationManager.location
-            userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
-            
+        if !haveLocation {
+            // we do now
+            haveLocation = true
+            loadInitialDeals()
         }
     }
     
-    func initialDeals(){
+    func setUpForInitialDeals(){
     
         dealList.removeAll()
         // delete any current venues
@@ -580,7 +578,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         
         // Start getting the users location
         locationManager.startUpdatingLocation()
-        
+    }
+    
+    func loadInitialDeals() {
         if APICalls.getLocalDeals(token, location: userLocation) {
             self.refreshDataArray()
         } else {

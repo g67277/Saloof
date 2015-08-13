@@ -68,6 +68,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
         
+        
+        // close search when user taps outside search field
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "shouldCloseKeyboard")
+        searchDisplayOverview.addGestureRecognizer(tap)
+        
+        
         // Add the second button to the nav bar
         dealsButton = UIBarButtonItem(image: UIImage(named: "dealIcon"), style: .Plain, target: self, action: "loadDeals")
         searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
@@ -259,6 +265,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         burgerTextField.editing
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
         
+    }
+    
+    func shouldCloseKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+        searchPickerView.hidden = true
     }
     
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------

@@ -809,6 +809,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
+- (void)shouldCloseKeyboard;
 - (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
 - (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
 - (void)pullNewSearchResults;
@@ -939,6 +940,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
 @property (nonatomic) CLLocation * __null_unspecified currentLocation;
+@property (nonatomic) BOOL haveLocation;
 @property (nonatomic) BOOL setUpForSaved;
 @property (nonatomic) BOOL setUpForDefault;
 @property (nonatomic) BOOL topDealReached;
@@ -981,7 +983,8 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)showErrorAlert:(NSError * __nonnull)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
-- (void)initialDeals;
+- (void)setUpForInitialDeals;
+- (void)loadInitialDeals;
 - (void)refreshDataArray;
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView * __nonnull)pickerView;
 - (NSInteger)pickerView:(UIPickerView * __nonnull)pickerView numberOfRowsInComponent:(NSInteger)component;
@@ -995,7 +998,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
-- (void)pullNewSearchResults;
+- (void)pullNewSearchResults:(BOOL)pricePoint;
 - (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
 - (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;

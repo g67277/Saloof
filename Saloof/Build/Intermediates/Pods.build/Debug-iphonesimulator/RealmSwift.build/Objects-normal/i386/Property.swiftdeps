@@ -7,20 +7,20 @@ nominals:
 - "C10RealmSwift8Property"
 class-members:
 top-level:
-- "String"
+- "Bool"
+- "Printable"
 - "Equatable"
 - "=="
-- "Bool"
-- "Property"
-- "Printable"
-- "RLMProperty"
+- "String"
 - "PropertyType"
+- "Property"
+- "RLMProperty"
 member-access:
-- "C10RealmSwift8Property"
 - "PSs9Equatable"
 - "PSs9AnyObject"
 - !private "CSo11RLMProperty"
 - !private "CSo8NSObject"
+- "C10RealmSwift8Property"
 - "PSs9Printable"
 dynamic-lookup:
 cross-module:
