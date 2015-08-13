@@ -434,6 +434,43 @@ public class APICalls {
         })
     }
     
+    class func getLocalDealsByPrice(token: String, call: String, completion: Bool -> ()){
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?\(call)"
+        var url:NSURL = NSURL(string: callString)!
+        
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            /* Your code */
+            let res = response as! NSHTTPURLResponse!
+            if res != nil{
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300{
+                    //let json = JSON(data: urlData!)
+                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+                    
+                    if let returnedVenues = JSONObject as? [AnyObject] {
+                        for venue in returnedVenues {
+                            let venueJson = JSON(venue)
+                            // Parse the JSON file using SwiftlyJSON
+                            APICalls.parseJSONDeals(venueJson)
+                            completion(true)
+                        }
+                    }
+                }
+            }
+        })
+    }
+    
     
     class func parseJSONVenues(json: JSON) {
         let venue = Venue()

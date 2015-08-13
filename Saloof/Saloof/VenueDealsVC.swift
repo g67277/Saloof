@@ -140,6 +140,10 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             singleDealView.hidden = true
             collectionCardView.hidden = false
             cardButtonsView.hidden = false
+            locationManager = CLLocationManager()
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.delegate = self
+            locationManager.startUpdatingLocation()
             initialDeals()
         }
         
@@ -575,9 +579,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
         
         // Start getting the users location
-        locationManager = CLLocationManager()
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
         locationManager.startUpdatingLocation()
         
         if APICalls.getLocalDeals(token, location: userLocation) {
@@ -677,12 +678,12 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func didSelectPricePoint() {
-        UIView.transitionWithView(searchPickerView, duration: 0.5, options:
+        UIView.transitionWithView(searchPickerView, duration: 0.2, options:
             .CurveEaseOut | .TransitionCrossDissolve, animations: {
                 //...animations
             }, completion: {_ in
                 self.searchPickerView.hidden = true
-                UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
+                UIView.transitionWithView(self.searchDisplayOverview, duration: 0.2, options:
                     .CurveEaseOut | .TransitionCrossDissolve, animations: {
                         //...animations
                     }, completion: {_ in
@@ -699,7 +700,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         if shouldSearch {
             // reload search
-           pullNewSearchResults()
+           pullNewSearchResults(true)
+            
         }
     }
     
@@ -720,7 +722,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         
     }
     
-    func pullNewSearchResults () {
+    func pullNewSearchResults (pricePoint: Bool) {
         
         dealList.removeAll()
         // delete any current venues
@@ -732,9 +734,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
         
         // Start getting the users location
-        locationManager = CLLocationManager()
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
         locationManager.startUpdatingLocation()
         
         // reset values
@@ -743,18 +742,33 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         currentDealIndex = 0
         topDealReached = false
         
+        if pricePoint{
+            var call = "priceTier=\(searchString)&\(userLocation)"
+            println(call)
+            APICalls.getLocalDealsByCategory(token, call: call){ result in
+                if result{
+                    self.refreshDataArray()
+                    self.activityIndicator.stopAnimation()
+                }
+            }
+        }else{
+            var formattedSearch = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            println(userLocation)
+            var call = "category=\(formattedSearch)&\(userLocation)"
+            println(call)
 
-        var call = "category=\(searchString)&\(userLocation)"
-        
-        APICalls.getLocalDealsByCategory(token, call: call){ result in
-            if result{
-                self.refreshDataArray()
+            APICalls.getLocalDealsByCategory(token, call: call){ result in
+                if result{
+                    self.refreshDataArray()
+                    self.activityIndicator.stopAnimation()
+                }
             }
         }
         
+        
+        
         // pull new venues
         //loadSaloofData()
-        activityIndicator.stopAnimation()
         searchDisplayOverview.hidden = true
     }
 
@@ -781,7 +795,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
-                pullNewSearchResults()
+                pullNewSearchResults(false)
             }
         }
         return false
