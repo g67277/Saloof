@@ -5,17 +5,16 @@ nominals:
 - "C6Saloof18CreateActivityView"
 class-members:
 top-level:
-- !private "CGRectMake"
+- "CGRect"
 - "UIView"
 - "UIColor"
 member-access:
-- !private "CSo8NSObject"
-- !private "CSo11UIResponder"
-- !private "V12CoreGraphics7CGFloat"
 - "PSs9AnyObject"
+- !private "CSo11UIResponder"
 - !private "CSo6UIView"
-- !private "VSC12UIRectCorner"
+- !private "CSo8NSObject"
 - "C6Saloof18CreateActivityView"
+- !private "V12CoreGraphics7CGFloat"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/Swift.swiftmodule"

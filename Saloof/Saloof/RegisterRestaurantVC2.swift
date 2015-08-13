@@ -65,6 +65,20 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         zipecodeField.delegate = self
         zipecodeField.tag = 1
         categoryArray = categories.loadCategories()
+        
+        restNameField.attributedPlaceholder = NSAttributedString(string:"Restaurant Name",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        streetField.attributedPlaceholder = NSAttributedString(string:"Street Address",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        cityField.attributedPlaceholder = NSAttributedString(string:"City",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        zipecodeField.attributedPlaceholder = NSAttributedString(string:"Postal Code",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        phoneNumField.attributedPlaceholder = NSAttributedString(string:"Phone Number",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        websiteField.attributedPlaceholder = NSAttributedString(string:"Website",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+
     }
     
     func DismissKeyboard(){
@@ -171,7 +185,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     
     func continueRegistration(){
         
-        runTestingMethod()
+       // runTestingMethod()
         
         var restaurantName = restNameField.text
         var street = streetField.text

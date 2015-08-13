@@ -23,19 +23,20 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="userLogInBg" translatesAutoresizingMaskIntoConstraints="NO" id="7fS-RE-eql">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                 </imageView>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vQd-6R-Ia8">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="563"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQd-6R-Ia8">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="752"/>
                     <subviews>
-                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6nc-xa-a4W" userLabel="Logo View">
-                            <rect key="frame" x="83" y="29" width="314" height="338"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6nc-xa-a4W" userLabel="Logo View">
+                            <rect key="frame" x="83" y="29" width="315" height="338"/>
                             <subviews>
-                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mCG-Nr-gug" userLabel="Icon View">
-                                    <rect key="frame" x="8" y="8" width="298" height="195"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mCG-Nr-gug" userLabel="Icon View">
+                                    <rect key="frame" x="8" y="8" width="299" height="194"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vz7-Lq-xX0">
-                                            <rect key="frame" x="50" y="49" width="198" height="146"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vz7-Lq-xX0">
+                                            <rect key="frame" x="50" y="48" width="199" height="146"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="vz7-Lq-xX0" secondAttribute="height" multiplier="72:53" id="3xV-xr-eAi"/>
+                                                <constraint firstAttribute="width" secondItem="vz7-Lq-xX0" secondAttribute="height" multiplier="72:53" id="cF1-Ig-GYH"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -53,8 +54,8 @@
                                     <constraints>
                                         <constraint firstItem="vz7-Lq-xX0" firstAttribute="top" secondItem="mCG-Nr-gug" secondAttribute="top" constant="49" id="8yD-7V-FQE"/>
                                         <constraint firstAttribute="bottom" secondItem="vz7-Lq-xX0" secondAttribute="bottom" id="UvS-kj-QYP"/>
-                                        <constraint firstItem="vz7-Lq-xX0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mCG-Nr-gug" secondAttribute="leading" constant="50" id="XGS-YL-YAQ"/>
-                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vz7-Lq-xX0" secondAttribute="trailing" constant="50" id="dcb-VS-bif"/>
+                                        <constraint firstItem="vz7-Lq-xX0" firstAttribute="leading" secondItem="mCG-Nr-gug" secondAttribute="leading" constant="50" id="XGS-YL-YAQ"/>
+                                        <constraint firstAttribute="trailing" secondItem="vz7-Lq-xX0" secondAttribute="trailing" constant="50" id="dcb-VS-bif"/>
                                         <constraint firstItem="vz7-Lq-xX0" firstAttribute="leading" secondItem="mCG-Nr-gug" secondAttribute="leading" constant="34" id="fAb-MJ-BYl">
                                             <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                                         </constraint>
@@ -65,6 +66,7 @@
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
+                                            <exclude reference="8yD-7V-FQE"/>
                                             <exclude reference="fAb-MJ-BYl"/>
                                             <exclude reference="oZD-Z2-duS"/>
                                             <exclude reference="sgE-41-C1v"/>
@@ -78,11 +80,11 @@
                                         </mask>
                                     </variation>
                                 </view>
-                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NYZ-QH-hsV" userLabel="Title View">
-                                    <rect key="frame" x="8" y="204" width="298" height="134"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NYZ-QH-hsV" userLabel="Title View">
+                                    <rect key="frame" x="8" y="203" width="299" height="135"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Saloof" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UgX-yU-D60">
-                                            <rect key="frame" x="0.0" y="0.0" width="298" height="48"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saloof" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UgX-yU-D60">
+                                            <rect key="frame" x="0.0" y="8" width="299" height="119"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Hairline" family="Montserrat" pointSize="40"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -90,65 +92,36 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="UgX-yU-D60" secondAttribute="bottom" constant="8" id="4k2-rn-Rjs"/>
+                                        <constraint firstAttribute="centerY" secondItem="UgX-yU-D60" secondAttribute="centerY" id="94d-Rt-wZr"/>
                                         <constraint firstItem="UgX-yU-D60" firstAttribute="leading" secondItem="NYZ-QH-hsV" secondAttribute="leading" id="Y2t-9h-SfM"/>
-                                        <constraint firstItem="UgX-yU-D60" firstAttribute="top" secondItem="NYZ-QH-hsV" secondAttribute="top" id="ouE-F3-IdC"/>
+                                        <constraint firstItem="UgX-yU-D60" firstAttribute="top" secondItem="NYZ-QH-hsV" secondAttribute="top" constant="8" id="ouE-F3-IdC"/>
                                         <constraint firstAttribute="trailing" secondItem="UgX-yU-D60" secondAttribute="trailing" id="yR3-kQ-2mK"/>
                                     </constraints>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="NYZ-QH-hsV" firstAttribute="leading" secondItem="6nc-xa-a4W" secondAttribute="leading" constant="8" id="21M-4H-Zkf"/>
                                 <constraint firstAttribute="width" secondItem="6nc-xa-a4W" secondAttribute="height" multiplier="150:161" id="4rd-If-oxm"/>
                                 <constraint firstAttribute="trailing" secondItem="NYZ-QH-hsV" secondAttribute="trailing" constant="8" id="6bD-cj-Ugq"/>
                                 <constraint firstAttribute="trailing" secondItem="mCG-Nr-gug" secondAttribute="trailing" constant="8" id="7Sj-Zh-jpV"/>
                                 <constraint firstAttribute="bottom" secondItem="NYZ-QH-hsV" secondAttribute="bottom" id="AFy-7L-Mxj"/>
-                                <constraint firstItem="NYZ-QH-hsV" firstAttribute="top" secondItem="mCG-Nr-gug" secondAttribute="bottom" constant="1" id="C6K-PG-sdl"/>
-                                <constraint firstAttribute="trailing" secondItem="mCG-Nr-gug" secondAttribute="trailing" constant="8" id="HJZ-oQ-dLR"/>
-                                <constraint firstAttribute="trailing" secondItem="NYZ-QH-hsV" secondAttribute="trailing" constant="8" id="PnD-vr-mHi"/>
-                                <constraint firstItem="NYZ-QH-hsV" firstAttribute="height" secondItem="6nc-xa-a4W" secondAttribute="height" multiplier="0.4" id="atk-Dd-pye"/>
-                                <constraint firstItem="mCG-Nr-gug" firstAttribute="leading" secondItem="6nc-xa-a4W" secondAttribute="leading" constant="8" id="c62-fW-YX4"/>
+                                <constraint firstItem="NYZ-QH-hsV" firstAttribute="height" secondItem="6nc-xa-a4W" secondAttribute="height" multiplier="0.4" id="LdU-AY-pPE"/>
                                 <constraint firstItem="mCG-Nr-gug" firstAttribute="top" secondItem="6nc-xa-a4W" secondAttribute="top" constant="8" id="hiU-dh-BL9"/>
-                                <constraint firstAttribute="bottom" secondItem="NYZ-QH-hsV" secondAttribute="bottom" id="kRq-Jb-yD1"/>
                                 <constraint firstItem="mCG-Nr-gug" firstAttribute="leading" secondItem="6nc-xa-a4W" secondAttribute="leading" constant="8" id="lhU-B2-mt1"/>
                                 <constraint firstItem="NYZ-QH-hsV" firstAttribute="top" secondItem="mCG-Nr-gug" secondAttribute="bottom" constant="1" id="qY1-bY-jaY"/>
-                                <constraint firstItem="mCG-Nr-gug" firstAttribute="top" secondItem="6nc-xa-a4W" secondAttribute="top" constant="8" id="sbK-9D-7bU"/>
                                 <constraint firstItem="NYZ-QH-hsV" firstAttribute="leading" secondItem="6nc-xa-a4W" secondAttribute="leading" constant="8" id="xPn-h6-SbX"/>
                             </constraints>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="HJZ-oQ-dLR"/>
-                                    <exclude reference="c62-fW-YX4"/>
-                                    <exclude reference="sbK-9D-7bU"/>
-                                    <exclude reference="21M-4H-Zkf"/>
-                                    <exclude reference="C6K-PG-sdl"/>
-                                    <exclude reference="PnD-vr-mHi"/>
-                                    <exclude reference="atk-Dd-pye"/>
-                                    <exclude reference="kRq-Jb-yD1"/>
-                                </mask>
-                            </variation>
-                            <variation key="heightClass=regular-widthClass=compact">
-                                <mask key="constraints">
-                                    <include reference="HJZ-oQ-dLR"/>
-                                    <include reference="c62-fW-YX4"/>
-                                    <include reference="sbK-9D-7bU"/>
-                                    <include reference="21M-4H-Zkf"/>
-                                    <include reference="C6K-PG-sdl"/>
-                                    <include reference="PnD-vr-mHi"/>
-                                    <include reference="atk-Dd-pye"/>
-                                    <include reference="kRq-Jb-yD1"/>
-                                </mask>
-                            </variation>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="6nc-xa-a4W" firstAttribute="centerX" secondItem="vQd-6R-Ia8" secondAttribute="centerX" id="7q7-4c-UoW"/>
                         <constraint firstItem="6nc-xa-a4W" firstAttribute="top" secondItem="vQd-6R-Ia8" secondAttribute="top" constant="29" id="S7c-l4-Rfh"/>
-                        <constraint firstItem="6nc-xa-a4W" firstAttribute="height" secondItem="vQd-6R-Ia8" secondAttribute="height" multiplier="0.6" id="pZ6-iO-Xd9"/>
+                        <constraint firstItem="6nc-xa-a4W" firstAttribute="height" secondItem="vQd-6R-Ia8" secondAttribute="height" multiplier="0.45" id="pZ6-iO-Xd9"/>
                     </constraints>
                 </view>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="  Copyright (c) 2015 SNASTek. All rights reserved." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2015 SNASTek. All rights reserved." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
                     <rect key="frame" x="20" y="439" width="441" height="21"/>
                     <fontDescription key="fontDescription" name="Montserrat-Light" family="Montserrat" pointSize="17"/>
                     <color key="textColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>

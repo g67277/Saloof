@@ -500,7 +500,7 @@
 				TargetAttributes = {
 					81F8C0421B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 9J676A68SR;
+						DevelopmentTeam = 56R6M4W3X8;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -509,6 +509,7 @@
 					};
 					81F8C05A1B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 56R6M4W3X8;
 						TestTargetID = 81F8C0421B67BA7D001B9203;
 					};
 				};
@@ -823,6 +824,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -834,6 +837,7 @@
 				INFOPLIST_FILE = SaloofTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Saloof.app/Saloof";
 			};
 			name = Debug;
@@ -842,6 +846,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -849,6 +855,7 @@
 				INFOPLIST_FILE = SaloofTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Saloof.app/Saloof";
 			};
 			name = Release;

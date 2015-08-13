@@ -2540,7 +2540,8 @@ DC 20007</string>
                                                                 <exclude reference="cgA-Jm-AMD"/>
                                                             </mask>
                                                         </variation>
-                                                        <variation key="heightClass=regular-widthClass=compact">
+                                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                            <rect key="frame" x="68" y="135" width="320" height="40"/>
                                                             <mask key="constraints">
                                                                 <include reference="cgA-Jm-AMD"/>
                                                             </mask>
@@ -2802,6 +2803,9 @@ DC 20007</string>
                                                                 <fontDescription key="fontDescription" name="Montserrat-UltraLight" family="Montserrat" pointSize="21"/>
                                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="71" y="14" width="150" height="55"/>
+                                                                </variation>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="LhL-2o-lBH">
                                                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
@@ -2818,7 +2822,8 @@ launch special!</string>
                                                                         <exclude reference="VYf-4o-iuW"/>
                                                                     </mask>
                                                                 </variation>
-                                                                <variation key="heightClass=regular-widthClass=compact">
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="14" y="85" width="243" height="36"/>
                                                                     <mask key="constraints">
                                                                         <include reference="VYf-4o-iuW"/>
                                                                     </mask>
@@ -2826,9 +2831,15 @@ launch special!</string>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dealBox" translatesAutoresizingMaskIntoConstraints="NO" id="3pB-cK-xBC">
                                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="193" y="123" width="70" height="18"/>
+                                                                </variation>
                                                             </imageView>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dealBox" translatesAutoresizingMaskIntoConstraints="NO" id="UOD-03-ZTj">
                                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="115" y="123" width="70" height="18"/>
+                                                                </variation>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3hr limit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="qDc-u1-cZN">
                                                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
@@ -2843,7 +2854,8 @@ launch special!</string>
                                                                         <exclude reference="vuf-Eb-rPA"/>
                                                                     </mask>
                                                                 </variation>
-                                                                <variation key="heightClass=regular-widthClass=compact">
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="121" y="125" width="58" height="14"/>
                                                                     <mask key="constraints">
                                                                         <include reference="vuf-Eb-rPA"/>
                                                                     </mask>
@@ -2862,7 +2874,8 @@ launch special!</string>
                                                                         <exclude reference="rUo-Yi-Yvo"/>
                                                                     </mask>
                                                                 </variation>
-                                                                <variation key="heightClass=regular-widthClass=compact">
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="197" y="125" width="62" height="14"/>
                                                                     <mask key="constraints">
                                                                         <include reference="rUo-Yi-Yvo"/>
                                                                     </mask>
@@ -2878,7 +2891,8 @@ launch special!</string>
                                                                         <exclude reference="jhJ-zw-jOV"/>
                                                                     </mask>
                                                                 </variation>
-                                                                <variation key="heightClass=regular-widthClass=compact">
+                                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="14" y="14" width="48" height="49"/>
                                                                     <mask key="constraints">
                                                                         <include reference="jhJ-zw-jOV"/>
                                                                     </mask>
@@ -3431,7 +3445,7 @@ launch special!</string>
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="305" height="170"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cardNoShadow" translatesAutoresizingMaskIntoConstraints="NO" id="jux-UR-I5e">
