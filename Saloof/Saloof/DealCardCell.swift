@@ -30,9 +30,9 @@ class DealCardCell: UICollectionViewCell {
     
     
     func setUpVenueDeal(deal: VenueDeal) {
-        locationTitle.text = " from \(deal.venue.name)"
-        if deal.venue.hasImage {
-            locationImage.image = deal.venue.image
+        locationTitle.text = " from \(deal.venueName)"
+        if deal.hasImage {
+            locationImage.image = deal.image
         } else {
             // set up default image
             locationImage.image = UIImage(named: "redHen")
