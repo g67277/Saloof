@@ -390,6 +390,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             if currentSavedDealId != "" {
                 saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
             }
+            searchBarButton.enabled = true
         }
         
     }
@@ -574,9 +575,21 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func loadInitialDeals() {
+        if searchBarButton != nil{
+            searchBarButton.enabled = false
+        }
+        var containerView = CreateActivityView.createView(UIColor.clearColor(), frame: CGRectMake(0, -100, self.view.frame.width, self.view.frame.height))
+        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.blackColor(), size: CGSize(width: 100, height: 100))
+        aIView.center = containerView.center
+        containerView.addSubview(aIView)
+        containerView.center = self.view.center
+        self.view.addSubview(containerView)
+        aIView.startAnimation()
         APICalls.getLocalDeals(token, location: userLocation, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
+                    aIView.startAnimation()
+                    containerView.removeFromSuperview()
                     self.refreshDataArray()
                     println("Refreshing data array from initial load")
                 }
@@ -605,6 +618,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             alertUser("Bummer", message: "There are no \(priceMessage)\(searchMessage) deals near you")
             timeLimitLabel.stop()
             timeLimitLabel.startValue = 0
+            searchBarButton.enabled = true
         }
     }
     
@@ -731,6 +745,19 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         dealList.removeAll()
         collectionView.reloadData()
         // delete any current venues
+        if searchBarButton != nil{
+            searchBarButton.enabled = false
+        }
+        let win:UIWindow = UIApplication.sharedApplication().delegate!.window!!
+        var containerView = CreateActivityView.createView(UIColor.clearColor(), frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.blackColor(), size: CGSize(width: 100, height: 100))
+        aIView.center = containerView.center
+        containerView.addSubview(aIView)
+        containerView.center = self.view.center
+        win.addSubview(containerView)
+        //self.view.addSubview(containerView)
+        aIView.startAnimation()
+        
         var pulledVenues = Realm().objects(VenueDeal)
         realm.write {
             self.realm.delete(pulledVenues)
@@ -753,8 +780,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 if result{
                     dispatch_async(dispatch_get_main_queue()){
                         println("refreshing data array from get local deals by price")
+                        aIView.stopAnimation()
+                        containerView.removeFromSuperview()
                         self.refreshDataArray()
-                        self.activityIndicator.stopAnimation()
                     }
                 }
             }
@@ -769,7 +797,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                     dispatch_async(dispatch_get_main_queue()){
                         println("refreshing data array from get local deals by category")
                         self.refreshDataArray()
-                        self.activityIndicator.stopAnimation()
+                        aIView.stopAnimation()
+                        containerView.removeFromSuperview()
                     }
                 }
             }

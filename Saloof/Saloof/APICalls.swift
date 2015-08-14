@@ -134,7 +134,7 @@ public class APICalls {
 
     func getBalance(id: String, token: String, completion: JSON -> ()){
         
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=CB29A448-84C9-4630-A0B0-06497A613DA6"
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=\(id)"
         var url:NSURL = NSURL(string: callString)!
         
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
@@ -187,73 +187,41 @@ public class APICalls {
         })
     }
     
-    class func uploadBalance(credits: Int, restID: String) -> (Bool){
+    class func uploadBalance(credits: Double, restID: String, token: String){
         
-        if Reachability.isConnectedToNetwork(){
-            
-            var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(credits)"
+            var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(Int(credits))"
+            //var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=B054B184-104E-431B-B007-A53130BF8005&credit=5"
+            println(call)
             var url:NSURL = NSURL(string: call)!
             
             var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
             
-            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
-            request.HTTPMethod = "POST"
-            request.HTTPBody = postData
-            request.timeoutInterval = 60
-            //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.HTTPBody = postData
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        
             var reponseError: NSError?
             var response: NSURLResponse?
+            let queue:NSOperationQueue = NSOperationQueue()
             
-            var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
-            
-            if ( urlData != nil ) {
-                let res = response as! NSHTTPURLResponse!;
-                
-                NSLog("Response code: %ld", res.statusCode);
-                println(res.debugDescription)
-                
-                if (res.statusCode >= 200 && res.statusCode < 300){
-                    
-                    return true
-                    
-                }else {
-                    
-                    var error: NSError?
-                    let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
-                    
-                    var alertView:UIAlertView = UIAlertView()
-                    alertView.title = "Sign in Failed!"
-                    alertView.message = jsonData["error_description"] as? String
-                    alertView.delegate = self
-                    alertView.addButtonWithTitle("OK")
-                    alertView.show()
-                    debugPrint("another error")
-                    return false
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+                /* Your code */
+                let res = response as! NSHTTPURLResponse!
+                if res != nil{
+                    println(res.statusCode)
+                    if res.statusCode >= 200 && res.statusCode < 300{
+                        print("Credits uploaded")
+                    }else{
+                        var error: NSError?
+                        let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                    }
                 }
-            }else{
-                var alertView:UIAlertView = UIAlertView()
-                alertView.title = "Sign in Failed!"
-                alertView.message = "Connection Failure"
-                if let error = reponseError {
-                    alertView.message = (error.localizedDescription)
-                }
-                alertView.delegate = self
-                alertView.addButtonWithTitle("OK")
-                alertView.show()
-                return false
-            }
-        }else{
-            var alertView:UIAlertView = UIAlertView()
-            alertView.title = "No network"
-            alertView.message = "Please make sure you are connected then try again"
-            alertView.delegate = self
-            alertView.addButtonWithTitle("OK")
-            alertView.show()
-        }
-        return false
+            })
     }
     
     /*

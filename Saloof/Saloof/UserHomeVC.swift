@@ -571,6 +571,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         fetchFoursquareVenues()
         activityIndicator.stopAnimation()
         swipeableView.reloadData()*/
+        
         APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){

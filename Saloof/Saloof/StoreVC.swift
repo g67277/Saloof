@@ -12,15 +12,20 @@ import StoreKit
 class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     @IBOutlet weak var tableView: UITableView!
     
-    let productIdenifiers = Set(["com.snastek.tier1", "com.snastek.tier2", "com.snastek.tier3", "com.snastek.tier4"])
+    let productIdenifiers = Set(["com.nazir.tier1", "com.nazir.tier2", "com.nazir.tier3", "com.nazir.tier4"])
     var product: SKProduct?
     var productsArray = Array<SKProduct>()
+    
+    var containerView = UIView()
+    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 100, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
+        containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+
         
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         requestProductData()
@@ -91,6 +96,8 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
             case SKPaymentTransactionState.Failed:
                 println("Transation Failed")
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+                aIView.startAnimation()
+                containerView.removeFromSuperview()
             default:
                 break
             }
@@ -98,37 +105,26 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     }
     
     func deliverProduct(transaction:SKPaymentTransaction) {
+
         
-        
-        func saveTransation(price: Int){
-            
-            var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-            //APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!)
-//            APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!, completion: { result in
-//                if result {
-//                    println("Credits updated")
-//                }
-//            })
-        }
-        
-        if transaction.payment.productIdentifier == "com.snastek.tier1" {
+        if transaction.payment.productIdentifier == "com.nazir.tier1" {
             
             println("$10 purchased")
             saveTransation(50)
             // Unlock feature or add credits
-        }else if transaction.payment.productIdentifier == "com.snastek.tier2" {
+        }else if transaction.payment.productIdentifier == "com.nazir.tier2" {
             
             println("$20 purchased")
             saveTransation(100)
             // Add credits
             
-        }else if transaction.payment.productIdentifier == "com.snastek.tier3" {
+        }else if transaction.payment.productIdentifier == "com.nazir.tier3" {
             
             println("$50 purchased")
             saveTransation(250)
             
             // Unlock feature or add credits
-        }else if transaction.payment.productIdentifier == "com.snastek.tier4" {
+        }else if transaction.payment.productIdentifier == "com.nazir.tier4" {
             
             println("$75 purchased")
             saveTransation(375)
@@ -139,6 +135,17 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         
         
         
+    }
+    
+    func saveTransation(price: Int){
+        
+        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        var restId = prefs.stringForKey("restID")!
+        var token = prefs.stringForKey("TOKEN")!
+        println("about to upload \(5) to id: \(restId)")
+        APICalls.uploadBalance(Double(price / 4), restID: restId.uppercaseString, token: token)
+        aIView.startAnimation()
+        containerView.removeFromSuperview()
     }
     
     
@@ -159,11 +166,20 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        let win:UIWindow = UIApplication.sharedApplication().delegate!.window!!
+        aIView.center = containerView.center
+        containerView.addSubview(aIView)
+        containerView.center = self.view.center
+        win.addSubview(containerView)
+        aIView.startAnimation()
         println(productsArray[indexPath.row].localizedTitle)
         let payment = SKPayment(product: productsArray[indexPath.row])
         SKPaymentQueue.defaultQueue().addPayment(payment)
         
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        SKPaymentQueue.defaultQueue().removeTransactionObserver(self)
     }
     
     
