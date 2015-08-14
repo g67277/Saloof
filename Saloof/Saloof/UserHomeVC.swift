@@ -349,7 +349,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         let restaurant: Venue = venueList[Int(index)]
-        //println(restaurant)
+        println(restaurant.identifier)
         cardView.setUpRestaurant(contentView, dataObject: restaurant)
         cardView.addSubview(contentView)
         // Layout constraints to keep card view within the swipeable view bounds as it moves
@@ -408,6 +408,18 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
                 swipedVenue.swipeValue = 2
                 self.realm.create(Venue.self, value: swipedVenue, update: true)
             }
+            APICalls.updateFavoriteCountForVenue(favorite.identifier, didFav: true, completion: { result in
+                if result {
+                    dispatch_async(dispatch_get_main_queue()){
+                            println("Favorited this venue")
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue()){
+                        println("unable to favorite this venue")
+                    }
+
+                }
+            })
         }
         
     }

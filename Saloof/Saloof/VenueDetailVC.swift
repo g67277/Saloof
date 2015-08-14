@@ -257,9 +257,25 @@ class VenueDetailVC: UIViewController {
     
     
     // -------------------- LIKING / UNLIKING  / FAVORITING  / UNFAVORITING  ----------------------
-    func setUpLikeNFavoriteButtons() {
-        // And favorites button
-        // Check if this venue is included in the liked or favorites lists
+    func setUpLikeNFavoriteButtons() {        
+        var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+        // see if we have a favorite venue with this id
+            if favoriteVenue != nil {
+            // set the favorite button on
+                favoriteButton.selected = true
+                doesFavorite = true
+            } else {
+                // did the user come from the favorites list
+                if isFavorite {
+                    favoriteButton.selected = true
+                    doesFavorite = true
+                } else {
+                    // not a favorite
+                    favoriteButton.selected = false
+                    doesFavorite = false
+                }
+        }
+        // see if this id is stored as a liked venue
         var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
         if likedVenue != nil {
             // set the liked button on
@@ -267,16 +283,7 @@ class VenueDetailVC: UIViewController {
             likeButton.selected = true
         } else {
             doesLike = false
-            likeButton.selected = true
-        }
-        var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
-        if favoriteVenue != nil {
-            // set the favorite button on
-            favoriteButton.selected = true
-            doesFavorite = true
-        } else {
-            favoriteButton.selected = false
-            doesFavorite = false
+            likeButton.selected = false
         }
         
     }
@@ -288,6 +295,9 @@ class VenueDetailVC: UIViewController {
         if sender.tag == 2 {
             if doesLike {
                 println("Unliking")
+                self.doesLike = false
+                self.likeButton.selected = false
+                self.shouldUpdateLikeCountForVenue(false)
                 // unlike/unselect this venue
                 var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
                 if likedVenue != nil {
@@ -295,23 +305,42 @@ class VenueDetailVC: UIViewController {
                         self.realm.delete(likedVenue!)
                     }
                 }
-                doesLike = false
-                likeButton.selected = false
+                // remove like from API
+                APICalls.updateLikeCountForVenue(thisVenueId, didLike: false, completion: { result in
+                    if result {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("User unliked this venue")
+                        }
+                    }
+                })
+
             } else {
                 println("Liking")
+                likeButton.selected = true
+                doesLike = true
+                self.shouldUpdateLikeCountForVenue(true)
                 // like and select
                 var newVenueLike = LikedVenue()
                 newVenueLike.likedId = thisVenueId
                 realm.write {
                     realm.create(LikedVenue.self, value: newVenueLike, update: true)
                 }
-                likeButton.selected = true
-                doesLike = true
+                // add like to API
+                APICalls.updateLikeCountForVenue(thisVenueId, didLike: true, completion: { result in
+                    if result {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("User liked this venue")
+                        }
+                    }
+                })
             }
         } else if sender.tag == 3 {
             // remove this venue
             if doesFavorite {
                 println("unfavoriting")
+                self.favoriteButton.selected = false
+                self.doesFavorite = false
+                self.shouldUpdateFavoriteCountForVenue(false)
                 // unlike/unselect this venue
                 var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                 if favVenue != nil {
@@ -319,11 +348,21 @@ class VenueDetailVC: UIViewController {
                         self.realm.delete(favVenue!)
                     }
                 }
-                favoriteButton.selected = false
-                doesFavorite = false
+                
+                // remove favorite from API
+                APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: false, completion: { result in
+                    if result {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("User unfavorited this venue")
+                        }
+                    }
+                })
             } else {
                 println("favoriting")
+                self.shouldUpdateFavoriteCountForVenue(true)
                 // fav and select
+                doesFavorite = true
+                favoriteButton.selected = true
                 // make sure there is a favorite venue saved
                 var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                 if favoriteVenue == nil {
@@ -385,12 +424,114 @@ class VenueDetailVC: UIViewController {
                         realm.write {
                             self.realm.create(FavoriteVenue.self, value: favorite, update: true)
                         }
-                        
                     }
                 }
-                favoriteButton.selected = true
-                isFavorite = true
+                APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: true, completion: { result in
+                    if result {
+                        println("user favorited this venue")
+                    }
+                })
+                
             }
+        }
+    }
+    
+    
+    func shouldUpdateLikeCountForVenue(shouldIncrease: Bool) {
+        var updatedCount: Int = 0
+        var currentCount: Int = 0
+        // Get the object type
+        if isFavorite {
+            // this is a FavoriteVenue object
+            if let venue: FavoriteVenue = favVenue {
+                currentCount = venue.likes
+                if shouldIncrease {
+                    updatedCount = currentCount + 1
+                } else {
+                    // they are unliking
+                    if currentCount > 0 {
+                        // decrement it by one
+                        updatedCount = currentCount - 1
+                    }
+                }
+                // Update the object and label
+                realm.write {
+                    self.favVenue?.likes = updatedCount
+                    self.realm.create(FavoriteVenue.self, value: self.favVenue!, update: true)
+                }
+            }
+        } else {
+            // This is a Venue object
+            if let venue: Venue = thisVenue {
+                currentCount = venue.likes
+                if shouldIncrease {
+                    updatedCount = currentCount + 1
+                } else {
+                    // they are unliking
+                    if currentCount > 0 {
+                        // decrement it by one
+                        updatedCount = currentCount - 1
+                    }
+                }
+                // Update the object and label
+                realm.write {
+                    self.thisVenue?.likes = updatedCount
+                    self.realm.create(Venue.self, value: self.thisVenue!, update: true)
+                }
+            }
+        }
+        // update the label
+        if var likeLabel = likesLabel {
+            likeLabel.text = "\(updatedCount)"
+        }
+    }
+    
+    func shouldUpdateFavoriteCountForVenue(shouldIncrease: Bool) {
+        var updatedCount: Int = 0
+        var currentCount: Int = 0
+        // Get the object type
+        if isFavorite {
+            // this is a FavoriteVenue object
+            if let venue: FavoriteVenue = favVenue {
+                currentCount = venue.favorites
+                if shouldIncrease {
+                    updatedCount = currentCount + 1
+                } else {
+                    // they are unliking
+                    if currentCount > 0 {
+                        // decrement it by one
+                        updatedCount = currentCount - 1
+                    }
+                }
+                // Update the object and label
+                realm.write {
+                    self.favVenue?.favorites = updatedCount
+                    self.realm.create(FavoriteVenue.self, value: self.favVenue!, update: true)
+                }
+            }
+        } else {
+            // This is a Venue object
+            if let venue: Venue = thisVenue {
+                currentCount = venue.favorites
+                if shouldIncrease {
+                    updatedCount = currentCount + 1
+                } else {
+                    // they are unliking
+                    if currentCount > 0 {
+                        // decrement it by one
+                        updatedCount = currentCount - 1
+                    }
+                }
+                // Update the object and label
+                realm.write {
+                    self.thisVenue?.favorites = updatedCount
+                    self.realm.create(Venue.self, value: self.thisVenue!, update: true)
+                }
+            }
+        }
+        // update the label
+        if var favLab = favoritesLabel {
+            favLab.text = "\(updatedCount)"
         }
     }
     
