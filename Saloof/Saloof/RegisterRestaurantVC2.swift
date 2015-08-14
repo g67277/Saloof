@@ -94,14 +94,46 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        if textField.tag == 0{
+       /* if textField.tag == 0{
             println(count(phoneNumField.text))
+            
             if count(phoneNumField.text) > 10{
                 //var updatedInput = count(descTF.text)
                 phoneNumField.text = phoneNumField.text.substringToIndex(phoneNumField.text.endIndex.predecessor())
             }
         }
-        return true
+        return true*/
+        if textField.tag == 0 {
+            var newString = (phoneNumField.text as NSString).stringByReplacingCharactersInRange(range, withString: string)
+            var components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            
+            var decimalString = "".join(components) as NSString
+            var length = decimalString.length
+            if length == 0 || length > 10 || length > 11 {
+                var newLength = (phoneNumField.text as NSString).length + (string as NSString).length - range.length as Int
+                return (newLength > 10) ? false : true
+            }
+            var index = 0 as Int
+            var formattedString = NSMutableString()
+            
+            if (length - index) > 3 {
+                var areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                formattedString.appendFormat("(%@) ", areaCode)
+                index += 3
+            }
+            if length - index > 3 {
+                var prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                formattedString.appendFormat("%@-", prefix)
+                index += 3
+            }
+            var remainder = decimalString.substringFromIndex(index)
+            formattedString.appendString(remainder)
+            phoneNumField.text = formattedString as String
+            return false
+        } else {
+            return true
+        }
+
     }
     
     @IBAction func onClick(_sender:UIButton){
@@ -111,7 +143,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
             //sign up here
             self.continueRegistration()
             
-        }else if _sender.tag == 10{
+        } else if _sender.tag == 10 {
             if continueSession{
                 navigationController?.popViewControllerAnimated(true)
             }
@@ -206,12 +238,14 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         
         if validation.validateInput(restaurantName, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name")
             && validation.validateAddress(street, city: city, zipcode: zipcode, lat: self.validatedlat, lng: self.validatedlng).valid
-            && validation.validatePhone(phoneNumField.text, check: 10, title: "Invalid Number", message: "Please enter a valid Phone number")
+            //&& validation.validatePhone(phoneNumField.text, check: 10, title: "Invalid Number", message: "Please enter a valid Phone number")
+            && validation.validatePhone(phoneNumField.text, check: 14, title: "Invalid Number", message: "Please enter a valid Phone number")
             && validation.category(selectedCategory!){
                 
                 //call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"10am - 10pm\",\"WeekEndHours\":\"10am - 10pm\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\"}"
                 call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"10AM-10PM\",\"WeekEndHours\":\"10AM-12AM\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\""
-                self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum.toInt()!, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
+                println(call)
+                self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
         }else {
             errorLabel.hidden = false
         }
@@ -246,7 +280,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func saveData(name: String, street: String, city: String, zipcode: Int, phoneNum: Int, website: String, category: String, price: Int, wkO: String, wkC: String, wknO: String, wknC: String, weekdayString: String, weekendString: String){
+    func saveData(name: String, street: String, city: String, zipcode: Int, phoneNum: String, website: String, category: String, price: Int, wkO: String, wkC: String, wknO: String, wknC: String, weekdayString: String, weekendString: String){
         
         var model = ProfileModel()
         model.restaurantName = name

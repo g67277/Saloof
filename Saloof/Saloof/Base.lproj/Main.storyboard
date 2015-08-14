@@ -2839,8 +2839,7 @@
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="24" y="27" width="25" height="27"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>
@@ -3334,6 +3333,9 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="phonePad"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="ql7-dB-PIr"/>
+                                                        </connections>
                                                     </textField>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="NVT-kg-1tn" userLabel="Web Img">
                                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
