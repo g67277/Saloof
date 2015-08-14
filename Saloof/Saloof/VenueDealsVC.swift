@@ -159,9 +159,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     
     func setUpDefaultDeal() {
         // set up view for a default deal
-        singleLocationTitle.text = " from \(singleDeal.venue.name)"
-        if singleDeal.venue.hasImage {
-            singleLocationImage.image = singleDeal.venue.image
+        singleLocationTitle.text = " from \(singleDeal.name)"
+        if singleDeal.hasImage {
+            singleLocationImage.image = singleDeal.image
         } else {
             // set up default image
             singleLocationImage.image = UIImage(named: "redHen")
@@ -175,9 +175,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     
     func setUpSaveSwapButton () {
         // set up view for a default deal
-        singleLocationTitle.text = " from \(savedDeal.venue.name)"
-        if savedDeal.venue.hasImage {
-            singleLocationImage.image = savedDeal.venue.image
+        singleLocationTitle.text = " from \(savedDeal.name)"
+        if savedDeal.hasImage {
+            singleLocationImage.image = savedDeal.image
         } else {
             // set up default image
             singleLocationImage.image = UIImage(named: "redHen")
@@ -283,7 +283,11 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             newDeal.timeLimit = deal.timeLimit
             newDeal.expirationDate = deal.expirationDate
             newDeal.value = deal.value
-            newDeal.venue = deal.venue
+            newDeal.restId = deal.restId
+            newDeal.venueName = deal.venueName
+            newDeal.image = deal.image
+            newDeal.hasImage = deal.hasImage
+            //newDeal.venue = deal.venue
             newDeal.id = deal.id
             realm.write {
                 self.realm.create(SavedDeal.self, value: newDeal, update: true)
@@ -332,7 +336,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }  else if sender.tag == 2 {
             bestButton.selected = false
             oldestButton.selected = true
-            println(pageController.currentPage)
+            //println(pageController.currentPage)
             pageController.currentPage = dealList.count - 1
             let indexPath = NSIndexPath(forRow: Int(dealList.count-1), inSection: 0)
             collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: true)
@@ -348,9 +352,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             // we have more deals to sort
             if lastDealRestId != "" {
                 
-                if lastDealRestId != validDeals[currentDealIndex].venue.identifier {
+                if lastDealRestId != validDeals[currentDealIndex].restId {
                     // Update lastDeal to hold the current restaurant id
-                    lastDealRestId = validDeals[currentDealIndex].venue.identifier
+                    lastDealRestId = validDeals[currentDealIndex].restId
                     // Adding the new restaurant to the top of the array as it has a higher value
                     dealList.insert(validDeals[currentDealIndex], atIndex: 0)
                     delayReload()
@@ -368,9 +372,9 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 
             }else{
                 //println("restaurant Name: \(validDeals[currentDealIndex].name), deal tier: \(validDeals[currentDealIndex].tier), deal value: \(validDeals[currentDealIndex].value)")
-                println(currentDealIndex)
-                println(validDeals[0])
-                lastDealRestId = validDeals[currentDealIndex].venue.identifier
+                //println(currentDealIndex)
+                //println(validDeals[0])
+                lastDealRestId = validDeals[currentDealIndex].restId
                 dealList.insert(validDeals[currentDealIndex], atIndex: 0)
                 currentDealIndex = currentDealIndex + 1
                 delayLoad()
@@ -431,6 +435,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("dealCell", forIndexPath: indexPath) as! DealCardCell
         let deal: VenueDeal = dealList[indexPath.row]
         cell.setUpVenueDeal(deal)
+        println("This deal's tier: \(deal.venuePriceTier)")
         pageController.numberOfPages = dealList.count
         return cell
     }
@@ -558,7 +563,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         dealList.removeAll()
         // delete any current venues
         var pulledVenues = Realm().objects(VenueDeal)
-        if pulledVenues.count < 1{
+        if pulledVenues.count < 1 {
             realm.write {
                 self.realm.delete(pulledVenues)
             }
@@ -573,27 +578,34 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             if result {
                 dispatch_async(dispatch_get_main_queue()){
                     self.refreshDataArray()
+                    println("Refreshing data array from initial load")
                 }
             }
         })
     }
+    // this method keeps looping
     
     func refreshDataArray(){
-        self.collectionCardView.reloadInputViews()
+        //self.collectionCardView.reloadInputViews()
         println("Retrieved deals from Saloof")
         haveItems = true
         //FINISHED CREATING DATA OBJECTS
         //get a list of all deal objects in Realm
         validDeals = Realm().objects(VenueDeal)
-        
         println("We have \(validDeals.count) returned deals")
-        println("We have \(validDeals.count) returned deals")
-        //Sort all deals by value
-        let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
-        validDeals = sortedDeals
-        //println("Sorted Deals from ParseJSON \(sortedDeals)")
-        biddingStart()
-        //pullLocalDeals()
+        if validDeals.count > 0 {
+            //Sort all deals by value
+            let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
+            validDeals = sortedDeals
+            biddingStart()
+        } else {
+            println("No results returned")
+            var searchMessage = (searchQuery) ? "\(searchString)" : ""
+            var priceMessage = (searchPrice) ? "\(searchString)" : ""
+            alertUser("Bummer", message: "There are no \(priceMessage)\(searchMessage) deals near you")
+            timeLimitLabel.stop()
+            timeLimitLabel.startValue = 0
+        }
     }
     
     //  ------------------  SEARCH TAGS AND PRICE PICKER METHODS ----------------------------
@@ -676,22 +688,24 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 UIView.transitionWithView(self.searchDisplayOverview, duration: 0.2, options:
                     .CurveEaseOut | .TransitionCrossDissolve, animations: {
                         //...animations
-                    }, completion: {_ in
-                        self.resetView(true)
+                    }, completion: { result in
+                        if result {
+                            println("Animation complete, resetting view")
+                            self.resetView(true)
+                        }
                         
                 })
         })
     }
     
     func resetView(shouldSearch: Bool) {
+        println("resetting view")
         activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
         searchPrice = shouldSearch
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         if shouldSearch {
-            // reload search
            pullNewSearchResults(true)
-            
         }
     }
     
@@ -713,16 +727,15 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func pullNewSearchResults (pricePoint: Bool) {
-        
+        println("pulling new search")
         dealList.removeAll()
+        collectionView.reloadData()
         // delete any current venues
         var pulledVenues = Realm().objects(VenueDeal)
-        if pulledVenues.count < 1{
-            realm.write {
-                self.realm.delete(pulledVenues)
-            }
+        realm.write {
+            self.realm.delete(pulledVenues)
+
         }
-        
         // Start getting the users location
         locationManager.startUpdatingLocation()
         
@@ -731,34 +744,36 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         topBidIndex = 0
         currentDealIndex = 0
         topDealReached = false
-        
-        if pricePoint{
+        pageController.currentPage = 0
+        pageController.numberOfPages = 0
+        if pricePoint {
             var call = "priceTier=\(searchString)&\(userLocation)"
-            println(call)
-            APICalls.getLocalDealsByCategory(token, call: call){ result in
+            //println(call)
+            APICalls.getLocalDealsByPrice(token, call: call){ result in
                 if result{
                     dispatch_async(dispatch_get_main_queue()){
+                        println("refreshing data array from get local deals by price")
                         self.refreshDataArray()
                         self.activityIndicator.stopAnimation()
                     }
                 }
             }
-        }else{
+        } else {
             var formattedSearch = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
             println(userLocation)
             var call = "category=\(formattedSearch)&\(userLocation)"
-            println(call)
+           // println(call)
 
             APICalls.getLocalDealsByCategory(token, call: call){ result in
                 if result{
                     dispatch_async(dispatch_get_main_queue()){
+                        println("refreshing data array from get local deals by category")
                         self.refreshDataArray()
                         self.activityIndicator.stopAnimation()
                     }
                 }
             }
         }
-
         searchDisplayOverview.hidden = true
     }
 
@@ -790,5 +805,15 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
         return false
     }
+    
+    func alertUser(title: String, message: String) {
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = title
+        alertView.message = message
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
+    }
+
 
 }

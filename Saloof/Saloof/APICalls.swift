@@ -581,10 +581,10 @@ public class APICalls {
     
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
-        //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=39.1167&lng=-77.5500"
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
+        //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=39.1167&lng=-77.5500"
         var url:NSURL = NSURL(string: callString)!
-        
+        println(url)
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
@@ -610,8 +610,8 @@ public class APICalls {
                             let venueJson = JSON(venue)
                             // Parse the JSON file using SwiftlyJSON
                             APICalls.parseJSONDeals(venueJson)
-                            completion(true)
                         }
+                        completion(true)
                     }
                 }
             }
@@ -621,7 +621,7 @@ public class APICalls {
     class func getLocalDealsByPrice(token: String, call: String, completion: Bool -> ()){
         var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?\(call)"
         var url:NSURL = NSURL(string: callString)!
-        
+        println(url)
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
@@ -647,8 +647,8 @@ public class APICalls {
                             let venueJson = JSON(venue)
                             // Parse the JSON file using SwiftlyJSON
                             APICalls.parseJSONDeals(venueJson)
-                            completion(true)
                         }
+                        completion(true)
                     }
                 }
             }
@@ -702,7 +702,7 @@ public class APICalls {
     }
     
     class func parseJSONDeals(json: JSON) {
-        let venue = Venue()
+     /*   let venue = Venue()
         // get venue information information
         venue.identifier = json["Id"].stringValue
         venue.phone = json["phone"].stringValue
@@ -729,7 +729,8 @@ public class APICalls {
             let venueImage = UIImage(data: data)
             venue.image = venueImage
         }
-        venue.swipeValue = 3   // deal only
+        venue.swipeValue = 3   // deal only*/
+        
         if let deals = json["deals"].array {
             for deal in deals {
                 // make sure it is active
@@ -742,8 +743,19 @@ public class APICalls {
                     venueDeal.timeLimit = deal["timeLimit"].intValue
                     venueDeal.value = deal["deal_value"].floatValue
                     venueDeal.id = deal["id"].stringValue
-                    venueDeal.venue = venue
-                    venueDeal.restId = venue.identifier
+                    //venueDeal.venue = venue
+                    venueDeal.restId = json["Id"].stringValue
+                    venueDeal.venueName = json["name"].stringValue
+                    venueDeal.venuePriceTier = json["priceTier"].intValue
+                    let imageUrlString = json["defaultPicUrl"].stringValue
+
+                    let imageUrl = NSURL(string: imageUrlString)
+                    if let data = NSData(contentsOfURL: imageUrl!){
+                        venueDeal.hasImage = true
+                        let venueImage = UIImage(data: data)
+                        venueDeal.image = venueImage
+                    }
+
                     // check for current object
                     let realm = Realm()
                     // Query using a predicate string
@@ -781,7 +793,7 @@ public class APICalls {
                         default:
                             time = 3600
                         }
-                        println(time)
+                        //println(time)
                         let dealExpires = firstLoad.dateByAddingTimeInterval(time)
                         venueDeal.expirationDate = dealExpires
                         venueDeal.validValue = 1

@@ -349,7 +349,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         let restaurant: Venue = venueList[Int(index)]
-        println(restaurant.identifier)
+        //println(restaurant.identifier)
         cardView.setUpRestaurant(contentView, dataObject: restaurant)
         cardView.addSubview(contentView)
         // Layout constraints to keep card view within the swipeable view bounds as it moves
@@ -604,7 +604,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
         let foursquareURl = NSURL(string: "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)")!
-        println(foursquareURl)
+        //println(foursquareURl)
         if  let response = NSData(contentsOfURL: foursquareURl) {
             let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
                 options: NSJSONReadingOptions(0),
@@ -711,8 +711,5 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         alertView.delegate = self
         alertView.addButtonWithTitle("OK")
         alertView.show()
-
-    
-    
     }
 }

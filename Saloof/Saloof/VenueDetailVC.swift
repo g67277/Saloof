@@ -544,18 +544,19 @@ class VenueDetailVC: UIViewController {
         venueDeal.timeLimit = 4
         if isFavorite {
             venueDeal.value = favVenue!.defaultDealValue
-            venueDeal.venue.name = favVenue!.name
-            venueDeal.venue.identifier = favVenue!.identifier
-            venueDeal.venue.image = favVenue!.image
-            var venueId = "\(venueDeal.venue.identifier).0)"
-            venueDeal.id = venueId
+            venueDeal.venueName = favVenue!.name
+            venueDeal.id = favVenue!.defaultDealID
+            venueDeal.image = favVenue!.image
+            venueDeal.hasImage = favVenue!.hasImage
+            venueDeal.restId = favVenue!.identifier
+
         } else  {
             venueDeal.value = thisVenue!.defaultDealValue
-            venueDeal.venue.name = thisVenue!.name
-            venueDeal.venue.identifier = thisVenue!.identifier
-            var venueId = "\(venueDeal.venue.identifier).0)"
-            venueDeal.venue.image = thisVenue!.image
-            venueDeal.id = venueId
+            venueDeal.venueName = thisVenue!.name
+            venueDeal.id = thisVenue!.defaultDealID
+            venueDeal.restId = thisVenue!.identifier
+            venueDeal.hasImage = thisVenue!.hasImage
+            venueDeal.image = thisVenue!.image
         }
         let realm = Realm()
         realm.write {
@@ -598,7 +599,11 @@ class VenueDetailVC: UIViewController {
         dealsVC.setUpForSaved = false
         let defaultDeal = VenueDeal()
         defaultDeal.name = thisVenue!.defaultDealTitle
-        defaultDeal.venue = thisVenue!
+        defaultDeal.hasImage = thisVenue!.hasImage
+        defaultDeal.image = thisVenue!.image
+        defaultDeal.restId = thisVenue!.identifier
+        defaultDeal.desc = thisVenue!.defaultDealDesc
+        //defaultDeal.venue = thisVenue!
         defaultDeal.value = thisVenue!.defaultDealValue
         defaultDeal.id = thisVenue!.defaultDealID
         dealsVC.singleDeal = defaultDeal
