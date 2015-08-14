@@ -349,7 +349,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         let restaurant: Venue = venueList[Int(index)]
-        //println(restaurant)
+        println(restaurant.identifier)
         cardView.setUpRestaurant(contentView, dataObject: restaurant)
         cardView.addSubview(contentView)
         // Layout constraints to keep card view within the swipeable view bounds as it moves

@@ -218,10 +218,22 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 let swapDeals = UIAlertAction(title: "Swap", style: .Default, handler: {
                     (action) -> Void in
                     // Swap deals
-                    self.realm.write {
-                        self.realm.delete(currentSavedDeal!)
-                    }
-                    self.saveNewDeal()
+                    APICalls.shouldSwapCreditForDeal(currentSavedDeal?.id as String!, token: self.token, newDeal: self.selectedDeal?.id as String!, completion:{ result in
+                        if result {
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("Favorited this venue")
+                                self.realm.write {
+                                    self.realm.delete(currentSavedDeal!)
+                                }
+                                self.saveNewDeal(true)
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("unable to decrement Deal credits")
+                            }
+                            
+                        }
+                    })
                 })
                 alertController.addAction(cancelSwap)
                 alertController.addAction(swapDeals)
@@ -233,12 +245,12 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 }
                 println("Deleted expired deal and saving new one")
                 // save this deal as the saved deal
-                saveNewDeal()
+                saveNewDeal(false)
             }
         } else {
             println("Setting a new saved deal")
             // save this deal as the saved deal
-            saveNewDeal()
+            saveNewDeal(false)
         }
     }
     
@@ -261,7 +273,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
     }
     
-    func saveNewDeal () {
+    func saveNewDeal (didSwap: Bool) {
         if let deal: VenueDeal = selectedDeal {
             currentSavedDealId = deal.id
             let newDeal = SavedDeal()
@@ -272,8 +284,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             newDeal.expirationDate = deal.expirationDate
             newDeal.value = deal.value
             newDeal.venue = deal.venue
-            var venueId = "\(newDeal.venue.identifier).\(newDeal.tier)"
-            newDeal.id = venueId
+            newDeal.id = deal.id
             realm.write {
                 self.realm.create(SavedDeal.self, value: newDeal, update: true)
             }
@@ -285,9 +296,21 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             alertView.show()
             // and change the button
             saveSwapButton.enabled = false
+            if !didSwap {
+                APICalls.shouldDecrementCreditForDeal(self.selectedDeal!.id as String, token: self.token, completion:{ result in
+                    if result {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("Deal credits decremented")
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("unable to decrement Deal credits")
+                        }
+                        
+                    }
+                })
+            }
         }
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -318,42 +341,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             setDealTimer(deal)
         }
     }
-    
-    
-    //  -------------------------------------  LOADING DEALS  ------------------------------------------------
-//    func loadSaloofData () {
-//        let saloofUrl = NSURL(string: "http://www.justwalkingonwater.com/json/venueResponse.json")!
-//        let response = NSData(contentsOfURL: saloofUrl)!
-//        let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
-//            options: NSJSONReadingOptions(0),
-//            error: nil) as! NSDictionary)["response"]
-//        
-//        if let object: AnyObject = json {
-//            haveItems = true
-//            var groups = object["groups"] as! [AnyObject]
-//            //  get array of items
-//            var venues = groups[0]["items"] as! [AnyObject]
-//            for item in venues {
-//                // get the venue
-//                if let venue = item["venue"] as? [String: AnyObject] {
-//                    // get each deal
-//                    let venueJson = JSON(venue)
-//                    // Parse the JSON file using SwiftlyJSON
-//                    JSONParser.parseJSON(venueJson, source: Constants.sourceTypeSaloof)
-//                }
-//            }
-//            // FINISHED CREATING DATA OBJECTS
-//            // get a list of all deal objects in Realm
-//            validDeals = Realm().objects(VenueDeal)
-//            // Sort all deals by value
-//            let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
-//            validDeals = sortedDeals
-//            //println("Sorted Deals from ParseJSON \(sortedDeals)")
-//            biddingStart()
-//        }
-//    }
-    
-    
+
     
     func biddingStart(){
         if currentDealIndex < validDeals.count{
@@ -766,11 +754,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 }
             }
         }
-        
-        
-        
-        // pull new venues
-        //loadSaloofData()
         searchDisplayOverview.hidden = true
     }
 

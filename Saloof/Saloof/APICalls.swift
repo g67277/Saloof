@@ -734,12 +734,83 @@ public class APICalls {
                     completion (false)
                 }
             } else {
-                 completion (false)            }
+                 completion (false)
+            }
         })
     }
 
     
+    class func shouldDecrementCreditForDeal (deal: String, token: String, completion: Bool -> ()) {
+        
+        //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Purchase?dealId=E1D72619-C35E-4F47-949A-0227AF1957B8
+        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Purchase?dealId=\(deal)"
+        println(baseUrlString)
+        var url:NSURL = NSURL(string: baseUrlString)!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 60
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                    debugPrint("Deal purchase successful")
+                    completion (true)
+                } else {
+                    debugPrint("unable to purchase deal")
+                    completion (false)
+                }
+            } else {
+                completion (false)
+                debugPrint("No response")
+            }
+            
+        })
+    }
     
+    
+    class func shouldSwapCreditForDeal (originalDeal: String, token: String, newDeal:String, completion: Bool -> ()) {
+        
+        //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Swap?originalDealId=E1D72619-C35E-4F47-949A-0227AF1957B8&newDealId=0F2A43BF-B902-4243-BB67-188B3F9EDE05
+        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Swap?originalDealId=\(originalDeal)&newDealId=\(newDeal)"
+        println(baseUrlString)
+        var url:NSURL = NSURL(string: baseUrlString)!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 60
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                    debugPrint("Deals swap successful")
+                    completion (true)
+                } else {
+                    debugPrint("unable to swap deals")
+                    completion (false)
+                }
+            } else {
+                completion (false)
+                 debugPrint("No response")
+            }
+            
+        })
+    }
+
     
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
