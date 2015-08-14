@@ -926,13 +926,13 @@
                         <barButtonItem key="leftBarButtonItem" image="profile" id="5Rb-RU-c0f" userLabel="profile">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="FUW-pA-j9r" kind="show" id="3GB-wH-9CH"/>
+                                <segue destination="FUW-pA-j9r" kind="show" identifier="toProfile" id="3GB-wH-9CH"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="dealIcon" id="Uve-ea-Jyc" userLabel="deals">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="OVY-LS-A7W" kind="show" id="3Ie-6p-B2P"/>
+                                <segue destination="OVY-LS-A7W" kind="show" identifier="toDealList" id="3Ie-6p-B2P"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -944,6 +944,7 @@
                         <outlet property="dealsSelectedLabel" destination="3e4-EV-c8E" id="lZh-Yh-FvD"/>
                         <outlet property="dealsSwapedLabel" destination="vdL-U5-a81" id="E5J-6u-XvF"/>
                         <outlet property="monthsBtn" destination="6Lk-Gs-cEx" id="MX8-VW-ZIB"/>
+                        <outlet property="numberOfDeals" destination="4ya-MX-aKT" id="Bs3-nM-cHc"/>
                         <outlet property="profileImgView" destination="9WT-3y-XAk" id="bYD-2i-hDk"/>
                         <outlet property="restaurantNameLabel" destination="WBW-Ef-ObS" id="Tel-Ef-epy"/>
                     </connections>
@@ -2899,6 +2900,9 @@ launch special!</string>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
+                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="87" y="110" width="266" height="14"/>
+                                                </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="140 Characters Left" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TXo-xn-XR0">
                                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>

@@ -104,11 +104,11 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
             
             var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             //APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!)
-            APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!, completion: { result in
-                if result {
-                    println("Credits updated")
-                }
-            })
+//            APICalls.uploadBalance(price, restID: prefs.stringForKey("restID")!, completion: { result in
+//                if result {
+//                    println("Credits updated")
+//                }
+//            })
         }
         
         if transaction.payment.productIdentifier == "com.snastek.tier1" {

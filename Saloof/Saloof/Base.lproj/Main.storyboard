@@ -764,6 +764,9 @@
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="256" y="28" width="109" height="25"/>
+                                        </variation>
                                         <connections>
                                             <segue destination="hJ9-Id-W48" kind="presentation" identifier="toBusinessSide" id="3QX-lr-HRG"/>
                                         </connections>
@@ -775,6 +778,9 @@
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="25" y="28" width="81" height="25"/>
+                                        </variation>
                                         <connections>
                                             <action selector="onClick:" destination="hbj-O5-pbv" eventType="touchUpInside" id="8JV-z1-xHo"/>
                                             <segue destination="OVE-Mo-f0V" kind="presentation" identifier="userForgotPassword" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="mme-wg-0i6"/>
@@ -842,6 +848,9 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="60" y="0.0" width="231" height="28"/>
+                                        </variation>
                                         <connections>
                                             <segue destination="SPs-NS-eUd" kind="show" id="YyB-B8-rUJ"/>
                                         </connections>
@@ -2830,8 +2839,7 @@
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="24" y="27" width="25" height="27"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>
@@ -5608,6 +5616,9 @@
                                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="126" y="42" width="50" height="31"/>
+                                                </variation>
                                                 <connections>
                                                     <segue destination="2SK-FJ-Y26" kind="unwind" unwindAction="returnToLogInScreen:" id="lqA-xa-7bU"/>
                                                 </connections>

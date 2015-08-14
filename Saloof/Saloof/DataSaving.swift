@@ -44,10 +44,24 @@ public class DataSaving{
                     var category = object["category"]["name"].string!
                     data!.category = category
                 }
+                if object["weekdayHours"] != nil{
+                    var weekDay = object["weekdayHours"].string!
+                    data!.weekdayHours = weekDay
+                }
+                if object["weekendHours"] != nil{
+                    var weekEnd = object["weekendHours"].string!
+                    data!.weekendHours = weekEnd
+                }
+                if object["defaultPicUrl"] != nil{
+                    var imgID = object["defaultPicUrl"].string!
+                    var imageURL = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID).jpg"
+                    data!.imgUri = imageURL
+                }
                 
                 if object["deals"] != nil{
                     
                     if let deals = object["deals"].array {
+                        var count = 0
                         for deal in deals {
                             var exists = false
                             for localDeal in dealArray{
@@ -71,7 +85,9 @@ public class DataSaving{
                                 bDeal.restaurantID = deal["venue_id"].string!
                                 data!.deals.append(bDeal)
                             }
+                            count++
                         }
+                        data!.dealsCount = count
                     }
                     
                 }
@@ -94,11 +110,24 @@ public class DataSaving{
                 var category = object["category"]["name"].string!
                 restaurant.category = category
             }
+            if object["weekdayHours"] != nil{
+                var weekDay = object["weekdayHours"].string!
+                restaurant.weekdayHours = weekDay
+            }
+            if object["weekendHours"] != nil{
+                var weekEnd = object["weekendHours"].string!
+                restaurant.weekendHours = weekEnd
+            }
+            if object["defaultPicUrl"] != nil{
+                var imageURL = object["defaultPicUrl"].string!
+                restaurant.imgUri = imageURL
+            }
             restaurant.id = prefs.stringForKey("restID")!
             
             if object["deals"] != nil{
                 
                 if let deals = object["deals"].array {
+                    var count = 0
                     for deal in deals {
                         var exists = false
                         for localDeal in dealArray{
@@ -119,29 +148,17 @@ public class DataSaving{
                             bDeal.restaurantID = deal["venue_id"].string!
                             restaurant.deals.append(bDeal)
                         }
+                        count++
                     }
+                    restaurant.dealsCount = count
+
                 }
                 
             }
-            
             realm.write({
                 realm.add(restaurant, update: false)
             })
-            
-            
         }
-        
-        
-        //        if object["weekdayHours"] != nil{
-        //            restaurant.weekdayHours = object["weekdayHours"] as! String
-        //            if let space = find(restaurant.weekdayHours, " ") {
-        //                let substr = restaurant.weekdayHours[restaurant.weekdayHours.startIndex..<space]
-        //                // substr will be "Hello"
-        //            }
-        //        }
-        //        if object["weekendHours"] != nil{
-        //            restaurant.weekendHours = object["weekendHours"] as! String
-        //        }
     }
     
 }

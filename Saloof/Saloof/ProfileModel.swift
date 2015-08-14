@@ -29,6 +29,7 @@ class ProfileModel:Object{
     dynamic var imgUri = ""
     dynamic var contactName = ""
     dynamic var desc = ""
+    dynamic var dealsCount = 0
     dynamic var id = ""
     let deals = List<BusinessDeal>()
     

@@ -37,7 +37,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBOutlet weak var weekendC: UIButton!
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
-    
+    var profileImg = UIImage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,40 +67,42 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         catButton.setTitle(category, forState: UIControlState.Normal)
         var price = data?.priceTier
         priceControls.selectedSegmentIndex = price!
-        weekdayO.setTitle(data?.weekdayO, forState: .Normal)
-        weekdayC.setTitle(data?.weekdayC, forState: .Normal)
-        weekendO.setTitle(data?.weekendO, forState: .Normal)
-        weekendC.setTitle(data?.weekendC, forState: .Normal)
-        var path = data?.imgUri
-        var imgURL = NSURL(string: path!)
-        getUIImagefromAsseturl(imgURL!)
+        var week = data?.weekdayHours
+        var weekend = data?.weekendHours
+        parseHours(week!, weekend: weekend!)
+        imgView.image = profileImg
         
     }
     
-    func getUIImagefromAsseturl (url: NSURL) {
-        var asset = ALAssetsLibrary()
+    func parseHours(week: String, weekend: String){
+        var delimiter = "-"
+        if week != "" {
+            var weekO = week.componentsSeparatedByString(delimiter)[0]
+            var weekCIndex = week.rangeOfString(" -", options: .BackwardsSearch)?.endIndex
+            var weekC = week.substringFromIndex(weekCIndex!)
+            weekdayO.setTitle("\(weekO)", forState: .Normal)
+            weekdayC.setTitle("\(weekC)", forState: .Normal)
+        }
+        if weekend != ""{
+            var weeknO = weekend.componentsSeparatedByString(delimiter)[0]
+            var weeknCIndex = weekend.rangeOfString("- ", options: .BackwardsSearch)?.endIndex
+            var weeknC = weekend.substringFromIndex(weeknCIndex!)
+            weekendO.setTitle("\(weeknO)", forState: .Normal)
+            weekendC.setTitle("\(weeknC)", forState: .Normal)
+        }
         
-        asset.assetForURL(url, resultBlock: { asset in
-            if let ast = asset {
-                let assetRep = ast.defaultRepresentation()
-                let iref = assetRep.fullResolutionImage().takeUnretainedValue()
-                let image = UIImage(CGImage: iref)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.imgView.image = image
-                })
-            }
-            }, failureBlock: { error in
-                println("Error: \(error)")
-        })
     }
+    
     
     func saveData(){
-        
+        var validation = Validation()
         var category = self.catButton.titleLabel?.text
         var wkO = self.weekdayO.titleLabel?.text
         var wkC = self.weekdayC.titleLabel?.text
         var wknO = self.weekendO.titleLabel?.text
         var wknC = self.weekendC.titleLabel?.text
+        var weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
+        var weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
         
         var realm = Realm()
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
@@ -121,9 +123,9 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             if wknC != nil{
                 data?.weekendC = wknC!
             }
-            if self.newImage{
-                data?.imgUri = "\(self.imgURI)"
-            }
+            data?.weekdayHours = weekdayString
+            data?.weekendHours = weekendString
+            
         })
         
         var alertView:UIAlertView = UIAlertView()
