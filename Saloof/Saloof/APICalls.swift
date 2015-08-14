@@ -666,6 +666,81 @@ public class APICalls {
         return (false)
     }
     */
+    
+    class func  updateLikeCountForVenue (venue: String, didLike: Bool, completion: Bool -> ()) {
+        
+    //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=CB29A448-84C9-4630-A0B0-06497A613DA6&like=true
+        var didLikeString = (didLike) ? "true" : "false"
+        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=\(venue)&like=\(didLikeString)"
+        println(baseUrlString)
+        var url:NSURL = NSURL(string: baseUrlString)!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                    var testString = (didLike) ? "increased" : "decreased"
+                    println("\(testString) this venue's like count")
+                    completion (true)
+                } else {
+                    println("unable to like venue")
+                    completion (false)
+                }
+            } else {
+              completion (false)
+            }
+            
+        })
+    }
+    
+    class func  updateFavoriteCountForVenue (venue: String, didFav: Bool, completion: Bool -> ()) {
+        
+        //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Favourite?id=CB29A448-84C9-4630-A0B0-06497A613DA6&favourite=true
+        var didFavString = (didFav) ? "true" : "false"
+        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Favourite?id=\(venue)&favourite=\(didFavString)"
+        println(baseUrlString)
+        var url:NSURL = NSURL(string: baseUrlString)!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println("Retrieved status code for favoriting")
+                println("Favorited item: status code: \(res.statusCode)")
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                     var testString = (didFav) ? "increased" : "decreased"
+                    println("\(testString) this venue's favorite count")
+                    completion (true)
+                } else {
+                    println("unable to favorite venue")
+                    completion (false)
+                }
+            } else {
+                 completion (false)            }
+        })
+    }
+
+    
+    
+    
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
         var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"

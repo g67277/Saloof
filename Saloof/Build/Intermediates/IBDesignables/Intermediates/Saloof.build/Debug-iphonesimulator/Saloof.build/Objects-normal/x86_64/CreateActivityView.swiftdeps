@@ -5,15 +5,15 @@ nominals:
 - "C6Saloof18CreateActivityView"
 class-members:
 top-level:
+- "UIColor"
 - "CGRect"
 - "UIView"
-- "UIColor"
 member-access:
-- "PSs9AnyObject"
-- !private "CSo11UIResponder"
 - !private "CSo6UIView"
 - !private "CSo8NSObject"
 - "C6Saloof18CreateActivityView"
+- !private "CSo11UIResponder"
+- "PSs9AnyObject"
 - !private "V12CoreGraphics7CGFloat"
 dynamic-lookup:
 cross-module:

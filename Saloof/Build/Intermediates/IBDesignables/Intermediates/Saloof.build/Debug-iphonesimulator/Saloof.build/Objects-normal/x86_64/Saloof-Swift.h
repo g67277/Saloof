@@ -595,12 +595,14 @@ SWIFT_CLASS("_TtC6Saloof21RegisterRestaurantVC2")
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class NSString;
 
 SWIFT_CLASS("_TtC6Saloof21RegisterRestaurantVC3")
 @interface RegisterRestaurantVC3 : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate>
 @property (nonatomic, weak) IBOutlet UIImageView * __null_unspecified imgView;
 @property (nonatomic) NSURL * __nonnull imgUri;
 @property (nonatomic) BOOL validImage;
+@property (nonatomic, copy) NSString * __nonnull imageName;
 @property (nonatomic, weak) IBOutlet UITextField * __null_unspecified contactName;
 @property (nonatomic, weak) IBOutlet UITextView * __null_unspecified descTextView;
 @property (nonatomic, weak) IBOutlet UIView * __null_unspecified indicatorContainer;
@@ -613,6 +615,7 @@ SWIFT_CLASS("_TtC6Saloof21RegisterRestaurantVC3")
 - (void)DismissKeyboard;
 - (IBAction)onClick:(UIButton * __nonnull)_sender;
 - (void)signUp;
+- (NSString * __nonnull)randomStringWithLength:(NSInteger)len;
 - (void)saveData;
 - (void)backThree;
 - (void)startImageAction;
@@ -806,6 +809,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
+- (void)shouldCloseKeyboard;
 - (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
 - (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
 - (void)pullNewSearchResults;
@@ -928,6 +932,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic, copy) NSArray * __nonnull pickerDataSource;
 @property (nonatomic, weak) IBOutlet TTCounterLabel * __null_unspecified timeLimitLabel;
 @property (nonatomic, copy) NSArray * __nonnull plistObjects;
+@property (nonatomic) /* Results<Venue> */ validDeals2;
 @property (nonatomic) /* Results<VenueDeal> */ validDeals;
 @property (nonatomic) BOOL haveItems;
 @property (nonatomic) BOOL loadSingleDeal;
@@ -935,6 +940,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
 @property (nonatomic) CLLocation * __null_unspecified currentLocation;
+@property (nonatomic) BOOL haveLocation;
 @property (nonatomic) BOOL setUpForSaved;
 @property (nonatomic) BOOL setUpForDefault;
 @property (nonatomic) BOOL topDealReached;
@@ -948,8 +954,10 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic) VenueDeal * __nullable selectedDeal;
 @property (nonatomic, readonly) /* List<VenueDeal> */ dealList;
 @property (nonatomic, readonly) NSUserDefaults * __nonnull defaults;
+@property (nonatomic, readonly) NSUserDefaults * __nonnull prefs;
+@property (nonatomic, copy) NSString * __nonnull userLocation;
+@property (nonatomic, copy) NSString * __nonnull token;
 - (void)viewWillAppear:(BOOL)animated;
-- (void)viewWillDisappear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewDidLoad;
 - (void)setButtonTitle:(NSString * __nonnull)title;
@@ -961,7 +969,6 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)saveNewDeal;
 - (void)didReceiveMemoryWarning;
 - (IBAction)onButtonSelect:(UIButton * __nonnull)sender;
-- (void)loadSaloofData;
 - (void)biddingStart;
 - (void)delayLoad;
 - (void)delayReload;
@@ -976,6 +983,9 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)showErrorAlert:(NSError * __nonnull)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
 - (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
+- (void)setUpForInitialDeals;
+- (void)loadInitialDeals;
+- (void)refreshDataArray;
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView * __nonnull)pickerView;
 - (NSInteger)pickerView:(UIPickerView * __nonnull)pickerView numberOfRowsInComponent:(NSInteger)component;
 - (NSString * __null_unspecified)pickerView:(UIPickerView * __nonnull)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
@@ -988,7 +998,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
-- (void)pullNewSearchResults;
+- (void)pullNewSearchResults:(BOOL)pricePoint;
 - (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
 - (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
@@ -1027,6 +1037,8 @@ SWIFT_CLASS("_TtC6Saloof13VenueDetailVC")
 - (void)didReceiveMemoryWarning;
 - (void)setUpLikeNFavoriteButtons;
 - (IBAction)onClick:(UIButton * __nonnull)sender;
+- (void)shouldUpdateLikeCountForVenue:(BOOL)shouldIncrease;
+- (void)shouldUpdateFavoriteCountForVenue:(BOOL)shouldIncrease;
 - (VenueDeal * __nonnull)createDealForDetailView;
 - (IBAction)shouldPushToSavedDeal:(id __nonnull)sender;
 - (IBAction)shouldLoadDefaultDealInDealView:(id __nonnull)sender;

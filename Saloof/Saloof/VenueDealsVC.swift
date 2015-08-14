@@ -588,12 +588,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 }
             }
         })
-        
-        /*if APICalls.getLocalDeals(token, location: userLocation) {
-            self.refreshDataArray()
-        } else {
-            println("Unable to retrieved deals from Saloof")
-        } */
     }
     
     func refreshDataArray(){
