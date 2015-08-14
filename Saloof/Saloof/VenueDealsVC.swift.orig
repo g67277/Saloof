@@ -579,7 +579,7 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func refreshDataArray(){
-        self.collectionCardView.reloadInputViews()
+        
         println("Retrieved deals from Saloof")
         haveItems = true
         //FINISHED CREATING DATA OBJECTS
@@ -737,10 +737,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             println(call)
             APICalls.getLocalDealsByCategory(token, call: call){ result in
                 if result{
-                    dispatch_async(dispatch_get_main_queue()){
-                        self.refreshDataArray()
-                        self.activityIndicator.stopAnimation()
-                    }
+                    self.refreshDataArray()
+                    self.activityIndicator.stopAnimation()
                 }
             }
         }else{
@@ -751,14 +749,16 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
 
             APICalls.getLocalDealsByCategory(token, call: call){ result in
                 if result{
-                    dispatch_async(dispatch_get_main_queue()){
-                        self.refreshDataArray()
-                        self.activityIndicator.stopAnimation()
-                    }
+                    self.refreshDataArray()
+                    self.activityIndicator.stopAnimation()
                 }
             }
         }
-
+<<<<<<< HEAD
+        // pull new venues
+        //loadSaloofData()
+=======
+>>>>>>> 2d8f9749c94b964de93a8058efa91480b620e398
         searchDisplayOverview.hidden = true
     }
 

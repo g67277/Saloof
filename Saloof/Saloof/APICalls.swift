@@ -581,7 +581,8 @@ public class APICalls {
     
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
+        //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=39.1167&lng=-77.5500"
         var url:NSURL = NSURL(string: callString)!
         
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
