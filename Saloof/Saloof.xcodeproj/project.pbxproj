@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810028281B7E525200C8BA80 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 810028271B7E525200C8BA80 /* StoreKit.framework */; };
 		8183BB2A1B799E13002EC6C8 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183BB291B799E13002EC6C8 /* JSONParser.swift */; };
 		8183BB601B79AE44002EC6C8 /* CreateActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183BB5F1B79AE44002EC6C8 /* CreateActivityView.swift */; };
 		81F8C0491B67BA7D001B9203 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0481B67BA7D001B9203 /* AppDelegate.swift */; };
@@ -88,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		3F7AA3BCBDD174ECE2056454 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		810028271B7E525200C8BA80 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8183BB291B799E13002EC6C8 /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		8183BB5F1B79AE44002EC6C8 /* CreateActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateActivityView.swift; sourceTree = "<group>"; };
 		81F8C0431B67BA7D001B9203 /* Saloof.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Saloof.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,6 +175,7 @@
 				998DB91B1B770AAF005B7E2E /* QuartzCore.framework in Frameworks */,
 				998DB9191B770AA7005B7E2E /* CoreLocation.framework in Frameworks */,
 				F4CA0662F73964C28F1E54B2 /* Pods.framework in Frameworks */,
+				810028281B7E525200C8BA80 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +265,7 @@
 		9133ADD13CBCD5A48EC06279 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				810028271B7E525200C8BA80 /* StoreKit.framework */,
 				998DB91A1B770AAF005B7E2E /* QuartzCore.framework */,
 				998DB9181B770AA7005B7E2E /* CoreLocation.framework */,
 				EC0F7C383A865C408CA68AA9 /* Pods.framework */,
@@ -499,7 +503,7 @@
 						DevelopmentTeam = 9J676A68SR;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};

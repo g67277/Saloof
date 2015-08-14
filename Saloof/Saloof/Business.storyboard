@@ -1381,7 +1381,7 @@
                                                         </segments>
                                                         <color key="tintColor" red="0.89246445109999994" green="0.89246445109999994" blue="0.89246445109999994" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
-                                                            <action selector="priceControl:" destination="FUW-pA-j9r" eventType="touchUpInside" id="GWw-Cu-V5d"/>
+                                                            <action selector="priceControl:" destination="FUW-pA-j9r" eventType="valueChanged" id="BZX-Xi-81j"/>
                                                         </connections>
                                                     </segmentedControl>
                                                 </subviews>
@@ -3004,7 +3004,6 @@ launch special!</string>
                                                         </segments>
                                                         <color key="tintColor" red="0.93917410710000004" green="0.93917410710000004" blue="0.93917410710000004" alpha="1" colorSpace="calibratedRGB"/>
                                                         <connections>
-                                                            <action selector="priceControl:" destination="FUW-pA-j9r" eventType="touchUpInside" id="r1f-9y-x1p"/>
                                                             <action selector="timeLimitSelector:" destination="IdD-AA-iH5" eventType="valueChanged" id="r9x-Uq-WFs"/>
                                                         </connections>
                                                     </segmentedControl>

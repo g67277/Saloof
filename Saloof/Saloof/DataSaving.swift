@@ -39,7 +39,6 @@ public class DataSaving{
                 if object["contactName"] != nil{
                     data!.contactName = object["contactName"].string!
                 }
-                
                 if object["category"] != nil{
                     var category = object["category"]["name"].string!
                     data!.category = category
@@ -54,8 +53,27 @@ public class DataSaving{
                 }
                 if object["defaultPicUrl"] != nil{
                     var imgID = object["defaultPicUrl"].string!
-                    var imageURL = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID).jpg"
-                    data!.imgUri = imageURL
+                    data!.imgUri = imgID
+                }
+                if object["location"] != nil{
+                    var street = object["location"]["address"].string!
+                    var city = object["location"]["city"].string!
+                    var zipcode = object["location"]["postalcode"].string!
+                    var lat = object["location"]["lat"].double!
+                    var lng = object["location"]["lng"].double!
+                    data?.streetAddress = street
+                    data?.city = city
+                    data?.zipcode = zipcode.toInt()!
+                    data?.lat = lat
+                    data?.lng = lng
+                }
+                if object["phone"] != nil{
+                    var num = object["phone"].string!
+                    data?.phoneNum = num.toInt()!
+                }
+                if object["url"] != nil{
+                    var url = object["url"].string!
+                    data?.website = url
                 }
                 
                 if object["deals"] != nil{
@@ -122,6 +140,27 @@ public class DataSaving{
                 var imageURL = object["defaultPicUrl"].string!
                 restaurant.imgUri = imageURL
             }
+            if object["location"] != nil{
+                var street = object["location"]["address"].string!
+                var city = object["location"]["city"].string!
+                var zipcode = object["location"]["postalcode"].string!
+                var lat = object["location"]["lat"].double!
+                var lng = object["location"]["lng"].double!
+                restaurant.streetAddress = street
+                restaurant.city = city
+                restaurant.zipcode = zipcode.toInt()!
+                restaurant.lat = lat
+                restaurant.lng = lng
+            }
+            if object["phone"] != nil{
+                var num = object["phone"].string!
+                restaurant.phoneNum = num.toInt()!
+            }
+            if object["url"] != nil{
+                var url = object["url"].string!
+                restaurant.website = url
+            }
+
             restaurant.id = prefs.stringForKey("restID")!
             
             if object["deals"] != nil{
