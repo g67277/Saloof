@@ -68,6 +68,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
         
+        
+        // close search when user taps outside search field
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "shouldCloseKeyboard")
+        searchDisplayOverview.addGestureRecognizer(tap)
+        
+        
         // Add the second button to the nav bar
         dealsButton = UIBarButtonItem(image: UIImage(named: "dealIcon"), style: .Plain, target: self, action: "loadDeals")
         searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
@@ -261,6 +267,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         
     }
     
+    func shouldCloseKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+        searchPickerView.hidden = true
+    }
+    
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == 4 {
@@ -280,6 +292,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             // Search
             if textField.text != "" {
                 searchString = textField.text
+                searchString = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
@@ -532,6 +545,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             urlParameters = "Venue/GetLocal?\(userLocation)"
         }
         //println(urlParameters)
+        /*
         if APICalls.getLocalVenues(token!, venueParameters: urlParameters){
             //println("Pulling data from saloof!!")
             for venue in venues {
@@ -544,7 +558,29 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         fetchFoursquareVenues()
         activityIndicator.stopAnimation()
-        swipeableView.reloadData()
+        swipeableView.reloadData()*/
+        APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
+            if result {
+                dispatch_async(dispatch_get_main_queue()){
+                    //println("Pulling local data asyncly from saloof!!")
+                    for venue in self.venues {
+                        self.venueList.append(venue)
+                    }
+                    //makesure the deals button is viewable
+                    self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
+                    self.fetchFoursquareVenues()
+                    self.activityIndicator.stopAnimation()
+                    self.swipeableView.reloadData()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.fetchFoursquareVenues()
+                    self.activityIndicator.stopAnimation()
+                    self.swipeableView.reloadData()
+                }
+            }
+            
+        })
     }
 
     

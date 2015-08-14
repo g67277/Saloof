@@ -68,9 +68,27 @@ class BusinessHome: UIViewController {
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         restaurantNameLabel.text = data?.restaurantName
         updateImg()
-        
+        var apiCall = APICalls()
         if Reachability.isConnectedToNetwork(){
-            var json = apiCall.getBalance(prefs.stringForKey("restID")!, token: prefs.stringForKey("TOKEN")!)
+            apiCall.getBalance(prefs.stringForKey("restID")!, token: prefs.stringForKey("TOKEN")!, completion: { json in
+                if json != nil {
+                    dispatch_async(dispatch_get_main_queue()){
+                         //println("returned json: \(json)")
+                        var credits = json["CreditAvailable"].int!
+                        var dealsSelected = json["TotalDealsPurchased"].int!
+                        var dealSwapped = json["TotalDealsSwapped"].int!
+                        var creditsAvailable = json["CreditAvailable"].int!
+                        if creditsAvailable > 0 {
+                            self.creditBalanceLabel.text = "\(creditsAvailable)C"
+                        }else{
+                            self.creditBalanceLabel.text = "No Credits"
+                        }
+                        self.dealsSelectedLabel.text = "\(dealsSelected)"
+                        self.dealsSwapedLabel.text = "\(dealSwapped)"
+                    }
+                }
+            })
+            /*var json = apiCall.getBalance(prefs.stringForKey("restID")!, token: prefs.stringForKey("TOKEN")!)
             //var credits = json["CreditAvailable"].int!
             var dealsSelected = json["TotalDealsPurchased"].int!
             var dealSwapped = json["TotalDealsSwapped"].int!
@@ -81,7 +99,7 @@ class BusinessHome: UIViewController {
                 creditBalanceLabel.text = "No Credits"
             }
             dealsSelectedLabel.text = "\(dealsSelected)"
-            dealsSwapedLabel.text = "\(dealSwapped)"
+            dealsSwapedLabel.text = "\(dealSwapped)" */
         }else{
             
             var alertView:UIAlertView = UIAlertView()
