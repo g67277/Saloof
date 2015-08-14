@@ -68,8 +68,9 @@ public class DataSaving{
                     data?.lng = lng
                 }
                 if object["phone"] != nil{
-                    var num = object["phone"].string!
-                    data?.phoneNum = num.toInt()!
+                    data!.phoneNum = object["phone"].string!
+                    //var num = object["phone"].string!
+                    //data?.phoneNum = num.toInt()!
                 }
                 if object["url"] != nil{
                     var url = object["url"].string!
@@ -150,8 +151,9 @@ public class DataSaving{
                 restaurant.lng = lng
             }
             if object["phone"] != nil{
-                var num = object["phone"].string!
-                restaurant.phoneNum = num.toInt()!
+                 restaurant.phoneNum = object["phone"].string!
+                //var num = object["phone"].string!
+                //restaurant.phoneNum = num.toInt()!
             }
             if object["url"] != nil{
                 var url = object["url"].string!

@@ -7,14 +7,14 @@ class-members:
 - "primaryKey"
 - "likedId"
 top-level:
-- "StringLiteralType"
 - "Object"
+- "StringLiteralType"
 - "String"
 member-access:
 - "C10RealmSwift6Object"
-- "CSo13RLMObjectBase"
-- "PSs9AnyObject"
 - "C6Saloof10LikedVenue"
+- "PSs9AnyObject"
+- "CSo13RLMObjectBase"
 - "CSo8NSObject"
 dynamic-lookup:
 cross-module:

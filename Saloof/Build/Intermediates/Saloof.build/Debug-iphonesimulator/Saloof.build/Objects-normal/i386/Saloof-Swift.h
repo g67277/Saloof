@@ -171,7 +171,6 @@ SWIFT_CLASS("_TtC6Saloof12BusinessHome")
 - (void)updateImg;
 - (void)filterData:(NSInteger)month;
 - (void)updateDisplay;
-- (void)getUIImagefromAsseturl:(NSURL * __nonnull)url;
 - (void)viewDidLayoutSubviews;
 - (IBAction)onClick:(UIButton * __nullable)_sender;
 - (IBAction)pickerSelected:(id __nonnull)sender;
@@ -325,7 +324,6 @@ SWIFT_CLASS("_TtC6Saloof7DealsVC")
 @property (nonatomic) UIImage * __nonnull defaultImg;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidLoad;
-- (void)getUIImagefromAsseturl:(NSURL * __nonnull)url;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __nullable)sender;
 - (IBAction)onClick:(UIButton * __nullable)_sender;
@@ -467,11 +465,13 @@ SWIFT_CLASS("_TtC6Saloof10LikedVenue")
 SWIFT_CLASS("_TtC6Saloof12ProfileModel")
 @interface ProfileModel : Object
 @property (nonatomic, copy) NSString * __nonnull restaurantName;
-@property (nonatomic) NSInteger phoneNum;
+@property (nonatomic, copy) NSString * __nonnull phoneNum;
 @property (nonatomic, copy) NSString * __nonnull website;
 @property (nonatomic, copy) NSString * __nonnull streetAddress;
 @property (nonatomic, copy) NSString * __nonnull city;
 @property (nonatomic) NSInteger zipcode;
+@property (nonatomic) double lat;
+@property (nonatomic) double lng;
 @property (nonatomic) NSInteger priceTier;
 @property (nonatomic, copy) NSString * __nonnull weekdayO;
 @property (nonatomic, copy) NSString * __nonnull weekdayC;
@@ -500,7 +500,6 @@ SWIFT_CLASS("_TtC6Saloof9ProfileVC")
 @interface ProfileVC : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified RestaurantTitleLabel;
 @property (nonatomic, weak) IBOutlet UIImageView * __null_unspecified imgView;
-@property (nonatomic) NSURL * __nonnull imgURI;
 @property (nonatomic) BOOL newImage;
 @property (nonatomic) BOOL validImage;
 @property (nonatomic, weak) IBOutlet UITextField * __null_unspecified contactField;
@@ -515,11 +514,14 @@ SWIFT_CLASS("_TtC6Saloof9ProfileVC")
 @property (nonatomic, weak) IBOutlet UIButton * __null_unspecified weekendO;
 @property (nonatomic, weak) IBOutlet UIButton * __null_unspecified weekendC;
 @property (nonatomic, readonly) NSUserDefaults * __nonnull prefs;
+@property (nonatomic, copy) NSString * __nonnull weekdayString;
+@property (nonatomic, copy) NSString * __nonnull weekendString;
 @property (nonatomic) UIImage * __nonnull profileImg;
 - (void)viewDidLoad;
 - (void)loadElements;
 - (void)parseHours:(NSString * __nonnull)week weekend:(NSString * __nonnull)weekend;
 - (void)saveData;
+- (void)uploadChanges:(ProfileModel * __nonnull)data;
 - (void)viewDidLayoutSubviews;
 - (void)DismissKeyboard;
 - (IBAction)onClick:(UIButton * __nonnull)_sender;
@@ -595,7 +597,7 @@ SWIFT_CLASS("_TtC6Saloof21RegisterRestaurantVC2")
 - (void)continueRegistration;
 - (void)runTestingMethod;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __null_unspecified)sender;
-- (void)saveData:(NSString * __nonnull)name street:(NSString * __nonnull)street city:(NSString * __nonnull)city zipcode:(NSInteger)zipcode phoneNum:(NSInteger)phoneNum website:(NSString * __nonnull)website category:(NSString * __nonnull)category price:(NSInteger)price wkO:(NSString * __nonnull)wkO wkC:(NSString * __nonnull)wkC wknO:(NSString * __nonnull)wknO wknC:(NSString * __nonnull)wknC weekdayString:(NSString * __nonnull)weekdayString weekendString:(NSString * __nonnull)weekendString;
+- (void)saveData:(NSString * __nonnull)name street:(NSString * __nonnull)street city:(NSString * __nonnull)city zipcode:(NSInteger)zipcode phoneNum:(NSString * __nonnull)phoneNum website:(NSString * __nonnull)website category:(NSString * __nonnull)category price:(NSInteger)price wkO:(NSString * __nonnull)wkO wkC:(NSString * __nonnull)wkC wknO:(NSString * __nonnull)wknO wknC:(NSString * __nonnull)wknC weekdayString:(NSString * __nonnull)weekdayString weekendString:(NSString * __nonnull)weekendString;
 - (void)findCoorinates:(NSString * __nonnull)formattedAddress;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)didReceiveMemoryWarning;

@@ -13,7 +13,7 @@ import RealmSwift
 class ProfileModel:Object{
     
     dynamic var restaurantName = ""
-    dynamic var phoneNum = 0
+    dynamic var phoneNum = ""
     dynamic var website = ""
     dynamic var streetAddress = ""
     dynamic var city = ""
