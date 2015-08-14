@@ -764,9 +764,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 }
             }
         }
-        
-        
-        
         // pull new venues
         //loadSaloofData()
         searchDisplayOverview.hidden = true

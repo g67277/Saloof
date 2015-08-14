@@ -18,6 +18,7 @@ class BusinessDeal:Object{
     dynamic var id = ""
     dynamic var restaurantID = ""
     dynamic var restaurant: ProfileModel?
+    dynamic var isActive = false
     
     override static func primaryKey() -> String? {
         return "id"

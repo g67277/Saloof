@@ -89,7 +89,6 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             }
             valueTF.text = String(stringInterpolationSegment: value)
             valueLabel.text = "$\(String(stringInterpolationSegment: value)) value"
-            
         }else{
             tierLabel.text = "They are going to love this..."
             if !editingMode{
@@ -190,14 +189,16 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             deal.timeLimit = hours
             deal.restaurantID = prefs.stringForKey("restID")!
             println(deal.restaurantID)
+            deal.isActive = true
             if editingMode {
                 deal.id = dealID
             }else{
                 deal.id = NSUUID().UUIDString
+                println("creation id:\(deal.id)")
             }
             
             //var call = "{\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"DealId\":\"\(deal.id)\"}"
-            var call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit)}"
+            var call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"Active\":true}"
             apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             realm.write{
                 self.realm.add(deal, update: self.editingMode)
@@ -226,6 +227,10 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     func deleteDeal(){
         
         if dealID != ""{
+            
+            var venueID = prefs.stringForKey("restID")!
+            var call = "{\"DealId\":\"\(dealID)\",\"VenueId\":\"\(venueID)\",\"DealTitle\":\"\(dealTitle)\",\"DealDescription\":\"\(desc)\",\"DealValue\":\(value),\"TimeLimit\":\(hours), \"Active\":false}"
+            apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             
             var refreshAlert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this deal", preferredStyle: UIAlertControllerStyle.Alert)
             refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in

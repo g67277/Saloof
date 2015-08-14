@@ -51,7 +51,10 @@ public class DataSaving{
                         for deal in deals {
                             var exists = false
                             for localDeal in dealArray{
-                                if localDeal.id == deal["id"].string!{
+                                println("localID id:\(localDeal.id)")
+                                var test = deal["id"].string!
+                                println("incoming id:\(test)")
+                                if localDeal.id.lowercaseString == deal["id"].string!{
                                     exists = true
                                     break
                                 }else{

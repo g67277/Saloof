@@ -35,10 +35,9 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     dealsArray.append(deal)
                 }
             }
+            dealsList.reloadData()
         }
         
-        dealsList.reloadData()
-        var test = dealsArray.count
         if dealsArray.count == 10 {
             addBtn.enabled = false
         }else{

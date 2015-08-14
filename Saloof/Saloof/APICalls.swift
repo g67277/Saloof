@@ -92,8 +92,47 @@ public class APICalls {
                 }
             })
     }
+    
+    func uploadDeal(call: NSString, token: String){
+        
+        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal")!
+        
+        var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
+        
+        var postLength:NSString = String( call.length)
+        
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postData
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue(postLength as String, forHTTPHeaderField: "Content-Length")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            /* Your code */
+            let res = response as! NSHTTPURLResponse!
+            if res != nil{
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300{
+                    println("Deal uploaded")
+                }else{
+                    var error: NSError?
+                    let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                    println(jsonData["error_description"] as? String)
+                }
+            }
+        })
+        
+    }
 
-    func uploadDeal(call: NSString, token: String) -> (Bool){
+   /* func uploadDeal(call: NSString, token: String) -> (Bool){
         
         if Reachability.isConnectedToNetwork(){
             
@@ -156,7 +195,7 @@ public class APICalls {
         }
         return false
         
-    }
+    }*/
     
     func getBalance(id: String, token: String, completion: Bool -> ()){
         
