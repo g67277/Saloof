@@ -581,11 +581,19 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     }
     
     func loadInitialDeals() {
-        if APICalls.getLocalDeals(token, location: userLocation) {
+        APICalls.getLocalDeals(token, location: userLocation, completion: { result in
+            if result {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.refreshDataArray()
+                }
+            }
+        })
+        
+        /*if APICalls.getLocalDeals(token, location: userLocation) {
             self.refreshDataArray()
         } else {
             println("Unable to retrieved deals from Saloof")
-        }
+        } */
     }
     
     func refreshDataArray(){

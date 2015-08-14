@@ -103,6 +103,12 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         // Addes guesture to hide keyboard when tapping on the view
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
+        
+        titleTF.attributedPlaceholder = NSAttributedString(string:"Deal Title",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        
+        valueTF.attributedPlaceholder = NSAttributedString(string:"Deal Value",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
     }
     
     
@@ -198,7 +204,26 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             
             //var call = "{\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"DealId\":\"\(deal.id)\"}"
             var call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit)}"
-            apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
+            var token = self.prefs.stringForKey("TOKEN")
+            apiCall.uploadDeal(call, token: token!, completion: { result in
+                if result {
+                    dispatch_async(dispatch_get_main_queue()){
+                        self.realm.write{
+                            self.realm.add(deal, update: self.editingMode)
+                        }
+                        
+                        println("saved")
+                        
+                        var refreshAlert = UIAlertController(title: "Saved", message: "Deal has been saved", preferredStyle: UIAlertControllerStyle.Alert)
+                        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
+                            self.navigationController?.popViewControllerAnimated(true)
+                        }))
+                        self.presentViewController(refreshAlert, animated: true, completion: nil)
+
+                    }
+                }
+            })
+            /*apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             realm.write{
                 self.realm.add(deal, update: self.editingMode)
             }
@@ -210,14 +235,14 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
                 self.navigationController?.popViewControllerAnimated(true)
             }))
             self.presentViewController(refreshAlert, animated: true, completion: nil)
+            */
             
-            
-        }else  if count(titleTF.text) < 1{
+        } else  if count(titleTF.text) < 1{
             titleTF.placeholder = "Required"
-        }else if count(descTF.text) < 1 {
+        } else if count(descTF.text) < 1 {
             descTF.text = "Required"
             descTF.textColor = UIColor.lightGrayColor()
-        }else if count(valueTF.text) < 1 {
+        } else if count(valueTF.text) < 1 {
             valueTF.placeholder = "Required"
         }
         

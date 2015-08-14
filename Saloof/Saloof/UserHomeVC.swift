@@ -292,6 +292,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             // Search
             if textField.text != "" {
                 searchString = textField.text
+                searchString = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
@@ -544,6 +545,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             urlParameters = "Venue/GetLocal?\(userLocation)"
         }
         //println(urlParameters)
+        /*
         if APICalls.getLocalVenues(token!, venueParameters: urlParameters){
             //println("Pulling data from saloof!!")
             for venue in venues {
@@ -556,7 +558,29 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         }
         fetchFoursquareVenues()
         activityIndicator.stopAnimation()
-        swipeableView.reloadData()
+        swipeableView.reloadData()*/
+        APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
+            if result {
+                dispatch_async(dispatch_get_main_queue()){
+                    //println("Pulling local data asyncly from saloof!!")
+                    for venue in self.venues {
+                        self.venueList.append(venue)
+                    }
+                    //makesure the deals button is viewable
+                    self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
+                    self.fetchFoursquareVenues()
+                    self.activityIndicator.stopAnimation()
+                    self.swipeableView.reloadData()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.fetchFoursquareVenues()
+                    self.activityIndicator.stopAnimation()
+                    self.swipeableView.reloadData()
+                }
+            }
+            
+        })
     }
 
     

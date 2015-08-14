@@ -4,20 +4,20 @@ provides:
 nominals:
 - "C11SaloofTests11SaloofTests"
 class-members:
-- "tearDown"
 - "testExample"
-- "testPerformanceExample"
 - "setUp"
+- "testPerformanceExample"
+- "tearDown"
 top-level:
-- "XCTestCase"
+- !private "StringLiteralType"
 - !private "XCTAssert"
 - !private "BooleanLiteralType"
-- !private "StringLiteralType"
+- "XCTestCase"
 member-access:
-- "CSo8NSObject"
-- !private "C11SaloofTests11SaloofTests"
 - "CSo6XCTest"
+- !private "C11SaloofTests11SaloofTests"
 - "PSs9AnyObject"
+- "CSo8NSObject"
 - "CSo10XCTestCase"
 dynamic-lookup:
 cross-module:

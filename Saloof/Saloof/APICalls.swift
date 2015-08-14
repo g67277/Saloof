@@ -92,7 +92,71 @@ public class APICalls {
                 }
             })
     }
-
+    
+    func uploadDeal(call: NSString, token: String, completion: Bool -> ()) {
+        if Reachability.isConnectedToNetwork(){
+            
+            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal")!
+            
+            var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
+            
+            var postLength:NSString = String( call.length)
+            
+            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "POST"
+            request.HTTPBody = postData
+            request.timeoutInterval = 60
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.setValue(postLength as String, forHTTPHeaderField: "Content-Length")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            var reponseError: NSError?
+            var response: NSURLResponse?
+            
+            let queue:NSOperationQueue = NSOperationQueue()
+            
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+             
+                if urlData != nil {
+                    let res = response as! NSHTTPURLResponse!
+                    if res != nil {
+                        println(res.statusCode)
+                        if res.statusCode >= 200 && res.statusCode < 300{
+                            completion (true)
+                        } else {
+                            var error: NSError?
+                            let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                            println(jsonData["error_description"] as? String)
+                            completion (false)
+                        }
+                    }
+                } else {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Upload failed"
+                    alertView.message = "Connection Failure"
+                    if let error = reponseError {
+                        alertView.message = (error.localizedDescription)
+                    }
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                    completion (false)
+                }
+            })
+            
+        } else {
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "No network"
+            alertView.message = "Please make sure you are connected then try again"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+            completion (false)
+        }
+    
+    }
+    /*
     func uploadDeal(call: NSString, token: String) -> (Bool){
         
         if Reachability.isConnectedToNetwork(){
@@ -157,13 +221,64 @@ public class APICalls {
         return false
         
     }
-    
-    func getBalance(id: String, token: String, completion: Bool -> ()){
+    */
+    func getBalance(id: String, token: String, completion: JSON -> ()){
+        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=CB29A448-84C9-4630-A0B0-06497A613DA6"
+        var url:NSURL = NSURL(string: callString)!
+        
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
         
         
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            
+            if urlData != nil {
+                let res = response as! NSHTTPURLResponse!
+                if res != nil {
+                    println(res.statusCode)
+                    if res.statusCode >= 200 && res.statusCode < 300 {
+                        
+                        var responseData:NSString  = NSString(data:urlData!, encoding:NSUTF8StringEncoding)!
+                        var error: NSError?
+                        let json = JSON(data: urlData!)
+                        if (json["VenueId"] != nil){
+                            debugPrint("Data Recieved")
+                            completion (json)
+                        } else {
+                            var error_msg:NSString
+                            if json["error_message"] != nil {
+                                error_msg = json["error_message"].string!
+                                debugPrint("error response")
+                            } else {
+                                error_msg = "Unknown Error"
+                                debugPrint("Unknown Error")
+                            }
+                            completion (nil)
+                        }
+                    } else {
+                        var error: NSError?
+                        let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                        println(jsonData["error_description"] as? String)
+                       completion (nil)
+                    }
+                }
+            } else {
+                println(error.localizedDescription)
+                completion (nil)
+            }
+        })
         
     }
-    
+    /*
     func getBalance(id: String, token: NSString) ->(JSON){
         
         //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=\(id)"
@@ -217,7 +332,7 @@ public class APICalls {
             }
         }
         return nil
-    }
+    }*/
     
     func uploadImg(imgData: UIImage, imgName: String, completion: Bool -> ()){
         
@@ -239,7 +354,72 @@ public class APICalls {
         })
     }
     
-    class func uploadBalance(credits: Int, restID: String) -> (Bool){
+    class func uploadBalance(credits: Int, restID: String, completion: Bool -> ()){
+        if Reachability.isConnectedToNetwork(){
+            
+            var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(credits)"
+            var url:NSURL = NSURL(string: call)!
+            
+            var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
+            
+            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "POST"
+            request.HTTPBody = postData
+            request.timeoutInterval = 60
+            //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            var reponseError: NSError?
+            var response: NSURLResponse?
+            let queue:NSOperationQueue = NSOperationQueue()
+            
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+                
+                if urlData != nil {
+                    let res = response as! NSHTTPURLResponse!
+                    if res != nil {
+                        println(res.statusCode)
+                        if res.statusCode >= 200 && res.statusCode < 300{
+                            completion (true)
+                        } else {
+                            var error: NSError?
+                            let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                            var alertView:UIAlertView = UIAlertView()
+                            alertView.title = "Problem Updating Credits"
+                            alertView.message = jsonData["error_description"] as? String
+                            alertView.delegate = self
+                            alertView.addButtonWithTitle("OK")
+                            alertView.show()
+                            debugPrint("another error")
+                            completion (false)
+                        }
+                    }
+                } else {
+                    var alertView:UIAlertView = UIAlertView()
+                    alertView.title = "Connection Failure"
+                    alertView.message = "Unable to update credits"
+                    if let error = reponseError {
+                        alertView.message = (error.localizedDescription)
+                    }
+                    alertView.delegate = self
+                    alertView.addButtonWithTitle("OK")
+                    alertView.show()
+                    completion (false)
+                }
+            })
+        } else {
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "No network"
+            alertView.message = "Please make sure you are connected then try again"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+        }
+        completion (false)
+    }
+
+  /*  class func uploadBalance(credits: Int, restID: String) -> (Bool){
         
         if Reachability.isConnectedToNetwork(){
             
@@ -306,8 +486,10 @@ public class APICalls {
             alertView.show()
         }
         return false
-    }
+    } */
+
     
+    /*
     class func getLocalVenues(token: NSString, venueParameters: NSString) ->(Bool){
         NSLog("Pulling local venues");
         //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=38.907192&lng=-77.036871")!
@@ -350,8 +532,97 @@ public class APICalls {
             println("There are no Saloof venues near this user")
             return false
         }
-    }
+    }*/
     
+    class func getLocalVenues(token: NSString, venueParameters: NSString, completion: Bool -> ()){
+        
+        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+                    
+                    if let returnedVenues = JSONObject as? [AnyObject] {
+                        println("Saloof returned \(returnedVenues.count) venues")
+                        for venue in returnedVenues {
+                            let venueJson = JSON(venue)
+                            APICalls.parseJSONVenues(venueJson)
+                        }
+                        completion (true)
+                    }
+                } else {
+                    completion (false)
+                }
+            } else {
+                completion (false)
+            }
+        })
+    }
+
+    class func getLocalDeals(token: NSString, location: NSString, completion: Bool -> ()){
+        NSLog("Pulling local venues");
+        if Reachability.isConnectedToNetwork(){
+            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=39.1167&lng=-77.5500")!
+            
+            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "GET"
+            request.timeoutInterval = 60
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            var reponseError: NSError?
+            var response: NSURLResponse?
+            let queue:NSOperationQueue = NSOperationQueue()
+            
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+                let res = response as! NSHTTPURLResponse!
+                if res != nil {
+                    println(res.statusCode)
+                    if res.statusCode >= 200 && res.statusCode < 300 {
+                        let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+                        
+                        if let returnedVenues = JSONObject as? [AnyObject] {
+                            for venue in returnedVenues {
+                                let venueJson = JSON(venue)
+                                // Parse the JSON file using SwiftlyJSON
+                                APICalls.parseJSONDeals(venueJson)
+                            }
+                            completion (true)
+                        }
+                    } else {
+                        completion (false)
+                    }
+                } else {
+                    completion (false)
+                }
+            })
+            
+        } else {
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "No network"
+            alertView.message = "Please make sure you are connected then try again"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+        }
+        completion (false)
+    }
+
+    /*
     class func getLocalDeals(token: NSString, location: NSString) ->(Bool){
         NSLog("Pulling local venues");
         if Reachability.isConnectedToNetwork(){
@@ -380,7 +651,7 @@ public class APICalls {
 
                 return true
                 
-            }else {
+            } else {
                 println("There are no Saloof deals near this user")
                 return false
             }
@@ -392,10 +663,9 @@ public class APICalls {
             alertView.addButtonWithTitle("OK")
             alertView.show()
         }
-        //var nilArray: [Venue] = []
         return (false)
     }
-    
+    */
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
         var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
