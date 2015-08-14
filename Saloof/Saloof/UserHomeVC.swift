@@ -541,6 +541,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
 
     
     }
+    
     func fetchSaloofVenues() {
         activityIndicator.startAnimation()
         var token = prefs.stringForKey("TOKEN")
@@ -556,21 +557,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         } else {
             urlParameters = "Venue/GetLocal?\(userLocation)"
         }
-        //println(urlParameters)
-        /*
-        if APICalls.getLocalVenues(token!, venueParameters: urlParameters){
-            //println("Pulling data from saloof!!")
-            for venue in venues {
-                venueList.append(venue)
-            }
-            //makesure the deals button is viewable
-            self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
-        } else {
-            //println("No Locations saloof locations near this user")
-        }
-        fetchFoursquareVenues()
-        activityIndicator.stopAnimation()
-        swipeableView.reloadData()*/
+
         APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
