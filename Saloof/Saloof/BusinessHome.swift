@@ -50,29 +50,33 @@ class BusinessHome: UIViewController {
         formatter.dateFormat = "M";
         defaultTimeZoneStr = formatter.stringFromDate(date).toInt()!
         monthsBtn.setTitle(months[defaultTimeZoneStr - 1], forState: UIControlState.Normal)
-        
+        updateImg()
     }
     
     override func viewWillAppear(animated: Bool) {
-        updateImg()
         updateDisplay()
     }
     
     func updateImg(){
         
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        var url = data?.imgUri
-        dealsCount = data!.dealsCount
-        let imageUrl = NSURL(string: url!)
-        if let data = NSData(contentsOfURL: imageUrl!){
-            
-            let venueImage = UIImage(data: data)
-            profileImgView.image = venueImage
+        var imgID = data?.imgUri
+        var url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
+        if data != nil{
+            dealsCount = data!.dealsCount
+        }else{
+            dealsCount = 0
         }
-
-//        var imgURL = NSURL(string: path!)
-//        getUIImagefromAsseturl(imgURL!)
-        
+        if imgID != nil{
+            let imageUrl = NSURL(string: url)
+            if let data = NSData(contentsOfURL: imageUrl!){
+                
+                let venueImage = UIImage(data: data)
+                profileImgView.image = venueImage
+            }
+        }else{
+            //display default image here
+        }
     }
     
     func parseSummery(json: JSON){
@@ -149,23 +153,6 @@ class BusinessHome: UIViewController {
         
     }
     
-    func getUIImagefromAsseturl (url: NSURL) {
-        var asset = ALAssetsLibrary()
-        
-        asset.assetForURL(url, resultBlock: { asset in
-            if let ast = asset {
-                let assetRep = ast.defaultRepresentation()
-                let iref = assetRep.fullResolutionImage().takeUnretainedValue()
-                let image = UIImage(CGImage: iref)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.profileImgView.image = image
-                })
-            }
-            }, failureBlock: { error in
-                println("Error: \(error)")
-        })
-    }
-    
     override func viewDidLayoutSubviews() {
         profileImgView.layer.masksToBounds = false
         profileImgView.layer.borderColor = UIColor.blackColor().CGColor
@@ -208,7 +195,9 @@ class BusinessHome: UIViewController {
             
         }else if segue.identifier == "toDealList" {
             var svc = segue.destinationViewController as! DealsVC;
-
+            if profileImgView.image != nil{
+                svc.defaultImg = profileImgView.image!
+            }
         }
     }
     

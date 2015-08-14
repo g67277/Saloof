@@ -53,30 +53,6 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         navigationItem.titleView = UIImageView(image: image)
         
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        
-        var path = data?.imgUri
-        if path != nil{
-            var imgURL = NSURL(string: path!)
-            getUIImagefromAsseturl(imgURL!)
-        }
-        
-    }
-    
-    func getUIImagefromAsseturl (url: NSURL) {
-        var asset = ALAssetsLibrary()
-        
-        asset.assetForURL(url, resultBlock: { asset in
-            if let ast = asset {
-                let assetRep = ast.defaultRepresentation()
-                let iref = assetRep.fullResolutionImage().takeUnretainedValue()
-                let image = UIImage(CGImage: iref)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.defaultImg = image!
-                })
-            }
-            }, failureBlock: { error in
-                println("Error: \(error)")
-        })
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -90,7 +66,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
             var selectedItem = dealsArray[(dealsList.indexPathForSelectedRow()?.row)!]
             
-            IVC.tier = (dealsList.indexPathForSelectedRow()?.row)!
+            IVC.tier = (dealsList.indexPathForSelectedRow()?.row)! + 1
             IVC.dealTitle = selectedItem.title
             IVC.desc = selectedItem.desc
             IVC.value = selectedItem.value

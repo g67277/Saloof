@@ -18,6 +18,8 @@ class ProfileModel:Object{
     dynamic var streetAddress = ""
     dynamic var city = ""
     dynamic var zipcode = 0
+    dynamic var lat = 0.0
+    dynamic var lng = 0.0
     dynamic var priceTier = 0
     dynamic var weekdayO = ""
     dynamic var weekdayC = ""

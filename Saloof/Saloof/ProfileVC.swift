@@ -17,7 +17,6 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     
     @IBOutlet weak var RestaurantTitleLabel: UILabel!
     @IBOutlet weak var imgView: UIImageView!
-    var imgURI = NSURL()
     var newMedia: Bool?
     var newImage = false
     var validImage = false
@@ -36,6 +35,9 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBOutlet weak var weekendO: UIButton!
     @IBOutlet weak var weekendC: UIButton!
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    
+    var weekdayString = ""
+    var weekendString = ""
     
     var profileImg = UIImage()
     
@@ -77,16 +79,18 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func parseHours(week: String, weekend: String){
         var delimiter = "-"
         if week != "" {
-            var weekO = week.componentsSeparatedByString(delimiter)[0]
-            var weekCIndex = week.rangeOfString(" -", options: .BackwardsSearch)?.endIndex
-            var weekC = week.substringFromIndex(weekCIndex!)
+            let trimmedString = week.stringByReplacingOccurrencesOfString(" ", withString: "")
+            var weekO = trimmedString.componentsSeparatedByString(delimiter)[0]
+            var weekCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
+            var weekC = trimmedString.substringFromIndex(weekCIndex!)
             weekdayO.setTitle("\(weekO)", forState: .Normal)
             weekdayC.setTitle("\(weekC)", forState: .Normal)
         }
         if weekend != ""{
-            var weeknO = weekend.componentsSeparatedByString(delimiter)[0]
-            var weeknCIndex = weekend.rangeOfString("- ", options: .BackwardsSearch)?.endIndex
-            var weeknC = weekend.substringFromIndex(weeknCIndex!)
+            let trimmedString = weekend.stringByReplacingOccurrencesOfString(" ", withString: "")
+            var weeknO = trimmedString.componentsSeparatedByString(delimiter)[0]
+            var weeknCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
+            var weeknC = trimmedString.substringFromIndex(weeknCIndex!)
             weekendO.setTitle("\(weeknO)", forState: .Normal)
             weekendC.setTitle("\(weeknC)", forState: .Normal)
         }
@@ -101,16 +105,16 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         var wkC = self.weekdayC.titleLabel?.text
         var wknO = self.weekendO.titleLabel?.text
         var wknC = self.weekendC.titleLabel?.text
-        var weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
-        var weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
+        weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
+        weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
         
         var realm = Realm()
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        
+        uploadChanges(data!)
         realm.write({
             data?.contactName = self.contactField.text
             data?.category = category!
-            data?.priceTier = self.priceControls.selectedSegmentIndex
+            data?.priceTier = self.priceControls.selectedSegmentIndex + 1
             if wkO != nil{
                 data?.weekdayO = wkO!
             }
@@ -123,16 +127,89 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             if wknC != nil{
                 data?.weekendC = wknC!
             }
-            data?.weekdayHours = weekdayString
-            data?.weekendHours = weekendString
+            data?.weekdayHours = self.weekdayString
+            data?.weekendHours = self.weekendString
             
         })
+    }
+    
+    func uploadChanges(data : ProfileModel){
         
-        var alertView:UIAlertView = UIAlertView()
-        alertView.title = "Saved"
-        alertView.delegate = self
-        alertView.addButtonWithTitle("OK")
-        alertView.show()
+        var contactNameUpdate = data.contactName
+        var imageUpated = data.imgUri
+        var streetUpdate = data.streetAddress
+        var cityUpdate = data.city
+        var zipcodeUpdate = data.zipcode
+        var phoneNumUpdate = data.phoneNum
+        var priceUpdate = data.priceTier
+        var restaurantNameUpdate = data.restaurantName
+        var latUpdate = data.lat
+        var lngUpate = data.lng
+        var selectedCat = catButton.titleLabel?.text
+        var categoryUpdate = selectedCat!
+        var websiteUpdate = data.website
+        
+        if count(contactField.text) > 0 {
+            contactNameUpdate = contactField.text
+        }
+        if selectedPrice > 0 {
+            priceUpdate = selectedPrice
+        }
+        
+        var restID = prefs.stringForKey("restID")!
+        println(priceUpdate)
+        
+        var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+        aIView.center = containerView.center
+        containerView.addSubview(aIView)
+        containerView.center = self.view.center
+        self.view.addSubview(containerView)
+        aIView.startAnimation()
+        
+        var call = "{\"VenueId\":\"\(restID)\",\"ContactName\":\"\(contactNameUpdate)\",\"StreetName\":\"\(streetUpdate)\",\"City\":\"\(cityUpdate)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcodeUpdate)\",\"PhoneNumber\":\"\(phoneNumUpdate)\",\"PriceTier\":\(priceUpdate),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantNameUpdate)\",\"Lat\":\"\(latUpdate)\",\"Lng\":\"\(lngUpate)\",\"CategoryName\":\"\(categoryUpdate)\",\"Website\":\"\(websiteUpdate)\",\"ImageName\":\"\(imageUpated)\"}"
+        var token = prefs.stringForKey("TOKEN")
+        
+        if Reachability.isConnectedToNetwork(){
+            var authentication = AuthenticationCalls()
+            authentication.registerRestaurant(call, token: token!){ result in
+                if result {
+                    if self.newImage{
+                        self.newImage = false
+                        var apiCall = APICalls()
+                        apiCall.uploadImg(self.imgView.image!, imgName: imageUpated){ result in
+                            dispatch_async(dispatch_get_main_queue()){
+                                aIView.stopAnimation()
+                                var alertView:UIAlertView = UIAlertView()
+                                alertView.title = "Saved"
+                                alertView.delegate = self
+                                alertView.addButtonWithTitle("OK")
+                                alertView.show()
+                                containerView.removeFromSuperview()
+                            }
+                        }
+                    }else{
+                        dispatch_async(dispatch_get_main_queue()){
+                            aIView.stopAnimation()
+                            var alertView:UIAlertView = UIAlertView()
+                            alertView.title = "Saved"
+                            alertView.delegate = self
+                            alertView.addButtonWithTitle("OK")
+                            alertView.show()
+                            containerView.removeFromSuperview()
+                        }
+                    }
+                    
+                }
+            }
+        }else{
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "Offline!"
+            alertView.message = "Looks like you're offline, your changes have been saved locally, please try uploading later"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -209,13 +286,13 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         
         switch sender.selectedSegmentIndex{
         case 0:
-            selectedPrice = 0
-        case 1:
             selectedPrice = 1
-        case 2:
+        case 1:
             selectedPrice = 2
-        case 3:
+        case 2:
             selectedPrice = 3
+        case 3:
+            selectedPrice = 4
         default:
             break;
         }
@@ -299,20 +376,25 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         if mediaType.isEqualToString(kUTTypeImage as! String) {
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
-            imgURI = info[UIImagePickerControllerReferenceURL] as! NSURL
-            newImage = true
-            //println(test.debugDescription)
             imgView.image = image
+            newImage = true
             validImage = true
             
             if (newMedia == true) {
-                UIImageWriteToSavedPhotosAlbum(image, self,
-                    "image:didFinishSavingWithError:contextInfo:", nil)
+                var imageData = UIImageJPEGRepresentation(imgView.image, 0.6)
+                var compressedJPGImage = UIImage(data: imageData)
+                ALAssetsLibrary().writeImageToSavedPhotosAlbum(compressedJPGImage!.CGImage, orientation: ALAssetOrientation(rawValue: compressedJPGImage!.imageOrientation.rawValue)!,
+                    completionBlock:{ (path:NSURL!, error:NSError!) -> Void in
+                       
+                })
+                
             } else if mediaType.isEqualToString(kUTTypeMovie as! String) {
                 // Code to support video here
             }
-            
         }
+        
+        // Will use this when we save pics from web
+        
     }
     
     func image(image: UIImage, didFinishSavingWithError error: NSErrorPointer, contextInfo:UnsafePointer<Void>) {
