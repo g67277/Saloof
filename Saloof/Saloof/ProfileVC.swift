@@ -110,7 +110,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         
         var realm = Realm()
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        uploadChanges(data!)
+        //uploadChanges(data!)
         realm.write({
             data?.contactName = self.contactField.text
             data?.category = category!
@@ -131,6 +131,12 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             data?.weekendHours = self.weekendString
             
         })
+        
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = "Saved"
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
     }
     
     func uploadChanges(data : ProfileModel){

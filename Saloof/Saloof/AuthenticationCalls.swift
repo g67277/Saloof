@@ -141,7 +141,7 @@ public class AuthenticationCalls {
                 println(json)
                 var alertView:UIAlertView = UIAlertView()
                 alertView.title = "Sign in Failed!"
-                alertView.message = json["error_message"].string!
+                //alertView.message = json["error_message"].string!
                 alertView.delegate = self
                 alertView.addButtonWithTitle("OK")
                 alertView.show()
