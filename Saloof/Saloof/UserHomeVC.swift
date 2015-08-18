@@ -12,7 +12,7 @@ import Koloda
 import CoreLocation
 import SwiftyJSON
 
-class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
+class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     typealias JSONParameters = [String: AnyObject]
     
@@ -23,9 +23,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     let venueList = List<Venue>()
     
     // Location Properties
-    var locationManager : CLLocationManager!
+    var location: CLLocation!
     var venueLocations : [AnyObject] = []
     var venueItems : [[String: AnyObject]]?
+    var manager: OneShotLocationManager?
+
     
     //View Properties
     @IBOutlet var menuButton: UIBarButtonItem!
@@ -112,10 +114,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             
         }
     }
-
-    
-    override func viewDidAppear(animated: Bool) {
-    }
     
   
     func getLocationPermissionAndData() {
@@ -129,26 +127,22 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
             self.realm.delete(rejectedVenues)
             self.realm.delete(unswipedVenues)
         }
-        // Start getting the users location
-        locationManager = CLLocationManager()
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
-        // check device location permission status
-        let status = CLLocationManager.authorizationStatus()
-        if status == .NotDetermined {
-            // Request access
-            activityIndicator.stopAnimation()
-            locationManager.requestWhenInUseAuthorization()
-        } else if status == CLAuthorizationStatus.AuthorizedWhenInUse
-            || status == CLAuthorizationStatus.AuthorizedAlways {
-                // we have permission, get location
-                locationManager.startUpdatingLocation()
-        } else {
-            // We do not have premission, request it
-            activityIndicator.stopAnimation()
-            requestLocationPermission()
-        }
         
+        manager = OneShotLocationManager()
+        manager!.fetchWithCompletion {location, error in
+            
+            // fetch location or an error
+            if let loc = location {
+               self.location = loc
+                self.checkLocationAndAccess()
+                println("Retrieved location: \(location)")
+            } else if let err = error {
+                 println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                self.activityIndicator.stopAnimation()
+            }
+            // destroy the object immediately to save memory
+            self.manager = nil
+        }
     }
     
     /* --------  SEARCH BAR DISPLAY AND DELEGATE METHODS ---------- */
@@ -462,58 +456,15 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         return true
     }
     
-    
-    // ------------------- USER LOCATION PERMISSION REQUEST  ----------------------
-    
-    func requestLocationPermission() {
-        let alertController = UIAlertController(title: "Need Location", message: "To find great restaurants, we need access to your location", preferredStyle: .Alert)
-        // Add button action to directly open the settings
-        let openSettings = UIAlertAction(title: "Open settings", style: .Default, handler: {
-            (action) -> Void in
-            let URL = NSURL(string: UIApplicationOpenSettingsURLString)
-            UIApplication.sharedApplication().openURL(URL!)
-        })
-        alertController.addAction(openSettings)
-        presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    func showErrorAlert(error: NSError) {
-        activityIndicator.stopAnimation()
-        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try again later.", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: {
-            (action) -> Void in
-        })
-        alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == .Denied || status == .Restricted {
-            requestLocationPermission()
-        } else {
-            locationManager.startUpdatingLocation()
-        }
-    }
-    
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        showErrorAlert(error)
-    }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
-        // once we have locations, stop retrieving their location
-        locationManager.stopUpdatingLocation()
-        checkLocationAndAccess()
-    }
-    
-    
+
     func checkLocationAndAccess () {
         activityIndicator.stopAnimation()
         if Reachability.isConnectedToNetwork(){
             
             // check their location from D.C.
-            let currentLocation = self.locationManager.location
+            //let currentLocation = self.locationManager.location
             var dcLocation = CLLocation(latitude: 38.9, longitude: -77.0)
-            var distanceBetween: CLLocationDistance = currentLocation.distanceFromLocation(dcLocation!)
+            var distanceBetween: CLLocationDistance = location.distanceFromLocation(dcLocation!)
             var distanceInMiles = distanceBetween / 1609.344
             if distanceInMiles > 40 {
                 alertUser("No Saloof Locations", message: "Looks like you are outside our deals area, but we can still show you some great locations near you!")
@@ -546,8 +497,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         var token = prefs.stringForKey("TOKEN")
         let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
         let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
-        let location = self.locationManager.location
-        var userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
+       // let userLocation = self.location
+        var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
         var urlParameters: String = ""
         if searchQuery {
             urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
@@ -556,21 +507,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         } else {
             urlParameters = "Venue/GetLocal?\(userLocation)"
         }
-        //println(urlParameters)
-        /*
-        if APICalls.getLocalVenues(token!, venueParameters: urlParameters){
-            //println("Pulling data from saloof!!")
-            for venue in venues {
-                venueList.append(venue)
-            }
-            //makesure the deals button is viewable
-            self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
-        } else {
-            //println("No Locations saloof locations near this user")
-        }
-        fetchFoursquareVenues()
-        activityIndicator.stopAnimation()
-        swipeableView.reloadData()*/
         
         APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
             if result {
@@ -602,7 +538,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
         // get the location & possible search
         let searchTerm = (searchQuery) ? "&query=\(searchString)" : "&query=restaurants"
         let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
-        let location = self.locationManager.location
+        //let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
         let foursquareURl = NSURL(string: "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)")!
         //println(foursquareURl)
@@ -634,9 +570,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, C
     func parseJSON(json: JSON, source: String) {
         let venue = Venue()
         venue.identifier = json["id"].stringValue
-        venue.phone = json["contact"]["formattedPhone"].stringValue /* Not working*/
+        venue.phone = json["contact"]["formattedPhone"].stringValue
         venue.name = json["name"].stringValue
-        venue.webUrl = json["url"].stringValue                       /* Not working*/
+        venue.webUrl = json["url"].stringValue
         let imagePrefix = json["photos"]["groups"][0]["items"][0]["prefix"].stringValue
         let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
         let imageName = imagePrefix + "400x400" +  imageSuffix

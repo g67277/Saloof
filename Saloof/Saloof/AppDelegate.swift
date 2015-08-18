@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Custom back icon
         UINavigationBar.appearance().backIndicatorImage = UIImage(named: "backBtn");
         UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(named: "backBtn");
+        
+        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: .Alert | .Badge | .Sound, categories: nil))
         return true
     }
 

@@ -11,7 +11,7 @@ import RealmSwift
 import CoreLocation
 import SwiftyJSON
 
-class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
+class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     // View properties
     @IBOutlet weak var collectionView: UICollectionView!
@@ -64,7 +64,8 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
     var loadSingleDeal: Bool = false
     
     // Location objects
-    var locationManager : CLLocationManager!
+    var manager: OneShotLocationManager?
+    var location: CLLocation!
     var venueLocations : [AnyObject] = []
     var venueItems : [[String: AnyObject]]?
     var currentLocation: CLLocation!
@@ -117,8 +118,10 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
             searchView.roundCorners(.AllCorners, radius: 14)
             priceView.roundCorners(.AllCorners, radius: 14)
+            getCurrentSavedDealId()
         }
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         token = prefs.stringForKey("TOKEN")!
@@ -142,20 +145,29 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             singleDealView.hidden = true
             collectionCardView.hidden = false
             cardButtonsView.hidden = false
-            locationManager = CLLocationManager()
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.delegate = self
-            locationManager.startUpdatingLocation()
+            // Get location and deals
             setUpForInitialDeals()
         }
         
     }
+    
     
     func setButtonTitle (title: String) {
         saveSwapButton.setTitle(title, forState: UIControlState.Normal)
         saveSwapButton.setTitle(title, forState: UIControlState.Selected)
     }
     
+    func getCurrentSavedDealId() {
+        var currentSavedDeal = realm.objects(SavedDeal).first
+        if (currentSavedDeal != nil) {
+            println("The user has a saved deal")
+            // make sure the deal is not expired
+            let valid = checkDealIsValid(currentSavedDeal!)
+            if valid {
+                currentSavedDealId = currentSavedDeal!.dealId
+            }
+        }
+    }
     
     func setUpDefaultDeal() {
         // set up view for a default deal
@@ -210,18 +222,19 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             if valid {
                 println("The user has a saved deal")
                 // display an alert requesting if they want to switch
-                let alertController = UIAlertController(title: "Swap Deals?", message: "Would you like to swap \(currentSavedDeal?.name) for \(selectedDeal?.name)", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "Swap Deals?", message: "Would you like to swap \(currentSavedDeal!.name) for \(selectedDeal!.name)", preferredStyle: .Alert)
                 // Add button action to swap
                 let cancelSwap = UIAlertAction(title: "Cancel", style: .Default, handler: {
                     (action) -> Void in
                 })
                 let swapDeals = UIAlertAction(title: "Swap", style: .Default, handler: {
                     (action) -> Void in
-                    // Swap deals
+                    // Swap deals - increase the old deal credits, and decrease the current
                     APICalls.shouldSwapCreditForDeal(currentSavedDeal?.id as String!, token: self.token, newDeal: self.selectedDeal?.id as String!, completion:{ result in
                         if result {
                             dispatch_async(dispatch_get_main_queue()){
                                 println("Favorited this venue")
+                                self.removeCurrentLocalNotification(currentSavedDeal!.dealId)
                                 self.realm.write {
                                     self.realm.delete(currentSavedDeal!)
                                 }
@@ -298,8 +311,20 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             alertView.delegate = self
             alertView.addButtonWithTitle("OK")
             alertView.show()
+            
             // and change the button
             saveSwapButton.enabled = false
+            
+            // create new local notification
+            // temporaily set it for 1 minute from now
+            let calendar = NSCalendar.autoupdatingCurrentCalendar()
+            //var newDate = calendar.dateByAddingUnit(.CalendarUnitMinute, value: -15, toDate: originalDate, options: nil)
+            var now = NSDate()
+            var soon = calendar.dateByAddingUnit(.CalendarUnitMinute, value: 1, toDate: now, options: nil)
+            // self.selectedDeal!.expirationDate
+            self.setCurrentDealLocalNotification(self.selectedDeal!.name, expireDate: soon!, dealId: self.selectedDeal!.dealId)
+            println("Set up local notification")
+            // if the user swapped, they already have credits updated
             if !didSwap {
                 APICalls.shouldDecrementCreditForDeal(self.selectedDeal!.id as String, token: self.token, completion:{ result in
                     if result {
@@ -317,10 +342,33 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
     }
     
+    func removeCurrentLocalNotification(dealId: String) {
+        // see if we still have a notification for this deal scheduled, and delete if found
+        for notification in UIApplication.sharedApplication().scheduledLocalNotifications as! [UILocalNotification] {
+            if (notification.userInfo!["dealId"] as! String == dealId) {
+                UIApplication.sharedApplication().cancelLocalNotification(notification)
+                 println("Cancelled local notification")
+                break
+            }
+        }
+    }
+    
+    func setCurrentDealLocalNotification(dealName: String, expireDate: NSDate, dealId: String) {
+        var notification = UILocalNotification()
+        notification.alertBody = "The \"\(dealName)\" deal is about to expire!"
+        notification.alertAction = "View"
+        notification.fireDate = expireDate
+        notification.soundName = UILocalNotificationDefaultSoundName
+        notification.userInfo = ["dealId": dealId, ]
+        notification.category = "TODO_CATEGORY"
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     
     @IBAction func onButtonSelect(sender: UIButton) {
         if sender.tag == 0 {
@@ -330,8 +378,13 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             let indexPath = NSIndexPath(forRow: 0, inSection: 0)
             collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: true)
             let deal: VenueDeal = dealList[indexPath.row]
+            selectedDeal = deal
             // set the timer to this deal
             setDealTimer(deal)
+            if currentSavedDealId != "" {
+                saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+            }
+
             
         }  else if sender.tag == 2 {
             bestButton.selected = false
@@ -342,7 +395,12 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Left, animated: true)
             let deal: VenueDeal = dealList[indexPath.row]
             // set the timer to this deal
+            selectedDeal = deal
             setDealTimer(deal)
+            if currentSavedDealId != "" {
+                saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+            }
+
         }
     }
 
@@ -531,33 +589,6 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
     }
     
-    // ------------------- USER LOCATION PERMISSION REQUEST  ----------------------
-    
-    func showErrorAlert(error: NSError) {
-        let alertController = UIAlertController(title: "Our Bad!", message:"Sorry, but we are having trouble finding where you are right now. Maybe try again later.", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: {
-            (action) -> Void in
-        })
-        alertController.addAction(okAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        showErrorAlert(error)
-    }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
-        locationManager.stopUpdatingLocation()
-        // update this location
-        let location = self.locationManager.location
-        userLocation = "lat=\(location.coordinate.latitude)&lng=\(location.coordinate.longitude)"
-        // if we dont' have any locations, get some
-        if !haveLocation {
-            // we do now
-            haveLocation = true
-            loadInitialDeals()
-        }
-    }
     
     func setUpForInitialDeals(){
     
@@ -571,7 +602,25 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         }
         
         // Start getting the users location
-        locationManager.startUpdatingLocation()
+        manager = OneShotLocationManager()
+        manager!.fetchWithCompletion {location, error in
+            
+            // fetch location or an error
+            if let loc = location {
+                self.location = loc
+                if !self.haveLocation {
+                    // we do now
+                    self.haveLocation = true
+                    self.loadInitialDeals()
+                    println("Retrieved location: \(location)")
+                }
+            } else if let err = error {
+                println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                self.activityIndicator.stopAnimation()
+            }
+            // destroy the object immediately to save memory
+            self.manager = nil
+        }
     }
     
     func loadInitialDeals() {
@@ -740,6 +789,31 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
         
     }
     
+    func getCurrentLocation (completion: Bool -> ()) {
+        manager = OneShotLocationManager()
+        manager!.fetchWithCompletion {location, error in
+            
+            // fetch location or an error
+            if let loc = location {
+                self.location = loc
+                if !self.haveLocation {
+                    // we do now
+                    self.haveLocation = true
+                    self.loadInitialDeals()
+                    println("Retrieved location: \(location)")
+                    self.manager = nil
+                    completion(true)
+                }
+            } else if let err = error {
+                println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                self.activityIndicator.stopAnimation()
+                self.manager = nil
+                completion (false)
+            }
+        }
+    }
+    
+    
     func pullNewSearchResults (pricePoint: Bool) {
         println("pulling new search")
         dealList.removeAll()
@@ -763,47 +837,52 @@ class VenueDealsVC: UIViewController,  CLLocationManagerDelegate, UICollectionVi
             self.realm.delete(pulledVenues)
 
         }
-        // Start getting the users location
-        locationManager.startUpdatingLocation()
         
-        // reset values
-        lastDealRestId = ""
-        topBidIndex = 0
-        currentDealIndex = 0
-        topDealReached = false
-        pageController.currentPage = 0
-        pageController.numberOfPages = 0
-        if pricePoint {
-            var call = "priceTier=\(searchString)&\(userLocation)"
-            //println(call)
-            APICalls.getLocalDealsByPrice(token, call: call){ result in
-                if result{
-                    dispatch_async(dispatch_get_main_queue()){
-                        println("refreshing data array from get local deals by price")
-                        aIView.stopAnimation()
-                        containerView.removeFromSuperview()
-                        self.refreshDataArray()
+        getCurrentLocation() { result in
+            if result {
+                // reset values
+                self.lastDealRestId = ""
+                self.topBidIndex = 0
+                self.currentDealIndex = 0
+                self.topDealReached = false
+                self.pageController.currentPage = 0
+                self.pageController.numberOfPages = 0
+                if pricePoint {
+                    var call = "priceTier=\(self.searchString)&\(self.location)"
+                    //println(call)
+                    APICalls.getLocalDealsByPrice(self.token, call: call){ result in
+                        if result{
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("refreshing data array from get local deals by price")
+                                aIView.stopAnimation()
+                                containerView.removeFromSuperview()
+                                self.refreshDataArray()
+                            }
+                        }
+                    }
+                } else {
+                    var formattedSearch = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    println(self.location)
+                    var call = "category=\(formattedSearch)&\(self.location)"
+                    // println(call)
+                    
+                    APICalls.getLocalDealsByCategory(self.token, call: call){ result in
+                        if result{
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("refreshing data array from get local deals by category")
+                                self.refreshDataArray()
+                                aIView.stopAnimation()
+                                containerView.removeFromSuperview()
+                            }
+                        }
                     }
                 }
-            }
-        } else {
-            var formattedSearch = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            println(userLocation)
-            var call = "category=\(formattedSearch)&\(userLocation)"
-           // println(call)
+                self.searchDisplayOverview.hidden = true
 
-            APICalls.getLocalDealsByCategory(token, call: call){ result in
-                if result{
-                    dispatch_async(dispatch_get_main_queue()){
-                        println("refreshing data array from get local deals by category")
-                        self.refreshDataArray()
-                        aIView.stopAnimation()
-                        containerView.removeFromSuperview()
-                    }
-                }
+            } else {
+                println("Unable to get the users location")
             }
         }
-        searchDisplayOverview.hidden = true
     }
 
     
