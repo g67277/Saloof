@@ -1950,9 +1950,11 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="tableview" destination="ngv-LN-jWB" id="rVv-Ie-cwR"/>
+                        <segue destination="5CK-jx-7Rg" kind="unwind" identifier="returnHomeFromFavorites" unwindAction="returnToUserHomeSegue:" id="Hv4-7X-pkd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUo-98-cAX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="5CK-jx-7Rg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-852" y="2277.75"/>
         </scene>
@@ -2540,8 +2542,7 @@ DC 20007</string>
                                                                 <exclude reference="cgA-Jm-AMD"/>
                                                             </mask>
                                                         </variation>
-                                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                            <rect key="frame" x="68" y="135" width="320" height="40"/>
+                                                        <variation key="heightClass=regular-widthClass=compact">
                                                             <mask key="constraints">
                                                                 <include reference="cgA-Jm-AMD"/>
                                                             </mask>
@@ -3330,9 +3331,11 @@ launch special!</string>
                         <outlet property="phoneTextView" destination="cno-8X-VrU" id="ljm-an-09b"/>
                         <outlet property="priceTierlabel" destination="oZT-1k-zvB" id="MYT-Ew-0Qr"/>
                         <outlet property="websiteUrlTextView" destination="hGr-8k-v2q" id="DOG-kz-OC9"/>
+                        <segue destination="tah-sO-FBk" kind="unwind" identifier="returnToUserHome" unwindAction="returnToUserHomeSegue:" id="Ltf-Rl-CLE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y6R-hc-gu1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="tah-sO-FBk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-852" y="3090"/>
         </scene>
@@ -5551,9 +5554,11 @@ launch special!</string>
                         <outlet property="singleLocationImage" destination="y0f-DG-KeZ" id="bOK-hs-IMt"/>
                         <outlet property="singleLocationTitle" destination="ctL-3r-tHP" id="012-Mx-4Km"/>
                         <outlet property="timeLimitLabel" destination="Dnb-pc-rIf" id="cy9-cN-nOo"/>
+                        <segue destination="7PJ-ly-NMd" kind="unwind" identifier="returnHomeFromDeals" unwindAction="returnToUserHomeSegue:" id="hPZ-A5-gvI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zHo-ew-pNt" sceneMemberID="firstResponder"/>
+                <exit id="7PJ-ly-NMd" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-1656" y="3015"/>
         </scene>

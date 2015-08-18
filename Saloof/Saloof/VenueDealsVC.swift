@@ -126,6 +126,13 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let image = UIImage(named: "navBarLogo")
+        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
+        homeButton.setImage(image, forState: UIControlState.Normal)
+        homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
+        navigationItem.titleView = homeButton
+
         // set up for the actifity indicator
         actIndicator.center = CGPoint(x: self.actContainer.center.x, y: self.actContainer.center.y - 40)
         self.actContainer.addSubview(actIndicator)
@@ -155,9 +162,11 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             // Get location and deals
             setUpForInitialDeals()
         }
-        
     }
     
+    func returnHome() {
+        self.performSegueWithIdentifier("returnHomeFromDeals", sender: self)
+    }
     
     func setButtonTitle (title: String) {
         saveSwapButton.setTitle(title, forState: UIControlState.Normal)

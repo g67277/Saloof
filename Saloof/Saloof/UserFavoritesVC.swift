@@ -30,7 +30,17 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         super.viewDidLoad()
         tableview.rowHeight = 105
         let image = UIImage(named: "navBarLogo")
-        navigationItem.titleView = UIImageView(image: image)
+        //navigationItem.titleView = UIImageView(image: image)
+        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
+        homeButton.setImage(image, forState: UIControlState.Normal)
+        homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
+        navigationItem.titleView = homeButton
+    }
+    
+    func returnHome() {
+        println("User wants to return home")
+        self.performSegueWithIdentifier("returnHomeFromFavorites", sender: self)
     }
     
     override func didReceiveMemoryWarning() {

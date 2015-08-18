@@ -46,9 +46,13 @@ class VenueDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let image = UIImage(named: "navBarLogo")
-        navigationItem.titleView = UIImageView(image: image)
+        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
+        homeButton.setImage(image, forState: UIControlState.Normal)
+        homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
+        navigationItem.titleView = homeButton
+
         
         // Do any additional setup after loading the view.
         if isFavorite {
@@ -67,6 +71,11 @@ class VenueDetailVC: UIViewController {
         setUpLikeNFavoriteButtons()
     }
     
+    func returnHome() {
+        println("User wants to return home")
+        self.performSegueWithIdentifier("returnToUserHome", sender: self)
+    }
+
     
     func setUpVenue(venue: Venue) {
         if var locationLabel = locationName {

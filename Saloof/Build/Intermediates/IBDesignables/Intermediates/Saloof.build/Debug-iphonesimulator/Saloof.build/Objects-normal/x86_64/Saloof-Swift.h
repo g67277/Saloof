@@ -776,6 +776,7 @@ SWIFT_CLASS("_TtC6Saloof15UserFavoritesVC")
 @property (nonatomic) /* Results<FavoriteVenue> */ favoriteVenues;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidLoad;
+- (void)returnHome;
 - (void)didReceiveMemoryWarning;
 - (NSInteger)numberOfSectionsInTableView:(UITableView * __nonnull)tableView;
 - (NSInteger)tableView:(UITableView * __nonnull)tableView numberOfRowsInSection:(NSInteger)section;
@@ -859,6 +860,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)fetchFoursquareVenues;
 - (IBAction)shouldPushToSavedDeal:(id __nonnull)sender;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __nullable)sender;
+- (IBAction)returnToUserHomeSegue:(UIStoryboardSegue * __nonnull)segue;
 - (void)alertUser:(NSString * __nonnull)title message:(NSString * __nonnull)message;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
@@ -993,6 +995,7 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewDidLoad;
+- (void)returnHome;
 - (void)setButtonTitle:(NSString * __nonnull)title;
 - (void)getCurrentSavedDealId;
 - (void)setUpDefaultDeal;
@@ -1067,6 +1070,7 @@ SWIFT_CLASS("_TtC6Saloof13VenueDetailVC")
 @property (nonatomic) BOOL doesFavorite;
 @property (nonatomic, copy) NSString * __nonnull thisVenueId;
 - (void)viewDidLoad;
+- (void)returnHome;
 - (void)setUpVenue:(Venue * __nonnull)venue;
 - (void)setUpFavoriteVenue:(FavoriteVenue * __nonnull)venue;
 - (void)didReceiveMemoryWarning;

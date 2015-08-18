@@ -650,6 +650,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         }
     }
     
+    @IBAction func returnToUserHomeSegue(segue:UIStoryboardSegue) {
+        
+    }
+    
     func alertUser(title: String, message: String) {
         var alertView:UIAlertView = UIAlertView()
         alertView.title = title
