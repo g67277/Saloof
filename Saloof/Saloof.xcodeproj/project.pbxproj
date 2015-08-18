@@ -503,7 +503,7 @@
 				TargetAttributes = {
 					81F8C0421B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 56R6M4W3X8;
+						DevelopmentTeam = 9J676A68SR;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -512,7 +512,7 @@
 					};
 					81F8C05A1B67BA7D001B9203 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 56R6M4W3X8;
+						DevelopmentTeam = 9J676A68SR;
 						TestTargetID = 81F8C0421B67BA7D001B9203;
 					};
 				};
@@ -805,7 +805,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b6113857-0d18-4190-8cd0-2733bb9b4cc0";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Debug;
@@ -821,7 +821,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b6113857-0d18-4190-8cd0-2733bb9b4cc0";
 				SWIFT_OBJC_BRIDGING_HEADER = "Saloof/Saloof-Bridging-Header.h";
 			};
 			name = Release;

@@ -1,1 +1,0 @@
- const unsigned char IQKeyboardManagerVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:IQKeyboardManager  PROJECT:Pods-1" "\n"; const double IQKeyboardManagerVersionNumber __attribute__ ((used)) = (double)1.;
