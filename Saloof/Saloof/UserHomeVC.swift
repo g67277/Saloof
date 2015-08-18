@@ -37,6 +37,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     var dealsButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
     let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor(red:0.98, green:0.39, blue:0.2, alpha:1), size: CGSize(width: 100, height: 100))
+    var containerView = CreateActivityView.createView(UIColor.clearColor(), frame: UIScreen.mainScreen().bounds)
     
     @IBOutlet var menuView: UIView!
     
@@ -90,6 +91,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         searchView.roundCorners(.AllCorners, radius: 14)
         priceView.roundCorners(.AllCorners, radius: 14)
+        
+        // set up for the actifity indicator
+        activityIndicator.center = self.containerView.center
+        self.containerView.addSubview(activityIndicator)
+        self.containerView.center = self.view.center
+        
         // GET LOCATION
         getLocationPermissionAndData()
     }
@@ -117,6 +124,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
   
     func getLocationPermissionAndData() {
+        self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         // delete any items in the array
         venueList.removeAll()
@@ -135,9 +143,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             if let loc = location {
                self.location = loc
                 self.checkLocationAndAccess()
-                println("Retrieved location: \(location)")
             } else if let err = error {
                  println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                self.containerView.removeFromSuperview()
                 self.activityIndicator.stopAnimation()
             }
             // destroy the object immediately to save memory
@@ -233,6 +241,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
 
     func resetView(shouldSearch: Bool) {
+        //activityIndicator.startAnimation()
+        self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
         searchPrice = shouldSearch
@@ -273,6 +283,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             textField.resignFirstResponder()
             // display the picker view
             searchPickerView.hidden = false
+        } else if textField.tag == 3 {
+            textField.placeholder = ""
         }
     }
     
@@ -290,6 +302,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
+                textField.placeholder = "Burger"
                 pullNewSearchResults()
             }
         }
@@ -297,6 +310,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
     
     func pullNewSearchResults () {
+        self.navigationController?.view.addSubview(containerView)
+        activityIndicator.startAnimation()
         venueList.removeAll()
         // delete any current venues
         var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
@@ -310,7 +325,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         swipeableView.resetCurrentCardNumber()
         // get more foursquare items
         fetchSaloofVenues()
-        activityIndicator.stopAnimation()
         searchDisplayOverview.hidden = true
         swipeableView.reloadData()
     }
@@ -343,7 +357,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         let restaurant: Venue = venueList[Int(index)]
-        //println(restaurant.identifier)
         cardView.setUpRestaurant(contentView, dataObject: restaurant)
         cardView.addSubview(contentView)
         // Layout constraints to keep card view within the swipeable view bounds as it moves
@@ -421,6 +434,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
         println("Ran out of cards, getting foursquare locations")
+        self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         resetSwipeableVieForReload()
     }
@@ -437,9 +451,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         }
         swipeableView.resetCurrentCardNumber()
         fetchFoursquareVenues()
-        activityIndicator.stopAnimation()
         swipeableView.reloadData()
-        
     }
     
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt) {
@@ -458,15 +470,14 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
 
     func checkLocationAndAccess () {
-        activityIndicator.stopAnimation()
         if Reachability.isConnectedToNetwork(){
-            
             // check their location from D.C.
-            //let currentLocation = self.locationManager.location
             var dcLocation = CLLocation(latitude: 38.9, longitude: -77.0)
             var distanceBetween: CLLocationDistance = location.distanceFromLocation(dcLocation!)
             var distanceInMiles = distanceBetween / 1609.344
             if distanceInMiles > 40 {
+                self.containerView.removeFromSuperview()
+                self.activityIndicator.stopAnimation()
                 alertUser("No Saloof Locations", message: "Looks like you are outside our deals area, but we can still show you some great locations near you!")
                 // just look for foursquare locations
                 fetchFoursquareVenues()
@@ -474,10 +485,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             } else {
                 // begin loading saloof & foursquare locations
                 self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
-                activityIndicator.startAnimation()
                 fetchSaloofVenues()
             }
         } else {
+            self.containerView.removeFromSuperview()
+            self.activityIndicator.stopAnimation()
             self.alertUser("No Network", message: "Please make sure you are connected then try again")
         }
 
@@ -493,11 +505,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     }
     func fetchSaloofVenues() {
-        activityIndicator.startAnimation()
         var token = prefs.stringForKey("TOKEN")
         let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
         let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
-       // let userLocation = self.location
         var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
         var urlParameters: String = ""
         if searchQuery {
@@ -518,17 +528,14 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                     //makesure the deals button is viewable
                     self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
                     self.fetchFoursquareVenues()
-                    self.activityIndicator.stopAnimation()
                     self.swipeableView.reloadData()
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()){
                     self.fetchFoursquareVenues()
-                    self.activityIndicator.stopAnimation()
                     self.swipeableView.reloadData()
                 }
             }
-            
         })
     }
 
@@ -564,6 +571,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             }
             offsetCount = offsetCount + 10
         }
+        self.containerView.removeFromSuperview()
+        self.activityIndicator.stopAnimation()
     }
     
     

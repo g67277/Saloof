@@ -34,7 +34,9 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     @IBOutlet var indicatorView: UIView!
     var searchBarButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    let activityIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor(red:0.98, green:0.39, blue:0.2, alpha:1), size: CGSize(width: 100, height: 100))
+    let actIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+    var actContainer = CreateActivityView.createView(UIColor.clearColor(), frame: UIScreen.mainScreen().bounds)
+    
     
     // Search
     @IBOutlet weak var searchDisplayOverview: UIView!
@@ -124,6 +126,10 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // set up for the actifity indicator
+        actIndicator.center = CGPoint(x: self.actContainer.center.x, y: self.actContainer.center.y - 40)
+        self.actContainer.addSubview(actIndicator)
+        self.actContainer.center = self.view.center
         token = prefs.stringForKey("TOKEN")!
         if loadSingleDeal {
             
@@ -134,13 +140,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             
             // see if it is for the saved deal or a default deal
             if setUpForSaved {
-                setUpSaveSwapButton()
+                setUpSavedDeal()
                 saveSwapButton.enabled = false
             }
             else if setUpForDefault {
                 setUpDefaultDeal()
             }
         } else {
+            
             // start getting new deals for collection view
             singleDealView.hidden = true
             collectionCardView.hidden = false
@@ -185,7 +192,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         singleDealValue.text = "$\(valueFloat.format(valueFormat)) value"
     }
     
-    func setUpSaveSwapButton () {
+    func setUpSavedDeal () {
         // set up view for a default deal
         singleLocationTitle.text = " from \(savedDeal.name)"
         if savedDeal.hasImage {
@@ -318,7 +325,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             // create new local notification
             // temporaily set it for 1 minute from now
             let calendar = NSCalendar.autoupdatingCurrentCalendar()
-            //var newDate = calendar.dateByAddingUnit(.CalendarUnitMinute, value: -15, toDate: originalDate, options: nil)
+            //var beforeExpireDate = calendar.dateByAddingUnit(.CalendarUnitMinute, value: -15, toDate: originalDate, options: nil)
             var now = NSDate()
             var soon = calendar.dateByAddingUnit(.CalendarUnitMinute, value: 1, toDate: now, options: nil)
             // self.selectedDeal!.expirationDate
@@ -401,6 +408,30 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
             }
 
+        } else if sender.tag == 3 {
+            // see if we have a saved deal
+            println("user pressed saved deal button")
+            var deal = realm.objects(SavedDeal).first
+            if (deal != nil) {
+                println("Saved deal")
+                self.savedDeal = deal!
+                collectionCardView.hidden = true
+                cardButtonsView.hidden = true
+                singleDealView.hidden = false
+                saveSwapButton.enabled = false
+                setUpSavedDeal()
+                
+            } else {
+                println("No saved deals")
+                let alertController = UIAlertController(title: "No Saved Deal", message: "Either your deal expired, or you haven't saved one yet.", preferredStyle: .Alert)
+                // Add button action to swap
+                let cancelMove = UIAlertAction(title: "Ok", style: .Default, handler: {
+                    (action) -> Void in
+                })
+                alertController.addAction(cancelMove)
+                presentViewController(alertController, animated: true, completion: nil)
+            }
+        
         }
     }
 
@@ -443,6 +474,9 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             // Once we are done with the array, hide the indicator, set the topDealReached, display the top
             // deal in the featured section
             topDealReached = true
+            println("Top deal reached")
+            self.actContainer.removeFromSuperview()
+            self.actIndicator.stopAnimation()
             selectedDeal = dealList[0]
             setDealTimer(selectedDeal!)
             if currentSavedDealId != "" {
@@ -579,7 +613,6 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         let calendar = NSCalendar.currentCalendar()
         let datecomponenets = calendar.components(NSCalendarUnit.CalendarUnitSecond, fromDate: now, toDate: expires, options: nil)
         let seconds = datecomponenets.second * 1000
-        // println("Seconds: \(seconds) times 1000")
         timeLimitLabel.countDirection = 1
         timeLimitLabel.startValue = UInt64(seconds)
         timeLimitLabel.start()
@@ -591,7 +624,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     
     func setUpForInitialDeals(){
-    
+        self.navigationController?.view.addSubview(actContainer)
+        actIndicator.startAnimation()
         dealList.removeAll()
         // delete any current venues
         var pulledVenues = Realm().objects(VenueDeal)
@@ -611,12 +645,13 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 if !self.haveLocation {
                     // we do now
                     self.haveLocation = true
+                    self.userLocation = "lat=\(loc.coordinate.latitude)&lng=\(loc.coordinate.longitude)"
                     self.loadInitialDeals()
-                    println("Retrieved location: \(location)")
                 }
             } else if let err = error {
                 println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
-                self.activityIndicator.stopAnimation()
+                self.actIndicator.stopAnimation()
+                self.actContainer.removeFromSuperview()
             }
             // destroy the object immediately to save memory
             self.manager = nil
@@ -627,20 +662,17 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         if searchBarButton != nil{
             searchBarButton.enabled = false
         }
-        var containerView = CreateActivityView.createView(UIColor.clearColor(), frame: CGRectMake(0, -100, self.view.frame.width, self.view.frame.height))
-        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.blackColor(), size: CGSize(width: 100, height: 100))
-        aIView.center = containerView.center
-        containerView.addSubview(aIView)
-        containerView.center = self.view.center
-        self.view.addSubview(containerView)
-        aIView.startAnimation()
         APICalls.getLocalDeals(token, location: userLocation, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
-                    aIView.startAnimation()
-                    containerView.removeFromSuperview()
                     self.refreshDataArray()
                     println("Refreshing data array from initial load")
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.actContainer.removeFromSuperview()
+                    self.actIndicator.stopAnimation()
+                    println("Unable to retrieve deals")
                 }
             }
         })
@@ -648,8 +680,6 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // this method keeps looping
     
     func refreshDataArray(){
-        //self.collectionCardView.reloadInputViews()
-        println("Retrieved deals from Saloof")
         haveItems = true
         //FINISHED CREATING DATA OBJECTS
         //get a list of all deal objects in Realm
@@ -659,8 +689,11 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             //Sort all deals by value
             let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
             validDeals = sortedDeals
+            self.actIndicator.stopAnimation()
             biddingStart()
         } else {
+            self.actContainer.removeFromSuperview()
+            self.actIndicator.stopAnimation()
             println("No results returned")
             var searchMessage = (searchQuery) ? "\(searchString)" : ""
             var priceMessage = (searchPrice) ? "\(searchString)" : ""
@@ -693,6 +726,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         case 0:
             priceTextField.text = "";
             searchString = ""
+            searchPrice = false
         case 1:
             priceTextField.text = "$";
             searchString = "1"
@@ -708,6 +742,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         default:
             priceTextField.text = ""
             searchString = ""
+            searchPrice = false
         }
         // reload search
         didSelectPricePoint()
@@ -763,7 +798,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func resetView(shouldSearch: Bool) {
         println("resetting view")
-        activityIndicator.startAnimation()
+        //activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
         searchPrice = shouldSearch
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
@@ -789,7 +824,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         
     }
     
-    func getCurrentLocation (completion: Bool -> ()) {
+    func updateCurrentLocation (completion: Bool -> ()) {
         manager = OneShotLocationManager()
         manager!.fetchWithCompletion {location, error in
             
@@ -799,14 +834,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 if !self.haveLocation {
                     // we do now
                     self.haveLocation = true
-                    self.loadInitialDeals()
-                    println("Retrieved location: \(location)")
+                    self.userLocation = "lat=\(loc.coordinate.latitude)&lng=\(loc.coordinate.longitude)"
                     self.manager = nil
                     completion(true)
                 }
             } else if let err = error {
                 println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
-                self.activityIndicator.stopAnimation()
+                self.actContainer.removeFromSuperview()
+                self.actIndicator.stopAnimation()
                 self.manager = nil
                 completion (false)
             }
@@ -815,6 +850,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     
     func pullNewSearchResults (pricePoint: Bool) {
+        self.navigationController?.view.addSubview(actContainer)
+        actIndicator.startAnimation()
         println("pulling new search")
         dealList.removeAll()
         collectionView.reloadData()
@@ -822,24 +859,16 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         if searchBarButton != nil{
             searchBarButton.enabled = false
         }
-        let win:UIWindow = UIApplication.sharedApplication().delegate!.window!!
-        var containerView = CreateActivityView.createView(UIColor.clearColor(), frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
-        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.blackColor(), size: CGSize(width: 100, height: 100))
-        aIView.center = containerView.center
-        containerView.addSubview(aIView)
-        containerView.center = self.view.center
-        win.addSubview(containerView)
-        //self.view.addSubview(containerView)
-        aIView.startAnimation()
         
         var pulledVenues = Realm().objects(VenueDeal)
         realm.write {
             self.realm.delete(pulledVenues)
 
         }
-        
-        getCurrentLocation() { result in
+        haveLocation = false
+        updateCurrentLocation() { result in
             if result {
+                println("Have location, searching")
                 // reset values
                 self.lastDealRestId = ""
                 self.topBidIndex = 0
@@ -847,40 +876,79 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.topDealReached = false
                 self.pageController.currentPage = 0
                 self.pageController.numberOfPages = 0
-                if pricePoint {
-                    var call = "priceTier=\(self.searchString)&\(self.location)"
+                if self.searchPrice {
+                    println("searching price point")
+                    var call = "priceTier=\(self.searchString)&\(self.userLocation)"
                     //println(call)
                     APICalls.getLocalDealsByPrice(self.token, call: call){ result in
                         if result{
                             dispatch_async(dispatch_get_main_queue()){
                                 println("refreshing data array from get local deals by price")
-                                aIView.stopAnimation()
-                                containerView.removeFromSuperview()
+                                self.actIndicator.stopAnimation()
+                                self.actContainer.removeFromSuperview()
                                 self.refreshDataArray()
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("No new deals")
+                                self.actIndicator.stopAnimation()
+                                self.actContainer.removeFromSuperview()
                             }
                         }
                     }
                 } else {
-                    var formattedSearch = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
-                    println(self.location)
-                    var call = "category=\(formattedSearch)&\(self.location)"
-                    // println(call)
-                    
-                    APICalls.getLocalDealsByCategory(self.token, call: call){ result in
-                        if result{
-                            dispatch_async(dispatch_get_main_queue()){
-                                println("refreshing data array from get local deals by category")
-                                self.refreshDataArray()
-                                aIView.stopAnimation()
-                                containerView.removeFromSuperview()
+                    // see if we have a query
+                    if self.searchQuery {
+                        println("searching tag")
+                        var formattedSearch = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                        println(self.location)
+                        // category=burger&lat=39.1167&lng=-77.5500
+                        var call = "category=\(formattedSearch)&\(self.userLocation)"
+                        // println(call)
+                        
+                        APICalls.getLocalDealsByCategory(self.token, call: call){ result in
+                            if result{
+                                dispatch_async(dispatch_get_main_queue()){
+                                    println("refreshing data array from get local deals by category")
+                                    self.refreshDataArray()
+                                    self.actIndicator.stopAnimation()
+                                    self.actContainer.removeFromSuperview()
+                                }
+                            } else {
+                                dispatch_async(dispatch_get_main_queue()){
+                                    println("No new deals")
+                                    self.actIndicator.stopAnimation()
+                                    self.actContainer.removeFromSuperview()
+                                }
                             }
                         }
+
+                    } else {
+                        // run a basic search for any price point
+                        APICalls.getLocalDeals(self.token, location: self.userLocation, completion: { result in
+                            if result {
+                                dispatch_async(dispatch_get_main_queue()){
+                                    self.refreshDataArray()
+                                    println("Refreshing data array from new any price search")
+                                    self.actIndicator.stopAnimation()
+                                    self.actContainer.removeFromSuperview()
+                                }
+                            } else {
+                                dispatch_async(dispatch_get_main_queue()){
+                                    self.actContainer.removeFromSuperview()
+                                    self.actIndicator.stopAnimation()
+                                    println("Unable to retrieve deals")
+                                }
+                            }
+                        })
                     }
                 }
                 self.searchDisplayOverview.hidden = true
 
             } else {
                 println("Unable to get the users location")
+                self.actIndicator.stopAnimation()
+                self.actContainer.removeFromSuperview()
             }
         }
     }
@@ -892,6 +960,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             textField.resignFirstResponder()
             // display the picker view
             searchPickerView.hidden = false
+        } else if textField.tag == 3 {
+            textField.placeholder = ""
         }
     }
     
@@ -908,6 +978,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
+                textField.placeholder = "Burger"
                 pullNewSearchResults(false)
             }
         }
@@ -922,6 +993,4 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         alertView.addButtonWithTitle("OK")
         alertView.show()
     }
-
-
 }

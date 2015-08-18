@@ -266,8 +266,8 @@ public class APICalls {
     class func getLocalDeals(token: NSString, location: NSString, completion: Bool -> ()){
         NSLog("Pulling local venues");
         if Reachability.isConnectedToNetwork(){
-            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=39.1167&lng=-77.5500")!
-            
+            //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=39.1167&lng=-77.5500")!
+            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?\(location)")!
             var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
             request.HTTPMethod = "GET"
             request.timeoutInterval = 60
@@ -309,8 +309,8 @@ public class APICalls {
             alertView.delegate = self
             alertView.addButtonWithTitle("OK")
             alertView.show()
+            completion (false)
         }
-        completion (false)
     }
 
     

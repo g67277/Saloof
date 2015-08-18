@@ -11,11 +11,11 @@ top-level:
 - "StringLiteralType"
 - "Object"
 member-access:
-- "CSo13RLMObjectBase"
-- "C6Saloof10LikedVenue"
-- "C10RealmSwift6Object"
 - "CSo8NSObject"
+- "C10RealmSwift6Object"
+- "C6Saloof10LikedVenue"
 - "PSs9AnyObject"
+- "CSo13RLMObjectBase"
 dynamic-lookup:
 cross-module:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/Swift.swiftmodule"

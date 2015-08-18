@@ -89,8 +89,8 @@ typedef struct _NSZone NSZone;
 @import Koloda;
 @import Foundation;
 @import ObjectiveC;
-@import StoreKit;
 @import CoreLocation;
+@import StoreKit;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -171,7 +171,6 @@ SWIFT_CLASS("_TtC6Saloof12BusinessHome")
 - (void)updateImg;
 - (void)filterData:(NSInteger)month;
 - (void)updateDisplay;
-- (void)getUIImagefromAsseturl:(NSURL * __nonnull)url;
 - (void)viewDidLayoutSubviews;
 - (IBAction)onClick:(UIButton * __nullable)_sender;
 - (IBAction)pickerSelected:(id __nonnull)sender;
@@ -325,7 +324,6 @@ SWIFT_CLASS("_TtC6Saloof7DealsVC")
 @property (nonatomic) UIImage * __nonnull defaultImg;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidLoad;
-- (void)getUIImagefromAsseturl:(NSURL * __nonnull)url;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __nullable)sender;
 - (IBAction)onClick:(UIButton * __nullable)_sender;
@@ -463,15 +461,30 @@ SWIFT_CLASS("_TtC6Saloof10LikedVenue")
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithValue:(id __nonnull)value schema:(RLMSchema * __nonnull)schema OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class CLLocationManager;
+@class NSError;
+@class CLLocation;
+
+SWIFT_CLASS("_TtC6Saloof22OneShotLocationManager")
+@interface OneShotLocationManager : NSObject <CLLocationManagerDelegate>
+- (void)locationManager:(CLLocationManager * __null_unspecified)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
+- (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
+- (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateLocations:(NSArray * __null_unspecified)locations;
+- (void)fetchWithCompletion:(void (^ __nonnull)(CLLocation * __nullable, NSError * __nullable))completion;
+- (SWIFT_NULLABILITY(nonnull) instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 SWIFT_CLASS("_TtC6Saloof12ProfileModel")
 @interface ProfileModel : Object
 @property (nonatomic, copy) NSString * __nonnull restaurantName;
-@property (nonatomic) NSInteger phoneNum;
+@property (nonatomic, copy) NSString * __nonnull phoneNum;
 @property (nonatomic, copy) NSString * __nonnull website;
 @property (nonatomic, copy) NSString * __nonnull streetAddress;
 @property (nonatomic, copy) NSString * __nonnull city;
 @property (nonatomic) NSInteger zipcode;
+@property (nonatomic) double lat;
+@property (nonatomic) double lng;
 @property (nonatomic) NSInteger priceTier;
 @property (nonatomic, copy) NSString * __nonnull weekdayO;
 @property (nonatomic, copy) NSString * __nonnull weekdayC;
@@ -500,7 +513,6 @@ SWIFT_CLASS("_TtC6Saloof9ProfileVC")
 @interface ProfileVC : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, weak) IBOutlet UILabel * __null_unspecified RestaurantTitleLabel;
 @property (nonatomic, weak) IBOutlet UIImageView * __null_unspecified imgView;
-@property (nonatomic) NSURL * __nonnull imgURI;
 @property (nonatomic) BOOL newImage;
 @property (nonatomic) BOOL validImage;
 @property (nonatomic, weak) IBOutlet UITextField * __null_unspecified contactField;
@@ -515,11 +527,14 @@ SWIFT_CLASS("_TtC6Saloof9ProfileVC")
 @property (nonatomic, weak) IBOutlet UIButton * __null_unspecified weekendO;
 @property (nonatomic, weak) IBOutlet UIButton * __null_unspecified weekendC;
 @property (nonatomic, readonly) NSUserDefaults * __nonnull prefs;
+@property (nonatomic, copy) NSString * __nonnull weekdayString;
+@property (nonatomic, copy) NSString * __nonnull weekendString;
 @property (nonatomic) UIImage * __nonnull profileImg;
 - (void)viewDidLoad;
 - (void)loadElements;
 - (void)parseHours:(NSString * __nonnull)week weekend:(NSString * __nonnull)weekend;
 - (void)saveData;
+- (void)uploadChanges:(ProfileModel * __nonnull)data;
 - (void)viewDidLayoutSubviews;
 - (void)DismissKeyboard;
 - (IBAction)onClick:(UIButton * __nonnull)_sender;
@@ -595,7 +610,7 @@ SWIFT_CLASS("_TtC6Saloof21RegisterRestaurantVC2")
 - (void)continueRegistration;
 - (void)runTestingMethod;
 - (void)prepareForSegue:(UIStoryboardSegue * __nonnull)segue sender:(id __null_unspecified)sender;
-- (void)saveData:(NSString * __nonnull)name street:(NSString * __nonnull)street city:(NSString * __nonnull)city zipcode:(NSInteger)zipcode phoneNum:(NSInteger)phoneNum website:(NSString * __nonnull)website category:(NSString * __nonnull)category price:(NSInteger)price wkO:(NSString * __nonnull)wkO wkC:(NSString * __nonnull)wkC wknO:(NSString * __nonnull)wknO wknC:(NSString * __nonnull)wknC weekdayString:(NSString * __nonnull)weekdayString weekendString:(NSString * __nonnull)weekendString;
+- (void)saveData:(NSString * __nonnull)name street:(NSString * __nonnull)street city:(NSString * __nonnull)city zipcode:(NSInteger)zipcode phoneNum:(NSString * __nonnull)phoneNum website:(NSString * __nonnull)website category:(NSString * __nonnull)category price:(NSInteger)price wkO:(NSString * __nonnull)wkO wkC:(NSString * __nonnull)wkC wknO:(NSString * __nonnull)wknO wknC:(NSString * __nonnull)wknC weekdayString:(NSString * __nonnull)weekdayString weekendString:(NSString * __nonnull)weekendString;
 - (void)findCoorinates:(NSString * __nonnull)formattedAddress;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)didReceiveMemoryWarning;
@@ -731,14 +746,18 @@ SWIFT_CLASS("_TtC6Saloof7StoreVC")
 @property (nonatomic, readonly, copy) NSSet * __nonnull productIdenifiers;
 @property (nonatomic) SKProduct * __nullable product;
 @property (nonatomic, copy) NSArray * __nonnull productsArray;
+@property (nonatomic) UIView * __nonnull containerView;
+@property (nonatomic) CustomActivityView * __nonnull aIView;
 - (void)viewDidLoad;
 - (void)requestProductData;
 - (void)productsRequest:(SKProductsRequest * __null_unspecified)request didReceiveResponse:(SKProductsResponse * __null_unspecified)response;
 - (void)paymentQueue:(SKPaymentQueue * __null_unspecified)queue updatedTransactions:(NSArray * __null_unspecified)transactions;
 - (void)deliverProduct:(SKPaymentTransaction * __nonnull)transaction;
+- (void)saveTransation:(NSInteger)price;
 - (NSInteger)tableView:(UITableView * __nonnull)tableView numberOfRowsInSection:(NSInteger)section;
 - (UITableViewCell * __nonnull)tableView:(UITableView * __nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * __nonnull)indexPath;
 - (void)tableView:(UITableView * __nonnull)tableView didSelectRowAtIndexPath:(NSIndexPath * __nonnull)indexPath;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)didReceiveMemoryWarning;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
@@ -769,20 +788,18 @@ SWIFT_CLASS("_TtC6Saloof15UserFavoritesVC")
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
-@class CLLocationManager;
 @class UIPickerView;
 @class NSAttributedString;
-@class NSError;
-@class CLLocation;
 
 SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
-@interface UserHomeVC : UIViewController <CLLocationManagerDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface UserHomeVC : UIViewController <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (nonatomic) /* Results<Venue> */ venues;
 @property (nonatomic) BOOL haveItems;
 @property (nonatomic, readonly) /* List<Venue> */ venueList;
-@property (nonatomic) CLLocationManager * __null_unspecified locationManager;
+@property (nonatomic) CLLocation * __null_unspecified location;
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
+@property (nonatomic) OneShotLocationManager * __nullable manager;
 @property (nonatomic) IBOutlet UIBarButtonItem * __null_unspecified menuButton;
 @property (nonatomic, weak) IBOutlet KolodaView * __null_unspecified swipeableView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified indicatorView;
@@ -790,6 +807,7 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 @property (nonatomic) UIBarButtonItem * __null_unspecified dealsButton;
 @property (nonatomic) UIBarButtonItem * __null_unspecified cancelButton;
 @property (nonatomic, readonly) CustomActivityView * __nonnull activityIndicator;
+@property (nonatomic) UIView * __nonnull containerView;
 @property (nonatomic) IBOutlet UIView * __null_unspecified menuView;
 @property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
 @property (nonatomic) IBOutlet UITextField * __null_unspecified burgerTextField;
@@ -809,7 +827,6 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)didReceiveMemoryWarning;
 - (IBAction)displayMenu:(id __nonnull)sender;
 - (IBAction)onClick:(UIButton * __nonnull)sender;
-- (void)viewDidAppear:(BOOL)animated;
 - (void)getLocationPermissionAndData;
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView * __nonnull)pickerView;
 - (NSInteger)pickerView:(UIPickerView * __nonnull)pickerView numberOfRowsInComponent:(NSInteger)component;
@@ -836,11 +853,6 @@ SWIFT_CLASS("_TtC6Saloof10UserHomeVC")
 - (void)resetSwipeableVieForReload;
 - (void)kolodaDidSelectCardAtIndex:(KolodaView * __nonnull)koloda index:(NSUInteger)index;
 - (BOOL)kolodaShouldApplyAppearAnimation:(KolodaView * __nonnull)koloda;
-- (void)requestLocationPermission;
-- (void)showErrorAlert:(NSError * __nonnull)error;
-- (void)locationManager:(CLLocationManager * __null_unspecified)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status;
-- (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
-- (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
 - (void)checkLocationAndAccess;
 - (void)loadDeals;
 - (void)fetchSaloofVenues;
@@ -918,7 +930,7 @@ SWIFT_CLASS("_TtC6Saloof9VenueDeal")
 @class TTCounterLabel;
 
 SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
-@interface VenueDealsVC : UIViewController <CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface VenueDealsVC : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (nonatomic, weak) IBOutlet UICollectionView * __null_unspecified collectionView;
 @property (nonatomic) IBOutlet UIButton * __null_unspecified bestButton;
 @property (nonatomic) IBOutlet UIButton * __null_unspecified oldestButton;
@@ -935,7 +947,8 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic) IBOutlet UIView * __null_unspecified indicatorView;
 @property (nonatomic) UIBarButtonItem * __null_unspecified searchBarButton;
 @property (nonatomic) UIBarButtonItem * __null_unspecified cancelButton;
-@property (nonatomic, readonly) CustomActivityView * __nonnull activityIndicator;
+@property (nonatomic, readonly) CustomActivityView * __nonnull actIndicator;
+@property (nonatomic) UIView * __nonnull actContainer;
 @property (nonatomic, weak) IBOutlet UIView * __null_unspecified searchDisplayOverview;
 @property (nonatomic) IBOutlet UITextField * __null_unspecified burgerTextField;
 @property (nonatomic) IBOutlet UIView * __null_unspecified searchView;
@@ -955,7 +968,8 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 @property (nonatomic) /* Results<VenueDeal> */ validDeals;
 @property (nonatomic) BOOL haveItems;
 @property (nonatomic) BOOL loadSingleDeal;
-@property (nonatomic) CLLocationManager * __null_unspecified locationManager;
+@property (nonatomic) OneShotLocationManager * __nullable manager;
+@property (nonatomic) CLLocation * __null_unspecified location;
 @property (nonatomic, copy) NSArray * __nonnull venueLocations;
 @property (nonatomic, copy) NSArray * __nullable venueItems;
 @property (nonatomic) CLLocation * __null_unspecified currentLocation;
@@ -980,12 +994,15 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewDidLoad;
 - (void)setButtonTitle:(NSString * __nonnull)title;
+- (void)getCurrentSavedDealId;
 - (void)setUpDefaultDeal;
-- (void)setUpSaveSwapButton;
+- (void)setUpSavedDeal;
 - (IBAction)userPressedSaveSwapButton:(UIButton * __nonnull)sender;
 - (void)checkForPreviouslySavedDeal;
 - (BOOL)checkDealIsValid:(SavedDeal * __nonnull)savedDeal;
 - (void)saveNewDeal:(BOOL)didSwap;
+- (void)removeCurrentLocalNotification:(NSString * __nonnull)dealId;
+- (void)setCurrentDealLocalNotification:(NSString * __nonnull)dealName expireDate:(NSDate * __nonnull)expireDate dealId:(NSString * __nonnull)dealId;
 - (void)didReceiveMemoryWarning;
 - (IBAction)onButtonSelect:(UIButton * __nonnull)sender;
 - (void)biddingStart;
@@ -999,9 +1016,6 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)scrollViewDidEndDecelerating:(UIScrollView * __nonnull)scrollView;
 - (void)setDealTimer:(VenueDeal * __nonnull)deal;
 - (void)setSavedDealTimer:(SavedDeal * __nonnull)deal;
-- (void)showErrorAlert:(NSError * __nonnull)error;
-- (void)locationManager:(CLLocationManager * __null_unspecified)manager didFailWithError:(NSError * __null_unspecified)error;
-- (void)locationManager:(CLLocationManager * __null_unspecified)manager didUpdateToLocation:(CLLocation * __null_unspecified)newLocation fromLocation:(CLLocation * __null_unspecified)oldLocation;
 - (void)setUpForInitialDeals;
 - (void)loadInitialDeals;
 - (void)refreshDataArray;
@@ -1017,9 +1031,11 @@ SWIFT_CLASS("_TtC6Saloof12VenueDealsVC")
 - (void)resetView:(BOOL)shouldSearch;
 - (void)shouldOpenSearch;
 - (void)shouldCloseSearch;
+- (void)updateCurrentLocation:(void (^ __nonnull)(BOOL))completion;
 - (void)pullNewSearchResults:(BOOL)pricePoint;
 - (void)textFieldDidBeginEditing:(UITextField * __nonnull)textField;
 - (BOOL)textFieldShouldReturn:(UITextField * __nonnull)textField;
+- (void)alertUser:(NSString * __nonnull)title message:(NSString * __nonnull)message;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (SWIFT_NULLABILITY(nonnull) instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end

@@ -4023,7 +4023,7 @@ launch special!</string>
                                             <outlet property="delegate" destination="bGX-WP-li9" id="Gl4-te-t8H"/>
                                         </connections>
                                     </collectionView>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="pGf-Ll-1zF">
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="1" translatesAutoresizingMaskIntoConstraints="NO" id="pGf-Ll-1zF">
                                         <rect key="frame" x="-19" y="-18" width="39" height="37"/>
                                     </pageControl>
                                 </subviews>
@@ -4915,9 +4915,9 @@ launch special!</string>
                                                             </mask>
                                                         </variation>
                                                     </imageView>
-                                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="mxR-rm-dEg">
+                                                    <button opaque="NO" tag="3" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="mxR-rm-dEg">
                                                         <rect key="frame" x="262" y="142" width="77" height="33"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="backgroundColor" red="0.33011490859999998" green="0.78314393940000004" blue="0.36397092790000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="134" id="m3m-yq-1Ev">
                                                                 <variation key="heightClass=regular-widthClass=compact" constant="150"/>
@@ -4937,6 +4937,9 @@ launch special!</string>
                                                                 <exclude reference="m3m-yq-1Ev"/>
                                                             </mask>
                                                         </variation>
+                                                        <connections>
+                                                            <action selector="onButtonSelect:" destination="bGX-WP-li9" eventType="touchUpInside" id="vSj-Ku-3iO"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
