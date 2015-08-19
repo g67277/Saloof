@@ -107,10 +107,10 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         var wknC = self.weekendC.titleLabel?.text
         weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
         weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
-        
+
         var realm = Realm()
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        //uploadChanges(data!)
+        uploadChanges(data!)
         realm.write({
             data?.contactName = self.contactField.text
             data?.category = category!
@@ -131,12 +131,6 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             data?.weekendHours = self.weekendString
             
         })
-        
-        var alertView:UIAlertView = UIAlertView()
-        alertView.title = "Saved"
-        alertView.delegate = self
-        alertView.addButtonWithTitle("OK")
-        alertView.show()
     }
     
     func uploadChanges(data : ProfileModel){
@@ -174,6 +168,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         aIView.startAnimation()
         
         var call = "{\"VenueId\":\"\(restID)\",\"ContactName\":\"\(contactNameUpdate)\",\"StreetName\":\"\(streetUpdate)\",\"City\":\"\(cityUpdate)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcodeUpdate)\",\"PhoneNumber\":\"\(phoneNumUpdate)\",\"PriceTier\":\(priceUpdate),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantNameUpdate)\",\"Lat\":\"\(latUpdate)\",\"Lng\":\"\(lngUpate)\",\"CategoryName\":\"\(categoryUpdate)\",\"Website\":\"\(websiteUpdate)\",\"ImageName\":\"\(imageUpated)\"}"
+        
         var token = prefs.stringForKey("TOKEN")
         
         if Reachability.isConnectedToNetwork(){
