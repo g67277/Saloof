@@ -1729,24 +1729,24 @@
                                                     </mask>
                                                     <mask key="constraints">
                                                         <exclude reference="J2p-JW-gUY"/>
-                                                        <exclude reference="28X-bd-QNK"/>
-                                                        <exclude reference="dyV-f0-HOR"/>
-                                                        <exclude reference="Hli-82-ufU"/>
-                                                        <exclude reference="rm8-Jd-Jtb"/>
                                                         <exclude reference="Nk4-tD-Cnm"/>
                                                         <exclude reference="ccH-nn-GK5"/>
                                                         <exclude reference="GUl-Iv-46i"/>
                                                         <exclude reference="yCt-lX-w5F"/>
-                                                        <exclude reference="IRq-i4-yy2"/>
-                                                        <exclude reference="bfr-zr-e7J"/>
+                                                        <exclude reference="Hli-82-ufU"/>
+                                                        <exclude reference="rm8-Jd-Jtb"/>
+                                                        <exclude reference="Oss-X2-ftm"/>
+                                                        <exclude reference="PVC-Db-uPa"/>
+                                                        <exclude reference="28X-bd-QNK"/>
+                                                        <exclude reference="dyV-f0-HOR"/>
                                                         <exclude reference="HUm-3F-mXy"/>
                                                         <exclude reference="IZn-Yw-hFV"/>
                                                         <exclude reference="56k-id-UyD"/>
                                                         <exclude reference="tdX-jn-4Gf"/>
-                                                        <exclude reference="Oss-X2-ftm"/>
-                                                        <exclude reference="PVC-Db-uPa"/>
                                                         <exclude reference="7Wx-8z-Fay"/>
                                                         <exclude reference="Yd5-OD-3SA"/>
+                                                        <exclude reference="IRq-i4-yy2"/>
+                                                        <exclude reference="bfr-zr-e7J"/>
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=regular-widthClass=compact">
@@ -1763,24 +1763,24 @@
                                                     </mask>
                                                     <mask key="constraints">
                                                         <include reference="J2p-JW-gUY"/>
-                                                        <include reference="28X-bd-QNK"/>
-                                                        <include reference="dyV-f0-HOR"/>
-                                                        <include reference="Hli-82-ufU"/>
-                                                        <include reference="rm8-Jd-Jtb"/>
                                                         <include reference="Nk4-tD-Cnm"/>
                                                         <include reference="ccH-nn-GK5"/>
                                                         <include reference="GUl-Iv-46i"/>
                                                         <include reference="yCt-lX-w5F"/>
-                                                        <include reference="IRq-i4-yy2"/>
-                                                        <include reference="bfr-zr-e7J"/>
+                                                        <include reference="Hli-82-ufU"/>
+                                                        <include reference="rm8-Jd-Jtb"/>
+                                                        <include reference="Oss-X2-ftm"/>
+                                                        <include reference="PVC-Db-uPa"/>
+                                                        <include reference="28X-bd-QNK"/>
+                                                        <include reference="dyV-f0-HOR"/>
                                                         <include reference="HUm-3F-mXy"/>
                                                         <include reference="IZn-Yw-hFV"/>
                                                         <include reference="56k-id-UyD"/>
                                                         <include reference="tdX-jn-4Gf"/>
-                                                        <include reference="Oss-X2-ftm"/>
-                                                        <include reference="PVC-Db-uPa"/>
                                                         <include reference="7Wx-8z-Fay"/>
                                                         <include reference="Yd5-OD-3SA"/>
+                                                        <include reference="IRq-i4-yy2"/>
+                                                        <include reference="bfr-zr-e7J"/>
                                                     </mask>
                                                 </variation>
                                             </view>
@@ -2819,6 +2819,7 @@ launch special!</string>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Deal's Title" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dZh-Iv-ePG">
                                                 <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="yes"/>
@@ -2861,6 +2862,7 @@ launch special!</string>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bG0-pB-iDQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="118" id="tL7-bH-nGt"/>
                                                 </constraints>
@@ -2944,6 +2946,7 @@ launch special!</string>
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Deal's Value" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TAe-K9-cwh">
                                                 <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad"/>

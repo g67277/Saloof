@@ -108,6 +108,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     func textViewDidBeginEditing(textView: UITextView) {
         navigationController?.navigationBarHidden = true
+        descTF.text = ""
     }
     
     func textViewDidChange(textView: UITextView) {
