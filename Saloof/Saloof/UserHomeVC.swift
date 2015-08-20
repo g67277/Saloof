@@ -70,7 +70,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         indicatorView.addSubview(activityIndicator)
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
-        
+        var pickerView = UIPickerView()
+        pickerView.delegate = self
+        priceTextField.inputView = pickerView
         
         // close search when user taps outside search field
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "shouldCloseKeyboard")
@@ -83,14 +85,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         cancelButton = UIBarButtonItem(image: UIImage(named: "closeIcon"), style: .Plain, target: self, action: "shouldCloseSearch")
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         // self.navigationItem.setLeftBarButtonItems([menuButton, self.dealButton], animated: true)
-        
         burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         
         priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
-        searchView.roundCorners(.AllCorners, radius: 14)
-        priceView.roundCorners(.AllCorners, radius: 14)
         
         // set up for the actifity indicator
         activityIndicator.center = self.containerView.center
@@ -104,6 +103,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidLayoutSubviews() {
+        searchView.roundCorners(.AllCorners, radius: 14)
+        priceView.roundCorners(.AllCorners, radius: 14)
     }
     
     
@@ -122,6 +126,17 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         }
     }
     
+    @IBAction func openPricePicker(sender: AnyObject) {
+       priceTextField.tintColor = UIColor.clearColor()
+        println("pressed price")
+        if priceTextField.isFirstResponder() {
+             println("is responder")
+            priceTextField.resignFirstResponder()
+        } else {
+            println("becomming responder")
+            priceTextField.becomeFirstResponder()
+        }
+    }
   
     func getLocationPermissionAndData() {
         self.navigationController?.view.addSubview(containerView)
@@ -191,13 +206,14 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             priceTextField.text = ""
             searchString = ""
         }
+        priceTextField.resignFirstResponder()
         // reload search
         didSelectPricePoint()
     }
     
     func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = pickerDataSource[row]
-        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         return myTitle
     }
     
@@ -208,7 +224,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 pickerLabel = UILabel()
             }
             let titleData = pickerDataSource[row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 18.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 18.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel!.attributedText = myTitle
             pickerLabel.textAlignment = .Center
             return pickerLabel
@@ -266,7 +282,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         searchQuery = false;
         searchPrice = false
         burgerTextField.text = ""
-        burgerTextField.editing
+        burgerTextField.endEditing(true)
+        self.view.endEditing(true)
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
         
     }
@@ -275,16 +292,26 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
         searchPickerView.hidden = true
+        burgerTextField.text = ""
+        burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+        burgerTextField.resignFirstResponder()
+        priceTextField.resignFirstResponder()
     }
     
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == 4 {
-            textField.resignFirstResponder()
-            // display the picker view
-            searchPickerView.hidden = false
+            println("User searching price")
+            burgerTextField.text = ""
+            burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         } else if textField.tag == 3 {
+            println("User searching tag")
+            // user searching query
             textField.placeholder = ""
+            priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         }
     }
     
@@ -543,7 +570,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
         // get the location & possible search
-        let searchTerm = (searchQuery) ? "&query=\(searchString)" : "&query=restaurants"
+        let searchTerm = (searchQuery) ? "&query=restaurants,\(searchString)" : "&query=restaurants"
         let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
         //let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
@@ -593,7 +620,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
         venue.address = address
         venue.hours = json["hours"]["status"].stringValue
-        venue.distance = json["location"]["distance"].floatValue
+        var distanceInMeters = json["location"]["distance"].floatValue
+        var distanceInMiles = distanceInMeters / 1609.344
+        // make sure it is greater than 0
+        distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
+        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        venue.distance = formattedDistance
         venue.priceTier = json["price"]["tier"].intValue
         venue.sourceType = source
         venue.swipeValue = 0
@@ -623,22 +655,20 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         // Check to make sure we have a saved deal
         var savedDeal = realm.objects(SavedDeal).first
         if (savedDeal != nil) {
-            let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
-            let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
-            dealsVC.loadSingleDeal = true
-            dealsVC.setUpForSaved = true
-            dealsVC.savedDeal = savedDeal!
-            dealsVC.navigationItem.title = nil
-            navigationController?.pushViewController(dealsVC, animated: true)
+            let valid = checkDealIsValid(savedDeal!)
+            if valid {
+                let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
+                let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
+                dealsVC.loadSingleDeal = true
+                dealsVC.setUpForSaved = true
+                dealsVC.savedDeal = savedDeal!
+                dealsVC.navigationItem.title = nil
+                navigationController?.pushViewController(dealsVC, animated: true)
+            } else {
+                alertUser("No Deal", message: "Either your deal expired, or you haven't saved one.")
+            }
         } else {
-            // Alert them there isn't a current valid saved deal
-            let alertController = UIAlertController(title: "No Deals", message: "Either your deal expired, or you haven't saved one.", preferredStyle: .Alert)
-            // Add button action to swap
-            let cancelMove = UIAlertAction(title: "Ok", style: .Default, handler: {
-                (action) -> Void in
-            })
-            alertController.addAction(cancelMove)
-            presentViewController(alertController, animated: true, completion: nil)
+            alertUser("No Deal", message: "Either your deal expired, or you haven't saved one.")
         }
     }
     
@@ -662,4 +692,25 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         alertView.addButtonWithTitle("OK")
         alertView.show()
     }
+    
+    func checkDealIsValid (savedDeal: SavedDeal) -> Bool {
+        // we need to check the date
+        var realm = Realm()
+        let expiresTime = savedDeal.expirationDate
+        // see how much time has lapsed
+        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        if compareDates == NSComparisonResult.OrderedAscending {
+            // the deal has not expired yet
+            println("This deal is still good")
+            return true
+        } else {
+            //the deal has expired
+            println("This deal has expired, deleting it")
+            realm.write {
+                realm.delete(savedDeal)
+            }
+            return false
+        }
+    }
+
 }

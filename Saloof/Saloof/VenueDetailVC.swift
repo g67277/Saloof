@@ -71,6 +71,16 @@ class VenueDetailVC: UIViewController {
         setUpLikeNFavoriteButtons()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        dealImage.layer.masksToBounds = false
+        dealImage.layer.borderColor = UIColor.blackColor().CGColor
+        dealImage.layer.cornerRadius = dealImage.frame.height/2
+        dealImage.clipsToBounds = true
+        
+    }
+    
     func returnHome() {
         println("User wants to return home")
         self.performSegueWithIdentifier("returnToUserHome", sender: self)
@@ -141,10 +151,10 @@ class VenueDetailVC: UIViewController {
         
         if var distanceLabel = locationDistanceLabel {
             // get the number of miles between the current user and the location,
-            var userDistance = venue.distance
-            var miles = userDistance/5280
-            let distance = Int(floor(miles))
-            distanceLabel.text = (distance == 1) ? "\(distance) mile" : "\(distance) miles"
+            var distance = venue.distance
+            //var miles = userDistance/5280
+            //let distance = Int(floor(miles))
+            distanceLabel.text  = distance
         }
         
         // Default Deal
@@ -226,10 +236,11 @@ class VenueDetailVC: UIViewController {
         
         if var distanceLabel = locationDistanceLabel {
             // get the number of miles between the current user and the location,
-            var userDistance = venue.distance
-            var miles = userDistance/5280
-            let distance = Int(floor(miles))
-            distanceLabel.text = (distance == 1) ? "\(distance) mile" : "\(distance) miles"
+            var distance = venue.distance
+            //var miles = userDistance/5280
+            //let distance = Int(floor(miles))
+            distanceLabel.text = distance
+            //distanceLabel.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         
         // Default Deal
@@ -580,22 +591,41 @@ class VenueDetailVC: UIViewController {
         let realm = Realm()
         var savedDeal = realm.objects(SavedDeal).first
         if (savedDeal != nil) {
-            let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
-            let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
-            dealsVC.loadSingleDeal = true
-            dealsVC.setUpForSaved = true
-            dealsVC.savedDeal = savedDeal!
-            navigationController?.pushViewController(dealsVC, animated: true)
+            if (savedDeal != nil) {
+                let valid = checkDealIsValid(savedDeal!)
+                if valid {
+                    let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
+                    let dealsVC: VenueDealsVC = storyboard.instantiateViewControllerWithIdentifier("userDealsVC") as! VenueDealsVC
+                    dealsVC.loadSingleDeal = true
+                    dealsVC.setUpForSaved = true
+                    dealsVC.savedDeal = savedDeal!
+                    navigationController?.pushViewController(dealsVC, animated: true)
+                }
+            } else {
+                alertUser("No Deal", message: "Either your deal expired, or you haven't saved one.")
+            }
         } else {
-            // Alert them there isn't a current valid saved deal
-            let alertController = UIAlertController(title: "No Deals", message: "Either your deal expired, or you haven't saved one.", preferredStyle: .Alert)
-            // Add button action to swap
-            let cancelMove = UIAlertAction(title: "Ok", style: .Default, handler: {
-                (action) -> Void in
-            })
-            alertController.addAction(cancelMove)
-            presentViewController(alertController, animated: true, completion: nil)
-            
+            alertUser("No Deal", message: "Either your deal expired, or you haven't saved one.")
+        }
+    }
+    
+    func checkDealIsValid (savedDeal: SavedDeal) -> Bool {
+        // we need to check the date
+        var realm = Realm()
+        let expiresTime = savedDeal.expirationDate
+        // see how much time has lapsed
+        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        if compareDates == NSComparisonResult.OrderedAscending {
+            // the deal has not expired yet
+            println("This deal is still good")
+            return true
+        } else {
+            //the deal has expired
+            println("This deal has expired, deleting it")
+            realm.write {
+                realm.delete(savedDeal)
+            }
+            return false
         }
     }
     
@@ -618,5 +648,14 @@ class VenueDetailVC: UIViewController {
         dealsVC.singleDeal = defaultDeal
         navigationController?.pushViewController(dealsVC, animated: true)
         
+    }
+    
+    func alertUser(title: String, message: String) {
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = title
+        alertView.message = message
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
     }
 }

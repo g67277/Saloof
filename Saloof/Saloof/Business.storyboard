@@ -1938,7 +1938,7 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="9i4-Zr-UeV">
-                        <barButtonItem key="rightBarButtonItem" tag="2" image="signOut" id="uBB-KZ-Ysr">
+                        <barButtonItem key="rightBarButtonItem" tag="2" title="Log Out" id="uBB-KZ-Ysr">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="onClick:" destination="FUW-pA-j9r" id="dkX-GC-UxD"/>
@@ -3427,7 +3427,6 @@ launch special!</string>
         <image name="profileShadowSmall" width="126" height="126"/>
         <image name="rasika" width="543" height="417"/>
         <image name="saveIcon" width="52" height="52"/>
-        <image name="signOut" width="24" height="23"/>
         <image name="textFieldBG" width="325" height="58"/>
         <image name="textFieldBgBig" width="325" height="266"/>
         <image name="textIcon" width="21" height="10"/>

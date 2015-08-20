@@ -18,7 +18,7 @@ class Venue: Object {
     dynamic var identifier = ""
     dynamic var name = ""
     dynamic var address = ""
-    dynamic var distance: Float = 0.0
+    dynamic var distance = ""
     dynamic var priceTier: Int = 0
     dynamic var phone = ""
     dynamic var webUrl = ""

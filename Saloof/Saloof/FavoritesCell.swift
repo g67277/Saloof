@@ -49,7 +49,7 @@ class FavoritesCell: UITableViewCell {
         locationImage.image = image
     }
     
-    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: Float) {
+    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {
         
         likesLabel.text = " \(likes)"
         favoritesLabel.text = " \(favorites)"
@@ -69,10 +69,10 @@ class FavoritesCell: UITableViewCell {
             default:
                 priceString = ""
             }
-            var userDistance = distance
-            var miles = userDistance/5280
-            let distance = Int(floor(miles))
-            tierLabel.text = (distance == 1) ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
+            var distance = distance
+            //var miles = userDistance/5280
+            //let distance = Int(floor(miles))
+            tierLabel.text = (distance == "1.0") ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
             
         }
         
