@@ -36,7 +36,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     var validWeb = false
     // Price Tier
     @IBOutlet weak var priceControls: UISegmentedControl!
-    var selectedPrice = 0
+    var selectedPrice = 1
     var validPrice = false
     //Hours
     @IBOutlet weak var weekdayO: UIButton!
@@ -199,13 +199,13 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         
         switch sender.selectedSegmentIndex{
         case 0:
-            selectedPrice = 0
-        case 1:
             selectedPrice = 1
-        case 2:
+        case 1:
             selectedPrice = 2
-        case 3:
+        case 2:
             selectedPrice = 3
+        case 3:
+            selectedPrice = 4
         default:
             break;
         }

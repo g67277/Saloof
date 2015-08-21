@@ -1235,5 +1235,133 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Saloof/RegisterRestaurantVC3.swift"
+            timestampString = "461796574.642372"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "signUp()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Saloof/RegisterRestaurantVC3.swift"
+            timestampString = "461796603.271897"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "signUp()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Saloof.RegisterRestaurantVC3.(signUp (Saloof.RegisterRestaurantVC3) -&gt; () -&gt; ()).(closure #1)"
+                  moduleName = "Saloof"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazirshuqair/Desktop/Prod%20Apps/Saloof/Saloof/Saloof/RegisterRestaurantVC3.swift"
+                  timestampString = "461796801.969236"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Saloof.RegisterRestaurantVC3.(signUp (Saloof.RegisterRestaurantVC3) -&gt; () -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "Saloof"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazirshuqair/Desktop/Prod%20Apps/Saloof/Saloof/Saloof/RegisterRestaurantVC3.swift"
+                  timestampString = "461796801.969449"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "88"
+                  endingLineNumber = "88"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Saloof/RegisterRestaurantVC3.swift"
+            timestampString = "461796605.587742"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "signUp()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Saloof/RegisterRestaurantVC3.swift"
+            timestampString = "461796606.705746"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "signUp()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Saloof.RegisterRestaurantVC3.(signUp (Saloof.RegisterRestaurantVC3) -&gt; () -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "Saloof"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazirshuqair/Desktop/Prod%20Apps/Saloof/Saloof/Saloof/RegisterRestaurantVC3.swift"
+                  timestampString = "461796801.983542"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "72">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Saloof.RegisterRestaurantVC3.(signUp (Saloof.RegisterRestaurantVC3) -&gt; () -&gt; ()).(closure #1).(closure #1).(closure #1)"
+                  moduleName = "Saloof"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nazirshuqair/Desktop/Prod%20Apps/Saloof/Saloof/Saloof/RegisterRestaurantVC3.swift"
+                  timestampString = "461796801.983784"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "90"
+                  endingLineNumber = "90"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

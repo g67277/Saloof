@@ -27,7 +27,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     var categoryArray = []
     // Price Tier
     @IBOutlet weak var priceControls: UISegmentedControl!
-    var selectedPrice = 0
+    var selectedPrice = 1
     var validPrice = false
     //Hours
     @IBOutlet weak var weekdayO: UIButton!
