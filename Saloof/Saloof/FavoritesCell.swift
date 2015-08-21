@@ -42,14 +42,15 @@ class FavoritesCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setUpCell(name: String, phone: String, image: UIImage){
+    func setUpCell(name: String, phone: String, imageUrl: String){
         
         locationTitle.text = name
         locationPhone.text = phone
-        locationImage.image = image
+        locationImage.imageFromUrl(imageUrl)
+        //locationImage.image = image
     }
     
-    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: Float) {
+    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {
         
         likesLabel.text = " \(likes)"
         favoritesLabel.text = " \(favorites)"
@@ -69,10 +70,10 @@ class FavoritesCell: UITableViewCell {
             default:
                 priceString = ""
             }
-            var userDistance = distance
-            var miles = userDistance/5280
-            let distance = Int(floor(miles))
-            tierLabel.text = (distance == 1) ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
+            var distance = distance
+            //var miles = userDistance/5280
+            //let distance = Int(floor(miles))
+            tierLabel.text = (distance == "1.0") ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
             
         }
         

@@ -26,6 +26,7 @@ class SavedDeal: Object {
     dynamic var imageData: NSData = NSData()
     dynamic var restId = ""
     dynamic var venuePriceTier: Int = 0
+    dynamic var venueImageUrl = ""
     dynamic var venueName = ""
     
     var image: UIImage? {

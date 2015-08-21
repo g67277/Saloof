@@ -568,12 +568,14 @@ public class APICalls {
         }
         let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/nYmm3rydT6pgwlY.jpg
+        venue.imageUrl = formattedImageUrl
+        /*
         let imageUrl = NSURL(string: formattedImageUrl)
         if let data = NSData(contentsOfURL: imageUrl!){
             venue.hasImage = true
             let venueImage = UIImage(data: data)
             venue.image = venueImage
-        }
+        }*/
         let realm = Realm()
         realm.write {
             //realm.add(venue)
@@ -602,13 +604,14 @@ public class APICalls {
                     venueDeal.venuePriceTier = json["priceTier"].intValue
                     let imageUrlString = json["defaultPicUrl"].stringValue
                     let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
+                    /*
                     let imageUrl = NSURL(string: formattedImageUrl)
                     if let data = NSData(contentsOfURL: imageUrl!){
                         venueDeal.hasImage = true
                         let venueImage = UIImage(data: data)
                         venueDeal.image = venueImage
-                    }
-
+                    }*/
+                    venueDeal.venueImageUrl = formattedImageUrl
                     // check for current object
                     let realm = Realm()
                     // Query using a predicate string

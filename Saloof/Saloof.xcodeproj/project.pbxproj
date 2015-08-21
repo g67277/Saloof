@@ -75,6 +75,8 @@
 		99BCBA2F1B771DA3004890E2 /* DealsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA2E1B771DA3004890E2 /* DealsCell.swift */; };
 		99BCBA311B771DCC004890E2 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA301B771DCC004890E2 /* ProfileVC.swift */; };
 		99F961BA1B7996EF00D01F4D /* LikedVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F961B91B7996EF00D01F4D /* LikedVenue.swift */; };
+		99FA89971B86B3A90068B676 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FA89961B86B3A90068B676 /* CardView.swift */; };
+		99FA89991B86B4040068B676 /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99FA89981B86B4040068B676 /* CardView.xib */; };
 		F4CA0662F73964C28F1E54B2 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC0F7C383A865C408CA68AA9 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -166,6 +168,8 @@
 		99BCBA2E1B771DA3004890E2 /* DealsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealsCell.swift; sourceTree = "<group>"; };
 		99BCBA301B771DCC004890E2 /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		99F961B91B7996EF00D01F4D /* LikedVenue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikedVenue.swift; sourceTree = "<group>"; };
+		99FA89961B86B3A90068B676 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		99FA89981B86B4040068B676 /* CardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		EC0F7C383A865C408CA68AA9 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -383,6 +387,8 @@
 				998DB9651B771495005B7E2E /* FavoriteHeaderCell.swift */,
 				998DB9671B7714BC005B7E2E /* DealCardCell.swift */,
 				9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */,
+				99FA89961B86B3A90068B676 /* CardView.swift */,
+				99FA89981B86B4040068B676 /* CardView.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -543,6 +549,7 @@
 			files = (
 				998DB92F1B770CA8005B7E2E /* Montserrat-ExtraBold.otf in Resources */,
 				81F8C0511B67BA7D001B9203 /* Main.storyboard in Resources */,
+				99FA89991B86B4040068B676 /* CardView.xib in Resources */,
 				998DB95A1B771349005B7E2E /* CardContentView.xib in Resources */,
 				998DB95B1B771349005B7E2E /* CardOverlayView.xib in Resources */,
 				998DB9171B7709BD005B7E2E /* User.storyboard in Resources */,
@@ -635,6 +642,7 @@
 				998DB96B1B7714FA005B7E2E /* VenueDeal.swift in Sources */,
 				998DB96D1B77150F005B7E2E /* Venue.swift in Sources */,
 				998DB9621B77143E005B7E2E /* FavoritesCell.swift in Sources */,
+				99FA89971B86B3A90068B676 /* CardView.swift in Sources */,
 				8183BB2A1B799E13002EC6C8 /* JSONParser.swift in Sources */,
 				998DB94A1B770E2F005B7E2E /* RegisterUserVC.swift in Sources */,
 				998DB9531B770F00005B7E2E /* AuthenticationCalls.swift in Sources */,

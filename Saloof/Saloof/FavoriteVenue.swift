@@ -13,7 +13,7 @@ class FavoriteVenue: Object {
     dynamic var identifier = ""
     dynamic var name = ""
     dynamic var address = ""
-    dynamic var distance: Float = 0.0
+    dynamic var distance = ""
     dynamic var priceTier: Int = 0
     dynamic var phone = ""
     dynamic var webUrl = ""
@@ -23,6 +23,7 @@ class FavoriteVenue: Object {
     dynamic var swipeValue: Int = 0  // 0: not swiped, 1: favorite, 2: rejected  3: Deal only
     dynamic var sourceType = ""
     dynamic var defaultDealTitle = ""
+    dynamic var imageUrl = ""
     dynamic var defaultDealID = ""
     dynamic var defaultDealDesc = ""
     dynamic var defaultDealValue: Float = 0.0

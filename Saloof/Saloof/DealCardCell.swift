@@ -31,12 +31,14 @@ class DealCardCell: UICollectionViewCell {
     
     func setUpVenueDeal(deal: VenueDeal) {
         locationTitle.text = " from \(deal.venueName)"
+        /*
         if deal.hasImage {
             locationImage.image = deal.image
         } else {
             // set up default image
             locationImage.image = UIImage(named: "redHen")
-        }
+        }*/
+        locationImage.imageFromUrl(deal.venueImageUrl)
         //locationImage.image = deal.venue.image
         dealTitle.text = deal.name
         dealDesc.text = deal.desc

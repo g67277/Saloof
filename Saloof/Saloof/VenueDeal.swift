@@ -29,6 +29,7 @@ class VenueDeal: Object {
     dynamic var imageData: NSData = NSData()
     dynamic var restId = ""
     dynamic var venueName = ""
+    dynamic var venueImageUrl = ""
     dynamic var venuePriceTier: Int = 0
     
     var image: UIImage? {

@@ -18,11 +18,12 @@ class Venue: Object {
     dynamic var identifier = ""
     dynamic var name = ""
     dynamic var address = ""
-    dynamic var distance: Float = 0.0
+    dynamic var distance = ""
     dynamic var priceTier: Int = 0
     dynamic var phone = ""
     dynamic var webUrl = ""
     dynamic var hours = ""
+    dynamic var imageUrl = ""
     dynamic var hasImage: Bool = false
     dynamic var imageData: NSData = NSData()
     dynamic var swipeValue: Int = 0     // 0: not swiped, 1: favorite, 2: rejected  3: Deal only
