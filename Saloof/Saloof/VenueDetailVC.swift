@@ -11,6 +11,12 @@ import RealmSwift
 
 class VenueDetailVC: UIViewController {
     
+    @IBOutlet var halfStatsView: UIView!
+    
+    @IBOutlet var fsDistanceLabel: UILabel!
+    @IBOutlet var fsPriceLabel: UILabel!
+    
+    @IBOutlet var fullStatsView: UIView!
     @IBOutlet weak var locationImage: UIImageView!
     @IBOutlet weak var priceTierlabel: UILabel!
     @IBOutlet weak var locationDistanceLabel: UILabel!
@@ -30,6 +36,8 @@ class VenueDetailVC: UIViewController {
     @IBOutlet var favoritesLabel: UILabel!
     @IBOutlet var likesLabel: UILabel!
     
+    @IBOutlet var clearLikeButton: UIButton!
+    @IBOutlet var clearFavoriteButton: UIButton!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var favoriteButton: UIButton!
     @IBOutlet var dealImage: UIImageView!
@@ -68,7 +76,6 @@ class VenueDetailVC: UIViewController {
                 setUpVenue(venue)
             }
         }
-        setUpLikeNFavoriteButtons()
     }
     
     override func viewDidLayoutSubviews() {
@@ -107,74 +114,13 @@ class VenueDetailVC: UIViewController {
         }
         
         if var imageView = locationImage {
-            imageView.imageFromUrl(venue.imageUrl)
-            //imageView.image = venue.image
-            imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            imageView.clipsToBounds = true
-        }
-        if var dealImageView = dealImage {
-            //dealImageView.image = venue.image
-            dealImageView.imageFromUrl(venue.imageUrl)
-            dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
-            dealImageView.clipsToBounds = true
-        }
-
-        /*
-        // Images
-        if venue.hasImage {
-            if var imageView = locationImage {
-                imageView.imageFromUrl(venue.imageUrl)
-                //imageView.image = venue.image
-                imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                imageView.clipsToBounds = true
-            }
-            if var dealImageView = dealImage {
-                //dealImageView.image = venue.image
-                dealImageView.imageFromUrl(venue.imageUrl)
-                dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
-                dealImageView.clipsToBounds = true
-            }
-        } else {
-            if var imageView = locationImage {
-                imageView.image = UIImage(named: "redHen")
-                imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                imageView.clipsToBounds = true
-            }
-            if var dealImageView = dealImage {
-                dealImageView.image = UIImage(named: "redHen")
-                dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
-                dealImageView.clipsToBounds = true
-            }
-            
-        }*/
-        
-        // Number Labels
-        if var tierLabel = priceTierlabel {
-            var priceTierValue = venue.priceTier
-            switch priceTierValue {
-            case 0:
-                tierLabel.text = ""
-            case 1:
-                tierLabel.text = "$"
-            case 2:
-                tierLabel.text = "$$"
-            case 3:
-                tierLabel.text = "$$$"
-            default:
-                tierLabel.text = ""
-            }
+            imageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
         }
         
-        if var distanceLabel = locationDistanceLabel {
-            // get the number of miles between the current user and the location,
-            var distance = venue.distance
-            //var miles = userDistance/5280
-            //let distance = Int(floor(miles))
-            distanceLabel.text  = distance
-        }
         
         // Default Deal
         if venue.sourceType == "Saloof" {
+            setUpLikeNFavoriteButtons()
             // Set up the value
             let valueFloat:Float = venue.defaultDealValue, valueFormat = ".2"
             dealValueLabel.text = "Value: $\(valueFloat.format(valueFormat))"
@@ -190,10 +136,73 @@ class VenueDetailVC: UIViewController {
             if var likeLabel = likesLabel {
                 likeLabel.text = "\(venue.likes)"
             }
-            // set up the deal
+            
+            halfStatsView.hidden = true
+            fullStatsView.hidden = false
+            
+            // Number Labels
+            if var tierLabel = priceTierlabel {
+                var priceTierValue = venue.priceTier
+                switch priceTierValue {
+                case 0:
+                    tierLabel.text = ""
+                case 1:
+                    tierLabel.text = "$"
+                case 2:
+                    tierLabel.text = "$$"
+                case 3:
+                    tierLabel.text = "$$$"
+                default:
+                    tierLabel.text = ""
+                }
+            }
+            
+            if var distanceLabel = locationDistanceLabel {
+                // get the number of miles between the current user and the location,
+                var distance = venue.distance
+                distanceLabel.text  = distance
+            }
+            
+            if var dealImageView = dealImage {
+                dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
+            }
+            
+            clearFavoriteButton.enabled = true
+            clearLikeButton.enabled = true
+            favoriteButton.hidden = false
+            likeButton.hidden = false
+
         } else {
             // hide the deal and favorites views
             dealView.hidden = true
+            halfStatsView.hidden = false
+            fullStatsView.hidden = true
+            clearFavoriteButton.enabled = false
+            clearLikeButton.enabled = false
+            favoriteButton.hidden = true
+            likeButton.hidden = true
+            // Number Labels
+            if var tierLabel = fsPriceLabel {
+                var priceTierValue = venue.priceTier
+                switch priceTierValue {
+                case 0:
+                    tierLabel.text = ""
+                case 1:
+                    tierLabel.text = "$"
+                case 2:
+                    tierLabel.text = "$$"
+                case 3:
+                    tierLabel.text = "$$$"
+                default:
+                    tierLabel.text = ""
+                }
+            }
+            
+            if var distanceLabel = fsDistanceLabel {
+                // get the number of miles between the current user and the location,
+                var distance = venue.distance
+                distanceLabel.text  = distance
+            }
         }
         
     }
@@ -219,39 +228,6 @@ class VenueDetailVC: UIViewController {
         
         if var imageView = locationImage {
             imageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
-           // imageView.contentMode = UIViewContentMode.ScaleAspectFill
-           // imageView.clipsToBounds = true
-        }
-        if var dealImageView = dealImage {
-            dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
-           // dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
-           // dealImageView.clipsToBounds = true
-        }
-        
-        // Number Labels
-        if var tierLabel = priceTierlabel {
-            var priceTierValue = venue.priceTier
-            switch priceTierValue {
-            case 0:
-                tierLabel.text = ""
-            case 1:
-                tierLabel.text = "$"
-            case 2:
-                tierLabel.text = "$$"
-            case 3:
-                tierLabel.text = "$$$"
-            default:
-                tierLabel.text = ""
-            }
-        }
-        
-        if var distanceLabel = locationDistanceLabel {
-            // get the number of miles between the current user and the location,
-            var distance = venue.distance
-            //var miles = userDistance/5280
-            //let distance = Int(floor(miles))
-            distanceLabel.text = distance
-            //distanceLabel.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         
         // Default Deal
@@ -271,13 +247,66 @@ class VenueDetailVC: UIViewController {
             if var likeLabel = likesLabel {
                 likeLabel.text = "\(venue.likes)"
             }
-            // set up the deal
+            
+            halfStatsView.hidden = true
+            fullStatsView.hidden = false
+            
+            // Number Labels
+            if var tierLabel = priceTierlabel {
+                var priceTierValue = venue.priceTier
+                switch priceTierValue {
+                case 0:
+                    tierLabel.text = ""
+                case 1:
+                    tierLabel.text = "$"
+                case 2:
+                    tierLabel.text = "$$"
+                case 3:
+                    tierLabel.text = "$$$"
+                default:
+                    tierLabel.text = ""
+                }
+            }
+            
+            if var distanceLabel = locationDistanceLabel {
+                // get the number of miles between the current user and the location,
+                var distance = venue.distance
+                distanceLabel.text  = distance
+            }
+            
+            if var dealImageView = dealImage {
+                dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
+            }
+            setUpLikeNFavoriteButtons()
+            
         } else {
             // hide the deal and favorites views
             dealView.hidden = true
-            // favoriteLikesView.hidden = true
+            halfStatsView.hidden = false
+            fullStatsView.hidden = true
+            // Number Labels
+            if var tierLabel = fsPriceLabel {
+                var priceTierValue = venue.priceTier
+                switch priceTierValue {
+                case 0:
+                    tierLabel.text = ""
+                case 1:
+                    tierLabel.text = "$"
+                case 2:
+                    tierLabel.text = "$$"
+                case 3:
+                    tierLabel.text = "$$$"
+                default:
+                    tierLabel.text = ""
+                }
+            }
+            
+            if var distanceLabel = fsDistanceLabel {
+                // get the number of miles between the current user and the location,
+                var distance = venue.distance
+                distanceLabel.text  = distance
+            }
         }
-        
         
     }
     
@@ -380,7 +409,9 @@ class VenueDetailVC: UIViewController {
                 var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                 if favVenue != nil {
                     realm.write {
-                        self.realm.delete(favVenue!)
+                        //self.realm.delete(favVenue!)
+                        favVenue?.swipeValue = 2
+                        self.realm.create(FavoriteVenue.self, value: favVenue!, update: true)
                     }
                 }
                 
@@ -410,6 +441,7 @@ class VenueDetailVC: UIViewController {
                         favorite.phone = favVenue!.phone
                         favorite.webUrl = favVenue!.webUrl
                         favorite.image = favVenue!.image
+                        favorite.imageUrl = favVenue!.imageUrl
                         favorite.distance = favVenue!.distance
                         favorite.identifier = favVenue!.identifier
                         favorite.address = favVenue!.address
@@ -433,7 +465,7 @@ class VenueDetailVC: UIViewController {
                         
                     } else {
                         println("Saving new venue from tinder ui as favorite")
-                        var favorite = Venue()
+                        var favorite = FavoriteVenue()
                         // create from the current favorite object
                         favorite.name = thisVenue!.name
                         favorite.phone = thisVenue!.phone
@@ -442,6 +474,7 @@ class VenueDetailVC: UIViewController {
                         favorite.distance = thisVenue!.distance
                         favorite.identifier = thisVenue!.identifier
                         favorite.address = thisVenue!.address
+                        favorite.imageUrl = thisVenue!.imageUrl
                         favorite.priceTier = thisVenue!.priceTier
                         favorite.hours = thisVenue!.hours
                         favorite.swipeValue = 1

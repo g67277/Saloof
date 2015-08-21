@@ -44,9 +44,9 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     @IBOutlet var searchView: UIView!
     @IBOutlet var priceView: UIView!
     @IBOutlet var priceTextField: UITextField!
-    @IBOutlet var searchPickerView: UIView!
-    @IBOutlet var pickerSpinnerView: UIView!
-    @IBOutlet var searchPicker: UIPickerView!
+    //@IBOutlet var searchPickerView: UIView!
+    //@IBOutlet var pickerSpinnerView: UIView!
+    //@IBOutlet var searchPicker: UIPickerView!
     
     // Search Properties
     var searchPrice : Bool = false
@@ -118,14 +118,22 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             
             priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
-            searchView.roundCorners(.AllCorners, radius: 14)
-            priceView.roundCorners(.AllCorners, radius: 14)
             getCurrentSavedDealId()
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        searchView.roundCorners(.AllCorners, radius: 14)
+        priceView.roundCorners(.AllCorners, radius: 14)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var pickerView = UIPickerView()
+        pickerView.delegate = self
+        priceTextField.inputView = pickerView
+        
         let image = UIImage(named: "navBarLogo")
         var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
@@ -210,6 +218,20 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     
     // -------------------------  BUTTON ACTIONS  ------------------------
+    
+    // this method handles the price picker view to make sure the curser is not displayed
+    @IBAction func openPricePicker(sender: AnyObject) {
+        priceTextField.tintColor = UIColor.clearColor()
+        println("pressed price")
+        if priceTextField.isFirstResponder() {
+            println("is responder")
+            priceTextField.resignFirstResponder()
+        } else {
+            println("becomming responder")
+            priceTextField.becomeFirstResponder()
+        }
+    }
+
     
     @IBAction func userPressedSaveSwapButton(sender: UIButton) {
         
@@ -704,6 +726,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     //  ------------------  SEARCH TAGS AND PRICE PICKER METHODS ----------------------------
     
 
+    // -------------------- PRICE POINT UIPICKERVIEW ----------------------------------
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -723,7 +746,6 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         case 0:
             priceTextField.text = "";
             searchString = ""
-            searchPrice = false
         case 1:
             priceTextField.text = "$";
             searchString = "1"
@@ -739,15 +761,15 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         default:
             priceTextField.text = ""
             searchString = ""
-            searchPrice = false
         }
+        priceTextField.resignFirstResponder()
         // reload search
         didSelectPricePoint()
     }
     
     func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = pickerDataSource[row]
-        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         return myTitle
     }
     
@@ -758,7 +780,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 pickerLabel = UILabel()
             }
             let titleData = pickerDataSource[row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 18.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 18.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel!.attributedText = myTitle
             pickerLabel.textAlignment = .Center
             return pickerLabel
@@ -769,29 +791,18 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 30
     }
-    
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return pickerSpinnerView.bounds.width
-    }
+        
     
     func didSelectPricePoint() {
-        UIView.transitionWithView(searchPickerView, duration: 0.2, options:
+        UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
             .CurveEaseOut | .TransitionCrossDissolve, animations: {
                 //...animations
             }, completion: {_ in
-                self.searchPickerView.hidden = true
-                UIView.transitionWithView(self.searchDisplayOverview, duration: 0.2, options:
-                    .CurveEaseOut | .TransitionCrossDissolve, animations: {
-                        //...animations
-                    }, completion: { result in
-                        if result {
-                            println("Animation complete, resetting view")
-                            self.resetView(true)
-                        }
-                        
-                })
+                self.resetView(true)
+                
         })
     }
+    
     
     func resetView(shouldSearch: Bool) {
         println("resetting view")
@@ -817,9 +828,23 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         searchPrice = false
         burgerTextField.text = ""
         burgerTextField.editing
+         self.view.endEditing(true)
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
         
     }
+    
+    
+    
+    func shouldCloseKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+        burgerTextField.text = ""
+        burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+        burgerTextField.resignFirstResponder()
+        priceTextField.resignFirstResponder()
+    }
+    
     
     func updateCurrentLocation (completion: Bool -> ()) {
         manager = OneShotLocationManager()
@@ -954,13 +979,19 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == 4 {
-            textField.resignFirstResponder()
-            // display the picker view
-            searchPickerView.hidden = false
+            println("User searching price")
+            burgerTextField.text = ""
+            burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         } else if textField.tag == 3 {
+            println("User searching tag")
+            // user searching query
             textField.placeholder = ""
+            priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         }
     }
+    
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         println("Textfield returned")
@@ -975,7 +1006,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
-                textField.placeholder = "Burger"
+                textField.attributedPlaceholder = NSAttributedString(string:"Burger",
+                    attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
                 pullNewSearchResults(false)
             }
         }
