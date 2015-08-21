@@ -28,8 +28,6 @@ class CardOverlayView: OverlayView {
     
     override var overlayState:OverlayMode  {
         didSet {
-            //overlayImageView.contentMode = UIViewContentMode.ScaleAspectFill
-            //overlayImageView.clipsToBounds = true
             switch overlayState {
             case .Left :
                 overlayImageView.image = UIImage(named: overlayLeftImageName)
@@ -40,6 +38,13 @@ class CardOverlayView: OverlayView {
             }
             
         }
+    }
+    
+    // Relay out subviews for auto constraints
+    override func layoutSublayersOfLayer(layer: CALayer!) {
+        super.layoutSublayersOfLayer(layer)
+        overlayImageView.frame = self.bounds
+        overlayImageView.roundCorners( .AllCorners, radius: 14)
     }
     
 }

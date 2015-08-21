@@ -12,20 +12,6 @@ import Koloda
 import CoreLocation
 import SwiftyJSON
 
-class KolodaPhoto {
-    var photoUrlString = ""
-    var title = ""
-    
-    init () {
-    }
-    
-    convenience init(_ dictionary: Dictionary<String, AnyObject>) {
-        self.init()
-        
-        title = (dictionary["title"] as? String)!
-        photoUrlString = (dictionary["url"] as? String)!
-    }
-}
 
 class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -391,36 +377,16 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func kolodaViewForCardAtIndex(koloda: KolodaView, index: UInt) -> UIView {
         
-        /*
-        //Check this for a better fix of the sizing issue...
-        //println("bounds for first 3: \(self.swipeableView.bounds)")
-        
-        var cardView = CardContentView(frame: self.swipeableView.bounds)
-        var contentView = NSBundle.mainBundle().loadNibNamed("CardContentView", owner: self, options: nil).first! as! UIView
-        // stop the imageview from filling out the whole view
-        
-        contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        let restaurant: Venue = venueList[Int(index)]
-        cardView.setUpRestaurant(contentView, dataObject: restaurant)
-        cardView.addSubview(contentView)
-        // Layout constraints to keep card view within the swipeable view bounds as it moves
-        let metrics = ["width":cardView.bounds.width, "height": cardView.bounds.height]
-        let views = ["contentView": contentView, "cardView": cardView]
-        cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView(width)]", options: .AlignAllLeft, metrics: metrics, views: views))
-        cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView(height)]", options: .AlignAllLeft, metrics: metrics, views: views))
-         cardView.roundCorners( .AllCorners, radius: 14)
-        return cardView*/
         
         var cardView = NSBundle.mainBundle().loadNibNamed("CardView",
             owner: self, options: nil)[0] as? CardView
         let restaurant: Venue = venueList[Int(index)]
-        cardView?.venueImageView?.imageFromUrl(restaurant.imageUrl)
+        cardView?.setImageWithURL(restaurant.imageUrl)
         cardView?.venueImageView?.contentMode = UIViewContentMode.ScaleAspectFill
         cardView?.venueImageView?.clipsToBounds = true
         cardView?.venueNameLabel?.text = restaurant.name
         cardView?.venuePhoneLabel?.text = restaurant.phone
-        //cardView!.roundCorners( .AllCorners, radius: 14)
+        cardView?.setBorderShadow()
         return cardView!
 
     }

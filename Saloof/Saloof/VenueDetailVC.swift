@@ -218,33 +218,15 @@ class VenueDetailVC: UIViewController {
         }
         
         if var imageView = locationImage {
-            imageView.imageFromUrl(venue.imageUrl)
-            //imageView.image = venue.image
+            imageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
            // imageView.contentMode = UIViewContentMode.ScaleAspectFill
            // imageView.clipsToBounds = true
         }
         if var dealImageView = dealImage {
-            //dealImageView.image = venue.image
-            dealImageView.imageFromUrl(venue.imageUrl)
+            dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
            // dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
            // dealImageView.clipsToBounds = true
         }
-/*
-        // Images
-        if var imageView = locationImage {
-            if venue.hasImage {
-                imageView.image = venue.image
-            } else {
-                imageView.image = UIImage(named: "redHen")
-            }
-            if var dealImageView = dealImage {
-                if venue.hasImage {
-                    dealImageView.image = venue.image
-                } else {
-                    dealImageView.image = UIImage(named: "redHen")
-                }
-            }
-        }*/
         
         // Number Labels
         if var tierLabel = priceTierlabel {
@@ -297,6 +279,10 @@ class VenueDetailVC: UIViewController {
         }
         
         
+    }
+    
+    func setImageWithURL(imgAddress: String) {
+        locationImage?.setImageCacheWithAddress(imgAddress, placeHolderImage: UIImage (named: "placeholder")!)
     }
     
     override func didReceiveMemoryWarning() {

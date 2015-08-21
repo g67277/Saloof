@@ -157,4 +157,13 @@ extension UIView {
         self.layer.shadowRadius = 1.3
         self.layer.shadowOffset = CGSizeMake(1.0, 1.0)
     }
+    
+    func setBorderShadow() {        
+        // drop shadow
+        self.layer.shadowColor = UIColor.lightGrayColor().CGColor
+        self.layer.shadowOpacity = 0.8
+        self.layer.shadowRadius = 1.3
+        self.layer.shadowOffset = CGSizeMake(1.0, 1.0)
+    }
+
 }

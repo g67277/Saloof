@@ -64,16 +64,9 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         var cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("favoritesCell") as! FavoritesCell
         let venue: FavoriteVenue = favoriteVenues[indexPath.row]
-        /*
-        var image = UIImage()
-        if venue.hasImage {
-            image = venue.image!
-        } else {
-            image = UIImage(named: "redHen")!
-        }*/
         cell.setUpCell(venue.name, phone: venue.phone, imageUrl: venue.imageUrl)
-        //cell.setUpCell(venue.name, phone: venue.phone, image: image)
         cell.setUpLikesBar(venue.likes, favorites: venue.favorites, price: venue.priceTier, distance: venue.distance)
+        cell.setImageWithURL(venue.imageUrl)
         return cell
     }
     

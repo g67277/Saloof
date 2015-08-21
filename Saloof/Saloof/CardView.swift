@@ -26,6 +26,18 @@ class CardView: UIView {
     @IBOutlet var venueImageView: UIImageView?
     @IBOutlet var venueNameLabel: UILabel?
     @IBOutlet var venuePhoneLabel: UILabel?
+    
+    func setImageWithURL(imgAddress: String) {
+        venueImageView?.setImageCacheWithAddress(imgAddress, placeHolderImage: UIImage (named: "placeholder")!)
+    }
+
+    
+    // Relay out subviews for auto constraints
+    override func layoutSublayersOfLayer(layer: CALayer!) {
+        super.layoutSublayersOfLayer(layer)
+        venueImageView!.roundCorners((UIRectCorner.TopLeft|UIRectCorner.TopRight), radius: 14)
+        venuePhoneLabel!.roundCorners((.BottomLeft  | .BottomRight), radius: 14)
+    }
 
 
 }

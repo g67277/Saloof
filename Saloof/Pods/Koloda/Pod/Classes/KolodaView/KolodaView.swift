@@ -17,8 +17,8 @@ public enum SwipeResultDirection {
 
 //Default values
 private let defaultCountOfVisibleCards = 3
-private let backgroundCardsTopMargin: CGFloat = 1.0
-private let backgroundCardsScalePercent: CGFloat = 0.95
+private let backgroundCardsTopMargin: CGFloat = 4.0
+private let backgroundCardsScalePercent: CGFloat = 0.9
 private let backgroundCardsLeftMargin: CGFloat = 4.0
 private let backgroundCardFrameAnimationDuration: NSTimeInterval = 0.2
 

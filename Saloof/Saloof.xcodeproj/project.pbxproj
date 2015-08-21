@@ -16,8 +16,9 @@
 		81F8C0531B67BA7D001B9203 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0521B67BA7D001B9203 /* Images.xcassets */; };
 		81F8C0561B67BA7D001B9203 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0541B67BA7D001B9203 /* LaunchScreen.xib */; };
 		81F8C0621B67BA7D001B9203 /* SaloofTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0611B67BA7D001B9203 /* SaloofTests.swift */; };
+		994B83C61B87A27E003FB5F8 /* DPImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C51B87A27E003FB5F8 /* DPImageCache.swift */; };
+		994B83C81B87AB8A003FB5F8 /* CardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */; };
 		99641A001B8395D500F04F3E /* OneShotLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */; };
-		9965B0371B7A7B33003426A0 /* CustomSwipableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */; };
 		9980FF141B7BE3760091F286 /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980FF131B7BE3760091F286 /* CustomTextView.swift */; };
 		998DB9151B7709B1005B7E2E /* Business.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9141B7709B1005B7E2E /* Business.storyboard */; };
 		998DB9171B7709BD005B7E2E /* User.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9161B7709BD005B7E2E /* User.storyboard */; };
@@ -46,10 +47,7 @@
 		998DB94F1B770E9A005B7E2E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB94E1B770E9A005B7E2E /* Reachability.swift */; };
 		998DB9511B770EB4005B7E2E /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9501B770EB4005B7E2E /* Validation.swift */; };
 		998DB9531B770F00005B7E2E /* AuthenticationCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9521B770F00005B7E2E /* AuthenticationCalls.swift */; };
-		998DB9551B77130D005B7E2E /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9541B77130D005B7E2E /* CardContentView.swift */; };
-		998DB95A1B771349005B7E2E /* CardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9581B771349005B7E2E /* CardContentView.xib */; };
 		998DB95B1B771349005B7E2E /* CardOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9591B771349005B7E2E /* CardOverlayView.xib */; };
-		998DB95D1B771375005B7E2E /* CardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB95C1B771375005B7E2E /* CardOverlayView.swift */; };
 		998DB9621B77143E005B7E2E /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9611B77143E005B7E2E /* FavoritesCell.swift */; };
 		998DB9641B77146D005B7E2E /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9631B77146D005B7E2E /* GradientView.swift */; };
 		998DB9661B771495005B7E2E /* FavoriteHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9651B771495005B7E2E /* FavoriteHeaderCell.swift */; };
@@ -105,8 +103,9 @@
 		81F8C05B1B67BA7D001B9203 /* SaloofTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaloofTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F8C0601B67BA7D001B9203 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81F8C0611B67BA7D001B9203 /* SaloofTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaloofTests.swift; sourceTree = "<group>"; };
+		994B83C51B87A27E003FB5F8 /* DPImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPImageCache.swift; sourceTree = "<group>"; };
+		994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardOverlayView.swift; sourceTree = "<group>"; };
 		996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneShotLocationManager.swift; sourceTree = "<group>"; };
-		9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSwipableView.swift; sourceTree = "<group>"; };
 		9980FF131B7BE3760091F286 /* CustomTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		998443B936F6F44EEF246EA9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		998DB9141B7709B1005B7E2E /* Business.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Business.storyboard; sourceTree = "<group>"; };
@@ -138,10 +137,7 @@
 		998DB94E1B770E9A005B7E2E /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		998DB9501B770EB4005B7E2E /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		998DB9521B770F00005B7E2E /* AuthenticationCalls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCalls.swift; sourceTree = "<group>"; };
-		998DB9541B77130D005B7E2E /* CardContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
-		998DB9581B771349005B7E2E /* CardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardContentView.xib; sourceTree = "<group>"; };
 		998DB9591B771349005B7E2E /* CardOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardOverlayView.xib; sourceTree = "<group>"; };
-		998DB95C1B771375005B7E2E /* CardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardOverlayView.swift; sourceTree = "<group>"; };
 		998DB9601B7713CD005B7E2E /* Saloof-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Saloof-Bridging-Header.h"; sourceTree = "<group>"; };
 		998DB9611B77143E005B7E2E /* FavoritesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
 		998DB9631B77146D005B7E2E /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -357,6 +353,7 @@
 		998DB93A1B770CE9005B7E2E /* Helper Classes */ = {
 			isa = PBXGroup;
 			children = (
+				994B83C51B87A27E003FB5F8 /* DPImageCache.swift */,
 				996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */,
 				998DB9371B770CAE005B7E2E /* Subclasses */,
 				998DB9381B770CBF005B7E2E /* Font */,
@@ -378,15 +375,12 @@
 		998DB9691B7714D7005B7E2E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				998DB9581B771349005B7E2E /* CardContentView.xib */,
+				994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */,
 				998DB9591B771349005B7E2E /* CardOverlayView.xib */,
-				998DB9541B77130D005B7E2E /* CardContentView.swift */,
-				998DB95C1B771375005B7E2E /* CardOverlayView.swift */,
 				998DB9611B77143E005B7E2E /* FavoritesCell.swift */,
 				998DB9631B77146D005B7E2E /* GradientView.swift */,
 				998DB9651B771495005B7E2E /* FavoriteHeaderCell.swift */,
 				998DB9671B7714BC005B7E2E /* DealCardCell.swift */,
-				9965B0361B7A7B33003426A0 /* CustomSwipableView.swift */,
 				99FA89961B86B3A90068B676 /* CardView.swift */,
 				99FA89981B86B4040068B676 /* CardView.xib */,
 			);
@@ -550,7 +544,6 @@
 				998DB92F1B770CA8005B7E2E /* Montserrat-ExtraBold.otf in Resources */,
 				81F8C0511B67BA7D001B9203 /* Main.storyboard in Resources */,
 				99FA89991B86B4040068B676 /* CardView.xib in Resources */,
-				998DB95A1B771349005B7E2E /* CardContentView.xib in Resources */,
 				998DB95B1B771349005B7E2E /* CardOverlayView.xib in Resources */,
 				998DB9171B7709BD005B7E2E /* User.storyboard in Resources */,
 				998DB92E1B770CA8005B7E2E /* Montserrat-Bold.otf in Resources */,
@@ -631,12 +624,11 @@
 				998DB9401B770D8F005B7E2E /* RegisterRestaurantVC.swift in Sources */,
 				998DB9641B77146D005B7E2E /* GradientView.swift in Sources */,
 				998DB9461B770DF5005B7E2E /* ForgotPasswordVC.swift in Sources */,
-				998DB95D1B771375005B7E2E /* CardOverlayView.swift in Sources */,
+				994B83C81B87AB8A003FB5F8 /* CardOverlayView.swift in Sources */,
 				998DB9781B77161A005B7E2E /* VenueDealsVC.swift in Sources */,
 				998DB9351B770CA8005B7E2E /* TTCounterLabel.m in Sources */,
 				998DB93E1B770D62005B7E2E /* SignInVC.swift in Sources */,
 				81F8C0491B67BA7D001B9203 /* AppDelegate.swift in Sources */,
-				998DB9551B77130D005B7E2E /* CardContentView.swift in Sources */,
 				99BCBA2F1B771DA3004890E2 /* DealsCell.swift in Sources */,
 				998DB9661B771495005B7E2E /* FavoriteHeaderCell.swift in Sources */,
 				998DB96B1B7714FA005B7E2E /* VenueDeal.swift in Sources */,
@@ -662,6 +654,7 @@
 				998DB9761B7715E9005B7E2E /* UserFavoritesVC.swift in Sources */,
 				99BCBA2A1B771D3A004890E2 /* DealsVC.swift in Sources */,
 				99641A001B8395D500F04F3E /* OneShotLocationManager.swift in Sources */,
+				994B83C61B87A27E003FB5F8 /* DPImageCache.swift in Sources */,
 				99BCBA171B771BBD004890E2 /* Constants.swift in Sources */,
 				998DB92C1B770CA8005B7E2E /* CustomActivityView.swift in Sources */,
 				99BCBA1A1B771BF4004890E2 /* FoodCategories.swift in Sources */,
@@ -669,7 +662,6 @@
 				99BCBA1F1B771C59004890E2 /* ProfileModel.swift in Sources */,
 				99BCBA1C1B771C32004890E2 /* BusinessDeal.swift in Sources */,
 				998DB9441B770DD2005B7E2E /* RegisterRestaurantVC3.swift in Sources */,
-				9965B0371B7A7B33003426A0 /* CustomSwipableView.swift in Sources */,
 				998DB93C1B770D2D005B7E2E /* InitialScreenVC.swift in Sources */,
 				81F8C04C1B67BA7D001B9203 /* Saloof.xcdatamodeld in Sources */,
 				99BCBA311B771DCC004890E2 /* ProfileVC.swift in Sources */,

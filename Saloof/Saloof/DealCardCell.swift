@@ -31,15 +31,7 @@ class DealCardCell: UICollectionViewCell {
     
     func setUpVenueDeal(deal: VenueDeal) {
         locationTitle.text = " from \(deal.venueName)"
-        /*
-        if deal.hasImage {
-            locationImage.image = deal.image
-        } else {
-            // set up default image
-            locationImage.image = UIImage(named: "redHen")
-        }*/
-        locationImage.imageFromUrl(deal.venueImageUrl)
-        //locationImage.image = deal.venue.image
+        locationImage.setImageCacheWithAddress(deal.venueImageUrl, placeHolderImage: UIImage (named: "placeholder")!)
         dealTitle.text = deal.name
         dealDesc.text = deal.desc
         // Set up the value

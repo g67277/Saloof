@@ -46,8 +46,10 @@ class FavoritesCell: UITableViewCell {
         
         locationTitle.text = name
         locationPhone.text = phone
-        locationImage.imageFromUrl(imageUrl)
-        //locationImage.image = image
+    }
+    
+    func setImageWithURL(imgAddress: String) {
+        locationImage?.setImageCacheWithAddress(imgAddress, placeHolderImage: UIImage (named: "placeholder")!)
     }
     
     func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {
@@ -71,8 +73,6 @@ class FavoritesCell: UITableViewCell {
                 priceString = ""
             }
             var distance = distance
-            //var miles = userDistance/5280
-            //let distance = Int(floor(miles))
             tierLabel.text = (distance == "1.0") ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
             
         }
