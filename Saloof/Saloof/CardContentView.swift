@@ -15,7 +15,7 @@ class CardContentView: UIView {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    
+    //var imageCache = [String:UIImage]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,6 +40,7 @@ class CardContentView: UIView {
     func setUpRestaurant(contentView: UIView, dataObject: Venue){
         
         let venue: Venue = dataObject
+        var imgURLS = NSURL(string: venue.imageUrl)
         if let label = contentView.viewWithTag(10) as? UILabel {
             label.text = venue.name
         }
@@ -47,6 +48,8 @@ class CardContentView: UIView {
             phoneLabel.text = venue.phone
         }
         if let locationImage = contentView.viewWithTag(20) as? UIImageView {
+
+            /*
             if venue.hasImage {
                 locationImage.contentMode = UIViewContentMode.ScaleAspectFill
                 locationImage.clipsToBounds = true
@@ -56,8 +59,9 @@ class CardContentView: UIView {
                 locationImage.contentMode = UIViewContentMode.ScaleAspectFill
                 locationImage.clipsToBounds = true
                 locationImage.image = UIImage(named: "fiola")
-            }
+            }*/
         }
+        // If this image is already cached, don't re-download
     }
     
 }

@@ -23,6 +23,7 @@ class Venue: Object {
     dynamic var phone = ""
     dynamic var webUrl = ""
     dynamic var hours = ""
+    dynamic var imageUrl = ""
     dynamic var hasImage: Bool = false
     dynamic var imageData: NSData = NSData()
     dynamic var swipeValue: Int = 0     // 0: not swiped, 1: favorite, 2: rejected  3: Deal only

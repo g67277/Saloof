@@ -106,15 +106,31 @@ class VenueDetailVC: UIViewController {
             statusLabel.text = (venue.hours == "") ? "Is Open": venue.hours
         }
         
+        if var imageView = locationImage {
+            imageView.imageFromUrl(venue.imageUrl)
+            //imageView.image = venue.image
+            imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            imageView.clipsToBounds = true
+        }
+        if var dealImageView = dealImage {
+            //dealImageView.image = venue.image
+            dealImageView.imageFromUrl(venue.imageUrl)
+            dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
+            dealImageView.clipsToBounds = true
+        }
+
+        /*
         // Images
         if venue.hasImage {
             if var imageView = locationImage {
-                imageView.image = venue.image
+                imageView.imageFromUrl(venue.imageUrl)
+                //imageView.image = venue.image
                 imageView.contentMode = UIViewContentMode.ScaleAspectFill
                 imageView.clipsToBounds = true
             }
             if var dealImageView = dealImage {
-                dealImageView.image = venue.image
+                //dealImageView.image = venue.image
+                dealImageView.imageFromUrl(venue.imageUrl)
                 dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
                 dealImageView.clipsToBounds = true
             }
@@ -130,7 +146,7 @@ class VenueDetailVC: UIViewController {
                 dealImageView.clipsToBounds = true
             }
             
-        }
+        }*/
         
         // Number Labels
         if var tierLabel = priceTierlabel {
@@ -201,6 +217,19 @@ class VenueDetailVC: UIViewController {
             statusLabel.text = (venue.hours == "") ? "Is Open": venue.hours
         }
         
+        if var imageView = locationImage {
+            imageView.imageFromUrl(venue.imageUrl)
+            //imageView.image = venue.image
+           // imageView.contentMode = UIViewContentMode.ScaleAspectFill
+           // imageView.clipsToBounds = true
+        }
+        if var dealImageView = dealImage {
+            //dealImageView.image = venue.image
+            dealImageView.imageFromUrl(venue.imageUrl)
+           // dealImageView.contentMode = UIViewContentMode.ScaleAspectFill
+           // dealImageView.clipsToBounds = true
+        }
+/*
         // Images
         if var imageView = locationImage {
             if venue.hasImage {
@@ -215,7 +244,7 @@ class VenueDetailVC: UIViewController {
                     dealImageView.image = UIImage(named: "redHen")
                 }
             }
-        }
+        }*/
         
         // Number Labels
         if var tierLabel = priceTierlabel {

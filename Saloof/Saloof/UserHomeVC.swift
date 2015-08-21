@@ -12,6 +12,21 @@ import Koloda
 import CoreLocation
 import SwiftyJSON
 
+class KolodaPhoto {
+    var photoUrlString = ""
+    var title = ""
+    
+    init () {
+    }
+    
+    convenience init(_ dictionary: Dictionary<String, AnyObject>) {
+        self.init()
+        
+        title = (dictionary["title"] as? String)!
+        photoUrlString = (dictionary["url"] as? String)!
+    }
+}
+
 class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, UITextFieldDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     typealias JSONParameters = [String: AnyObject]
@@ -27,6 +42,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     var venueLocations : [AnyObject] = []
     var venueItems : [[String: AnyObject]]?
     var manager: OneShotLocationManager?
+    var imageCache = [String:UIImage] ()
 
     
     //View Properties
@@ -374,6 +390,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
     
     func kolodaViewForCardAtIndex(koloda: KolodaView, index: UInt) -> UIView {
+        
+        /*
         //Check this for a better fix of the sizing issue...
         //println("bounds for first 3: \(self.swipeableView.bounds)")
         
@@ -392,7 +410,19 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView(width)]", options: .AlignAllLeft, metrics: metrics, views: views))
         cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView(height)]", options: .AlignAllLeft, metrics: metrics, views: views))
          cardView.roundCorners( .AllCorners, radius: 14)
-        return cardView
+        return cardView*/
+        
+        var cardView = NSBundle.mainBundle().loadNibNamed("CardView",
+            owner: self, options: nil)[0] as? CardView
+        let restaurant: Venue = venueList[Int(index)]
+        cardView?.venueImageView?.imageFromUrl(restaurant.imageUrl)
+        cardView?.venueImageView?.contentMode = UIViewContentMode.ScaleAspectFill
+        cardView?.venueImageView?.clipsToBounds = true
+        cardView?.venueNameLabel?.text = restaurant.name
+        cardView?.venuePhoneLabel?.text = restaurant.phone
+        //cardView!.roundCorners( .AllCorners, radius: 14)
+        return cardView!
+
     }
     
     func kolodaViewForCardOverlayAtIndex(koloda: KolodaView, index: UInt) -> OverlayView? {
@@ -426,6 +456,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             favorite.hours = swipedVenue.hours
             favorite.swipeValue = 1
             favorite.hasImage = swipedVenue.hasImage
+            favorite.imageUrl = swipedVenue.imageUrl
             favorite.sourceType = swipedVenue.sourceType
             // save deal
             if swipedVenue.sourceType == Constants.sourceTypeSaloof {
@@ -613,6 +644,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
         let imageName = imagePrefix + "400x400" +  imageSuffix
         // Address
+        venue.imageUrl = imagePrefix + "400x400" +  imageSuffix
         var locationStreet = json["location"]["address"].stringValue
         var locationCity = json["location"]["city"].stringValue
         var locationState = json["location"]["state"].stringValue

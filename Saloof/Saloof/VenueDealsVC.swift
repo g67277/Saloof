@@ -188,12 +188,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     func setUpDefaultDeal() {
         // set up view for a default deal
         singleLocationTitle.text = " from \(singleDeal.name)"
+        singleLocationImage.imageFromUrl(singleDeal.venueImageUrl)
+        /*
         if singleDeal.hasImage {
             singleLocationImage.image = singleDeal.image
         } else {
             // set up default image
             singleLocationImage.image = UIImage(named: "redHen")
-        }
+        }*/
         singleDealTitle.text = singleDeal.name
         singleDealDesc.text = singleDeal.desc
         // Set up the value
@@ -204,12 +206,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     func setUpSavedDeal () {
         // set up view for a default deal
         singleLocationTitle.text = " from \(savedDeal.name)"
-        if savedDeal.hasImage {
-            singleLocationImage.image = savedDeal.image
+        singleLocationImage.imageFromUrl(singleDeal.venueImageUrl)
+        /*
+        if singleDeal.hasImage {
+        singleLocationImage.image = singleDeal.image
         } else {
-            // set up default image
-            singleLocationImage.image = UIImage(named: "redHen")
-        }
+        // set up default image
+        singleLocationImage.image = UIImage(named: "redHen")
+        }*/
         singleDealTitle.text = savedDeal.name
         singleDealDesc.text = savedDeal.desc
         // Set up the value
@@ -315,6 +319,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             newDeal.restId = deal.restId
             newDeal.venueName = deal.venueName
             newDeal.image = deal.image
+            newDeal.venueImageUrl = deal.venueImageUrl
             newDeal.hasImage = deal.hasImage
             //newDeal.venue = deal.venue
             newDeal.id = deal.id

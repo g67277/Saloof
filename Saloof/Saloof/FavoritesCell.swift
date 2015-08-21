@@ -42,11 +42,12 @@ class FavoritesCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setUpCell(name: String, phone: String, image: UIImage){
+    func setUpCell(name: String, phone: String, imageUrl: String){
         
         locationTitle.text = name
         locationPhone.text = phone
-        locationImage.image = image
+        locationImage.imageFromUrl(imageUrl)
+        //locationImage.image = image
     }
     
     func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {

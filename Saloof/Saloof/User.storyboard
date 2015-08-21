@@ -1028,14 +1028,14 @@
                                                 <exclude reference="vJx-a3-aEd"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="3s9-e0-RmA"/>
+                                                <exclude reference="4ck-CA-cZg"/>
+                                                <exclude reference="sl4-XP-W2n"/>
                                                 <exclude reference="9oY-0g-4kw"/>
                                                 <exclude reference="bxZ-yk-h9N"/>
                                                 <exclude reference="kDd-Tf-ft9"/>
                                                 <exclude reference="l4x-ZJ-RhH"/>
                                                 <exclude reference="roD-10-Ud9"/>
-                                                <exclude reference="3s9-e0-RmA"/>
-                                                <exclude reference="4ck-CA-cZg"/>
-                                                <exclude reference="sl4-XP-W2n"/>
                                                 <exclude reference="0M1-ZC-ihU"/>
                                                 <exclude reference="0kG-7F-GD9"/>
                                                 <exclude reference="2um-jo-ARG"/>
@@ -1052,14 +1052,14 @@
                                                 <include reference="vJx-a3-aEd"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <include reference="3s9-e0-RmA"/>
+                                                <include reference="4ck-CA-cZg"/>
+                                                <include reference="sl4-XP-W2n"/>
                                                 <exclude reference="9oY-0g-4kw"/>
                                                 <include reference="bxZ-yk-h9N"/>
                                                 <include reference="kDd-Tf-ft9"/>
                                                 <include reference="l4x-ZJ-RhH"/>
                                                 <include reference="roD-10-Ud9"/>
-                                                <include reference="3s9-e0-RmA"/>
-                                                <include reference="4ck-CA-cZg"/>
-                                                <include reference="sl4-XP-W2n"/>
                                                 <include reference="0M1-ZC-ihU"/>
                                                 <include reference="0kG-7F-GD9"/>
                                                 <include reference="2um-jo-ARG"/>
@@ -2667,8 +2667,7 @@ DC 20007</string>
                                                                 <exclude reference="cgA-Jm-AMD"/>
                                                             </mask>
                                                         </variation>
-                                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                            <rect key="frame" x="68" y="135" width="320" height="40"/>
+                                                        <variation key="heightClass=regular-widthClass=compact">
                                                             <mask key="constraints">
                                                                 <include reference="cgA-Jm-AMD"/>
                                                             </mask>
