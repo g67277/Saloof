@@ -14,8 +14,9 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     @IBOutlet weak var tableview: UITableView!
     // Query using a predicate string
-    var favoriteVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
+    //var favoriteVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
     
+    let venueList = List<FavoriteVenue>()
     
     /* -----------------------  VIEW CONTROLLER  METHODS --------------------------- */
     
@@ -23,6 +24,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     override func viewWillAppear(animated: Bool) {
         // Remove text and leave back chevron
         self.navigationController?.navigationBar.topItem?.title = ""
+        updateFavoritesList()
         
     }
     
@@ -30,12 +32,28 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         super.viewDidLoad()
         tableview.rowHeight = 105
         let image = UIImage(named: "navBarLogo")
-        //navigationItem.titleView = UIImageView(image: image)
         var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
         homeButton.setImage(image, forState: UIControlState.Normal)
         homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
         navigationItem.titleView = homeButton
+    }
+    
+    func updateFavoritesList() {
+        venueList.removeAll()
+        // delete any rejected favorite venues
+        var realm = Realm()
+        var rejectedVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        realm.write {
+            realm.delete(rejectedVenues)
+        }
+        // get all the active ones
+         var favoriteVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
+        for venue in favoriteVenues {
+            venueList.append(venue)
+        }
+        tableview.reloadData()
+        
     }
     
     func returnHome() {
@@ -56,14 +74,14 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.favoriteVenues.count
+        return self.venueList.count
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("favoritesCell") as! FavoritesCell
-        let venue: FavoriteVenue = favoriteVenues[indexPath.row]
+        let venue: FavoriteVenue = venueList[indexPath.row]
         cell.setUpCell(venue.name, phone: venue.phone, imageUrl: venue.imageUrl)
         cell.setUpLikesBar(venue.likes, favorites: venue.favorites, price: venue.priceTier, distance: venue.distance)
         cell.setImageWithURL(venue.imageUrl)
@@ -85,7 +103,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "restaurantDetailSegue" {
             if let indexPath = self.tableview.indexPathForSelectedRow() {
-                var venue: FavoriteVenue = favoriteVenues[indexPath.row]
+                var venue: FavoriteVenue = venueList[indexPath.row]
                 let destinationVC = segue.destinationViewController as! VenueDetailVC
                 destinationVC.favVenue = venue
                 destinationVC.isFavorite = true

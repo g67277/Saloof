@@ -49,9 +49,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     @IBOutlet var searchView: UIView!
     @IBOutlet var priceView: UIView!
     @IBOutlet var priceTextField: UITextField!
-    @IBOutlet var searchPickerView: UIView!
-    @IBOutlet var pickerSpinnerView: UIView!
-    @IBOutlet var searchPicker: UIPickerView!
+ //   @IBOutlet var searchPickerView: UIView!
+  //  @IBOutlet var pickerSpinnerView: UIView!
+   // @IBOutlet var searchPicker: UIPickerView!
     
     // Search Properties
     var searchPrice : Bool = false
@@ -118,6 +118,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         shouldCloseSearch()
         
     }
+    
+    
     @IBAction func onClick(sender: UIButton) {
         if sender.tag == 3 {
             //LOG OUT USER
@@ -238,23 +240,14 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         return 30
     }
     
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return pickerSpinnerView.bounds.width
-    }
     
     func didSelectPricePoint() {
-        UIView.transitionWithView(searchPickerView, duration: 0.5, options:
+        UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
             .CurveEaseOut | .TransitionCrossDissolve, animations: {
                 //...animations
             }, completion: {_ in
-                self.searchPickerView.hidden = true
-                UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
-                    .CurveEaseOut | .TransitionCrossDissolve, animations: {
-                        //...animations
-                    }, completion: {_ in
-                        self.resetView(true)
-                        
-                })
+                self.resetView(true)
+                
         })
     }
 
@@ -293,7 +286,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     func shouldCloseKeyboard(){
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
-        searchPickerView.hidden = true
         burgerTextField.text = ""
         burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
