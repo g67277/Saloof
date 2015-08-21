@@ -89,6 +89,11 @@ class RegisterUserVC: UIViewController {
                                         }
                                     }
                                 }
+                            }else{
+                                dispatch_async(dispatch_get_main_queue()){
+                                    aIView.stopAnimation()
+                                    containerView.removeFromSuperview()
+                                }
                             }
                         }
                     }else{

@@ -73,6 +73,10 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             IVC.hours = selectedItem.timeLimit
             IVC.dealID = selectedItem.id
             IVC.editingMode = true
+            println(dealsArray.count)
+            if dealsArray.count <= 1{
+                IVC.deleteEnabled = false
+            }
             IVC.img = defaultImg
             
         }else if segue.identifier == "toAdd"{

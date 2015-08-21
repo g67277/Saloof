@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:washington.gpx">
+   </FileRef>
+   <FileRef
       location = "group:Saloof.xcodeproj">
    </FileRef>
    <FileRef

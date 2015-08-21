@@ -35,6 +35,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     var hours = 0
     var dealID = ""
     var editingMode = false
+    var deleteEnabled = true
     var img = UIImage()
     
     var realm = Realm()
@@ -55,7 +56,11 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         
         
         if editingMode{
-            deleteBtn.hidden = false
+            if deleteEnabled{
+                deleteBtn.hidden = false
+            }else{
+                deleteBtn.hidden = true
+            }
         }else{
             deleteBtn.hidden = true
         }

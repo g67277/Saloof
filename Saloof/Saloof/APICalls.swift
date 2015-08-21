@@ -68,15 +68,20 @@ public class APICalls {
                         completion(false)
                     }
                 }else {
-                    var alertView:UIAlertView = UIAlertView()
-                    alertView.title = "Sign in Failed!"
-                    alertView.message = "Connection Failure"
-                    if let error = reponseError {
-                        alertView.message = (error.localizedDescription)
+                    var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                    if prefs.stringForKey("TOKEN") == nil || prefs.stringForKey("TOKEN") == ""{
+                        dispatch_async(dispatch_get_main_queue()){
+                            var alertView:UIAlertView = UIAlertView()
+                            alertView.title = "Sign in Failed!"
+                            alertView.message = "Connection Failure"
+                            if let error = reponseError {
+                                alertView.message = (error.localizedDescription)
+                            }
+                            alertView.delegate = self
+                            alertView.addButtonWithTitle("OK")
+                            alertView.show()
+                        }
                     }
-                    alertView.delegate = self
-                    alertView.addButtonWithTitle("OK")
-                    alertView.show()
                     completion(false)
                 }
                 }else{

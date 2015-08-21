@@ -98,16 +98,17 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                                                 }))
                                                 self.presentViewController(refreshAlert, animated: true, completion: nil)
                                             }
-                                        }else{
-                                            
                                         }
                                     }
                                 }
                                 
                             }
                         }
-                        aIView.stopAnimation()
-                        containerView.removeFromSuperview()
+                        
+                        dispatch_async(dispatch_get_main_queue()){
+                            aIView.stopAnimation()
+                            containerView.removeFromSuperview()
+                        }
                     }
                 }else{
                     aIView.stopAnimation()

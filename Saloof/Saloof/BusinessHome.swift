@@ -30,7 +30,7 @@ class BusinessHome: UIViewController {
     var selectedDeals : [filteredData] = []
     var swappedDeals : [filteredData] = []
     var availableCredits = 0
-    let selectedMonth = 0
+    var selectedMonth = 0
     var defaultTimeZoneStr = 0
     var dealsCount = 0
     
@@ -50,6 +50,7 @@ class BusinessHome: UIViewController {
         formatter.dateFormat = "M";
         defaultTimeZoneStr = formatter.stringFromDate(date).toInt()!
         monthsBtn.setTitle(months[defaultTimeZoneStr - 1], forState: UIControlState.Normal)
+        selectedMonth = defaultTimeZoneStr - 1
         updateImg()
     }
     
@@ -174,9 +175,10 @@ class BusinessHome: UIViewController {
     @IBAction func pickerSelected(sender: AnyObject) {
         
         if sender.tag == 0 {
-            ActionSheetStringPicker.showPickerWithTitle("Month", rows: months as [AnyObject], initialSelection: 1, doneBlock: {
+            ActionSheetStringPicker.showPickerWithTitle("Month", rows: months as [AnyObject], initialSelection: selectedMonth, doneBlock: {
                 picker, value, index in
                 self.monthsBtn.setTitle("\(index)", forState: UIControlState.Normal)
+                self.selectedMonth = value
                 self.filterData(value + 1)
                 println("value = \(value)")
                 println("index = \(index)")
