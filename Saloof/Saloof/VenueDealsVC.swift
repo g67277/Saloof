@@ -671,6 +671,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
                 self.actIndicator.stopAnimation()
                 self.actContainer.removeFromSuperview()
+                self.alertUser("", message: "Sorry, but we are having trouble finding where you are right now. Please check your location settings.")
             }
             // destroy the object immediately to save memory
             self.manager = nil
@@ -995,6 +996,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 println("Unable to get the users location")
                 self.actIndicator.stopAnimation()
                 self.actContainer.removeFromSuperview()
+                self.alertUser("", message: "Sorry, but we are having trouble finding where you are right now. Please check your location settings.")
             }
         }
     }

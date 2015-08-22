@@ -162,10 +162,20 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                  println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
                 self.containerView.removeFromSuperview()
                 self.activityIndicator.stopAnimation()
+                self.showErrorAlert()
             }
             // destroy the object immediately to save memory
             self.manager = nil
         }
+    }
+    
+    func showErrorAlert() {
+        let alertController = UIAlertController(title: nil, message:"Sorry, but we are having trouble finding where you are right now. Please check your location settings.", preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "Ok", style: .Default, handler: {
+            (action) -> Void in
+        })
+        alertController.addAction(okAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     /* --------  SEARCH BAR DISPLAY AND DELEGATE METHODS ---------- */
