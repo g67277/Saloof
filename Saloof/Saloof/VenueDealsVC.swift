@@ -103,6 +103,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         realm.write {
             self.realm.delete(expiredDeals)
         }
+        self.navigationController?.navigationBar.topItem?.title = ""
         
     }
     
@@ -207,7 +208,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     func setUpSavedDeal () {
         // set up view for a default deal
         singleLocationTitle.text = " from \(savedDeal.name)"
-        singleLocationImage.setImageCacheWithAddress(singleDeal.venueImageUrl, placeHolderImage: UIImage (named: "placeholder")!)
+        singleLocationImage.setImageCacheWithAddress(savedDeal.venueImageUrl, placeHolderImage: UIImage (named: "placeholder")!)
         singleDealTitle.text = savedDeal.name
         singleDealDesc.text = savedDeal.desc
         // Set up the value
@@ -231,7 +232,6 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             priceTextField.becomeFirstResponder()
         }
     }
-
     
     @IBAction func userPressedSaveSwapButton(sender: UIButton) {
         
