@@ -494,12 +494,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             println("Top deal reached")
             self.actContainer.removeFromSuperview()
             self.actIndicator.stopAnimation()
-            selectedDeal = dealList[0]
-            setDealTimer(selectedDeal!)
-            if currentSavedDealId != "" {
-                saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+            if dealList.count > 0 {
+                selectedDeal = dealList[0]
+                setDealTimer(selectedDeal!)
+                if currentSavedDealId != "" {
+                    saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+                }
+                searchBarButton.enabled = true
             }
-            searchBarButton.enabled = true
         }
         
     }
