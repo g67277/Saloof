@@ -100,8 +100,8 @@ public class Validation{
     
     func formatHours(weekO: String, weekC: String, weekendO: String, weekendC: String) -> (weekdayHours: String, weekendHours: String){
         
-        var weekdayString = "\(weekO) - \(weekC)"
-        var weekendString = "\(weekendO) - \(weekendC)"
+        var weekdayString = "\(weekO)-\(weekC)"
+        var weekendString = "\(weekendO)-\(weekendC)"
         return (weekdayString, weekendString)
     }
     

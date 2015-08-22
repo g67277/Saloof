@@ -142,9 +142,9 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         var restId = prefs.stringForKey("restID")!
         var token = prefs.stringForKey("TOKEN")!
-        println("about to upload \(5) to id: \(restId)")
-        APICalls.uploadBalance(Double(price / 4), restID: restId.uppercaseString, token: token)
-        aIView.startAnimation()
+        println("about to upload \(price) to id: \(restId)")
+        APICalls.uploadBalance(Double(price / 3), restID: restId.uppercaseString, token: token)
+        aIView.stopAnimation()
         containerView.removeFromSuperview()
     }
     

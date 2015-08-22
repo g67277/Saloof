@@ -226,7 +226,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         var phoneNum = phoneNumField.text
         var website = websiteField.text
         var selectedCategory = catButton.titleLabel?.text as String!
-        var price = priceControls.selectedSegmentIndex
+        var price = priceControls.selectedSegmentIndex + 1
         var wkO = weekdayO.titleLabel?.text
         var wkC = weekdayC.titleLabel?.text
         var wknO = weekendO.titleLabel?.text

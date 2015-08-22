@@ -75,6 +75,8 @@ class BusinessHome: UIViewController {
         selectedDeals.removeAll(keepCapacity: true)
         swappedDeals.removeAll(keepCapacity: true)
         var returnedData = json.array!
+        println(prefs.stringForKey("restID")!)
+        println(json)
         for deal in returnedData{
             var selectedDeal = filteredData(deal["TotalDealsPurchased"].int!, deal["Month"].int!)
             var swappedDeal = filteredData(deal["TotalDealsSwapped"].int!, deal["Month"].int!)
@@ -128,6 +130,7 @@ class BusinessHome: UIViewController {
                 dispatch_async(dispatch_get_main_queue()){
                     self.dealsCount = self.prefs.integerForKey("DealCount")
                     self.numberOfDeals.text = "\(self.dealsCount)"
+                    println(self.availableCredits)
                     if self.availableCredits > 0 {
                         self.creditBalanceLabel.text = "\(self.availableCredits)C"
                     }else{
