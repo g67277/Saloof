@@ -62,22 +62,17 @@ class BusinessHome: UIViewController {
         
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         var imgID = data?.imgUri
+        println(imgID)
         var url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
+        println(url)
         if data != nil{
             dealsCount = data!.dealsCount
         }else{
             dealsCount = 0
         }
-        if imgID != nil{
-            let imageUrl = NSURL(string: url)
-            if let data = NSData(contentsOfURL: imageUrl!){
-                
-                let venueImage = UIImage(data: data)
-                profileImgView.image = venueImage
-            }
-        }else{
-            //display default image here
-        }
+        DPImageCache.cleanCace()
+        profileImgView?.setImageCacheWithAddress(url, placeHolderImage: UIImage (named: "placeholder")!)
+
     }
     
     func parseSummery(json: JSON){

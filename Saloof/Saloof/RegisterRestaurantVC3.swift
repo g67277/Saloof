@@ -29,6 +29,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     let authentication = AuthenticationCalls()
     let validation = Validation()
     let apiCall = APICalls()
+    var compressedImgData = NSData()
     
     var callPart1 = ""
     var continueSession = false
@@ -86,7 +87,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                         if result{
                             APICalls.getMyRestaurant(token!){ result in
                                 if result{
-                                    self.apiCall.uploadImg(self.imgView.image!, imgName: self.imageName){ result in
+                                    self.apiCall.uploadImg(self.compressedImgData, imgName: self.imageName){ result in
                                         if result{
                                             self.saveData()
                                             dispatch_async(dispatch_get_main_queue()){
@@ -145,7 +146,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
         realm.write({
             data?.contactName = self.contactName.text
             data?.desc = self.descTextView.text
-            data?.imgUri = "\(self.imgUri)"
+            data?.imgUri = self.imageName
         })
         
     }
@@ -232,6 +233,24 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
             imgView.image = image
+            // Start new code here
+            //jpegImg = UIImageJPEGRepresentation(image, 100)
+            //pngImg = UIImagePNGRepresentation(image)
+            compressedImgData = UIImageJPEGRepresentation(image, 1)
+            var ratio: CGFloat = 0.5
+            var attempts = 6
+            println("Initial imageSize: \(compressedImgData.length)")
+            while compressedImgData.length > 80000 && attempts > 0 {
+                attempts = attempts - 1
+                ratio = ratio * 0.5
+                println("image Size before compression: \(compressedImgData.length)")
+                compressedImgData = UIImageJPEGRepresentation(image, ratio)
+                println("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
+            }
+            println("final image size: \(compressedImgData.length)")
+            
+            
+            // End new code here
             validImage = true
             
             if (newMedia == true) {

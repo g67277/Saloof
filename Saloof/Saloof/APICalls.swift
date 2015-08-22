@@ -170,13 +170,12 @@ public class APICalls {
         
     }
     
-    func uploadImg(imgData: UIImage, imgName: String, completion: Bool -> ()){
+    func uploadImg(jpgImg: NSData, imgName: String, completion: Bool -> ()){
         
         let url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Image"
-        let data: NSData = UIImageJPEGRepresentation(imgData, 1)
-        println(data.length)
+        println("Size of image to be uploaded: \(jpgImg.length)")
         
-        sendFile(url, fileName: imgName, data: data, completionHandler: { (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        sendFile(url, fileName: imgName, data: jpgImg, completionHandler: { (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             
             let res = response as! NSHTTPURLResponse!
             

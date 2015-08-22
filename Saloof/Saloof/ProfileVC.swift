@@ -20,6 +20,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     var newMedia: Bool?
     var newImage = false
     var validImage = false
+    var compressedImgData = NSData()
     @IBOutlet weak var contactField: UITextField!
     //Category
     @IBOutlet weak var catButton: UIButton!
@@ -178,7 +179,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                     if self.newImage{
                         self.newImage = false
                         var apiCall = APICalls()
-                        apiCall.uploadImg(self.imgView.image!, imgName: imageUpated){ result in
+                        apiCall.uploadImg(self.compressedImgData, imgName: imageUpated){ result in
                             dispatch_async(dispatch_get_main_queue()){
                                 aIView.stopAnimation()
                                 var alertView:UIAlertView = UIAlertView()
@@ -378,6 +379,19 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
             imgView.image = image
+            compressedImgData = UIImageJPEGRepresentation(image, 1)
+            var ratio: CGFloat = 0.5
+            var attempts = 6
+            println("Initial imageSize: \(compressedImgData.length)")
+            while compressedImgData.length > 80000 && attempts > 0 {
+                attempts = attempts - 1
+                ratio = ratio * 0.5
+                println("image Size before compression: \(compressedImgData.length)")
+                compressedImgData = UIImageJPEGRepresentation(image, ratio)
+                println("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
+            }
+            println("final image size: \(compressedImgData.length)")
+            
             newImage = true
             validImage = true
             
