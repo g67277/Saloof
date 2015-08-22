@@ -119,11 +119,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     @IBAction func onClick(sender: UIButton) {
         if sender.tag == 3 {
-            //LOG OUT USER
             menuView.hidden = true
-            prefs.setObject(nil, forKey: "TOKEN")
-            self.dismissViewControllerAnimated(true, completion: nil)
-            
+            let storyboard = UIStoryboard(name: "User", bundle: NSBundle.mainBundle())
+            let profileVC: UserProfileVC = storyboard.instantiateViewControllerWithIdentifier("userProfile") as! UserProfileVC
+            profileVC.navigationItem.title = nil
+            navigationController?.pushViewController(profileVC, animated: true)
         }
     }
     

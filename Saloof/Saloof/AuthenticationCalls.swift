@@ -48,6 +48,7 @@ public class AuthenticationCalls {
                         prefs.setObject(true, forKey: "ROLE")
                     }else{
                         prefs.setObject(false, forKey: "ROLE")
+                        prefs.setObject(json["userName"].string!, forKey: "Saloof.UserName")
                     }
                     prefs.synchronize()
                     

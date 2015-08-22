@@ -61,6 +61,7 @@
 		998DB9761B7715E9005B7E2E /* UserFavoritesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9751B7715E9005B7E2E /* UserFavoritesVC.swift */; };
 		998DB9781B77161A005B7E2E /* VenueDealsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9771B77161A005B7E2E /* VenueDealsVC.swift */; };
 		998DB97A1B77165C005B7E2E /* VenueDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DB9791B77165C005B7E2E /* VenueDetailVC.swift */; };
+		99A95D311B883C11004C9963 /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A95D301B883C11004C9963 /* UserProfileVC.swift */; };
 		99BCBA171B771BBD004890E2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA161B771BBD004890E2 /* Constants.swift */; };
 		99BCBA1A1B771BF4004890E2 /* FoodCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA191B771BF4004890E2 /* FoodCategories.swift */; };
 		99BCBA1C1B771C32004890E2 /* BusinessDeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BCBA1B1B771C32004890E2 /* BusinessDeal.swift */; };
@@ -153,6 +154,7 @@
 		998DB9751B7715E9005B7E2E /* UserFavoritesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserFavoritesVC.swift; sourceTree = "<group>"; };
 		998DB9771B77161A005B7E2E /* VenueDealsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueDealsVC.swift; sourceTree = "<group>"; };
 		998DB9791B77165C005B7E2E /* VenueDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueDetailVC.swift; sourceTree = "<group>"; };
+		99A95D301B883C11004C9963 /* UserProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		99BCBA161B771BBD004890E2 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		99BCBA191B771BF4004890E2 /* FoodCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodCategories.swift; sourceTree = "<group>"; };
 		99BCBA1B1B771C32004890E2 /* BusinessDeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessDeal.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 				998DB9751B7715E9005B7E2E /* UserFavoritesVC.swift */,
 				998DB9771B77161A005B7E2E /* VenueDealsVC.swift */,
 				998DB9791B77165C005B7E2E /* VenueDetailVC.swift */,
+				99A95D301B883C11004C9963 /* UserProfileVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -656,6 +659,7 @@
 				8183BB601B79AE44002EC6C8 /* CreateActivityView.swift in Sources */,
 				998DB9741B7715A3005B7E2E /* UserHomeVC.swift in Sources */,
 				998DB9761B7715E9005B7E2E /* UserFavoritesVC.swift in Sources */,
+				99A95D311B883C11004C9963 /* UserProfileVC.swift in Sources */,
 				99BCBA2A1B771D3A004890E2 /* DealsVC.swift in Sources */,
 				99641A001B8395D500F04F3E /* OneShotLocationManager.swift in Sources */,
 				994B83C61B87A27E003FB5F8 /* DPImageCache.swift in Sources */,
