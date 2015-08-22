@@ -88,6 +88,12 @@ class VenueDetailVC: UIViewController {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        // Remove text and leave back chevron
+        self.navigationController?.navigationBar.topItem?.title = ""
+        
+    }
+    
     func returnHome() {
         println("User wants to return home")
         self.performSegueWithIdentifier("returnToUserHome", sender: self)
@@ -119,7 +125,7 @@ class VenueDetailVC: UIViewController {
         
         
         // Default Deal
-        if venue.sourceType == "Saloof" {
+        if venue.sourceType == Constants.sourceTypeSaloof {
             setUpLikeNFavoriteButtons()
             // Set up the value
             let valueFloat:Float = venue.defaultDealValue, valueFormat = ".2"
@@ -231,7 +237,7 @@ class VenueDetailVC: UIViewController {
         }
         
         // Default Deal
-        if venue.sourceType == "Saloof" {
+        if venue.sourceType ==  Constants.sourceTypeSaloof  {
             // Set up the value
             let valueFloat:Float = venue.defaultDealValue, valueFormat = ".2"
             dealValueLabel.text = "Value: $\(valueFloat.format(valueFormat))"
@@ -279,11 +285,20 @@ class VenueDetailVC: UIViewController {
             }
             setUpLikeNFavoriteButtons()
             
+            clearFavoriteButton.enabled = true
+            clearLikeButton.enabled = true
+            favoriteButton.hidden = false
+            likeButton.hidden = false
+            
         } else {
             // hide the deal and favorites views
             dealView.hidden = true
             halfStatsView.hidden = false
             fullStatsView.hidden = true
+            clearFavoriteButton.enabled = false
+            clearLikeButton.enabled = false
+            favoriteButton.hidden = true
+            likeButton.hidden = true
             // Number Labels
             if var tierLabel = fsPriceLabel {
                 var priceTierValue = venue.priceTier

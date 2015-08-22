@@ -45,7 +45,12 @@ class UserProfileVC: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-
+    override func viewWillAppear(animated: Bool) {
+        // Remove text and leave back chevron
+        self.navigationController?.navigationBar.topItem?.title = ""
+        
+    }
+    
     @IBAction func onReset(sender: AnyObject) {
         if validation.validateEmail(emailTextfield.text){
             if authenticationCall.resetPassword(emailTextfield.text){
