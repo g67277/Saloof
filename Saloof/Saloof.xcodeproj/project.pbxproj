@@ -16,6 +16,7 @@
 		81F8C0531B67BA7D001B9203 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0521B67BA7D001B9203 /* Images.xcassets */; };
 		81F8C0561B67BA7D001B9203 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81F8C0541B67BA7D001B9203 /* LaunchScreen.xib */; };
 		81F8C0621B67BA7D001B9203 /* SaloofTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F8C0611B67BA7D001B9203 /* SaloofTests.swift */; };
+		81FAE1851B87EE3B000F76E7 /* TermsAndCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FAE1841B87EE3B000F76E7 /* TermsAndCondition.swift */; };
 		994B83C61B87A27E003FB5F8 /* DPImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C51B87A27E003FB5F8 /* DPImageCache.swift */; };
 		994B83C81B87AB8A003FB5F8 /* CardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */; };
 		99641A001B8395D500F04F3E /* OneShotLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */; };
@@ -103,6 +104,7 @@
 		81F8C05B1B67BA7D001B9203 /* SaloofTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaloofTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F8C0601B67BA7D001B9203 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81F8C0611B67BA7D001B9203 /* SaloofTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaloofTests.swift; sourceTree = "<group>"; };
+		81FAE1841B87EE3B000F76E7 /* TermsAndCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndCondition.swift; sourceTree = "<group>"; };
 		994B83C51B87A27E003FB5F8 /* DPImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPImageCache.swift; sourceTree = "<group>"; };
 		994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardOverlayView.swift; sourceTree = "<group>"; };
 		996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneShotLocationManager.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				998DB9471B770E17005B7E2E /* SignInUserVC.swift */,
 				998DB9491B770E2F005B7E2E /* RegisterUserVC.swift */,
 				998DB94B1B770E4D005B7E2E /* ForgotPasswordUserVC.swift */,
+				81FAE1841B87EE3B000F76E7 /* TermsAndCondition.swift */,
 			);
 			name = "Signing In/Up";
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				99BCBA2F1B771DA3004890E2 /* DealsCell.swift in Sources */,
 				998DB9661B771495005B7E2E /* FavoriteHeaderCell.swift in Sources */,
 				998DB96B1B7714FA005B7E2E /* VenueDeal.swift in Sources */,
+				81FAE1851B87EE3B000F76E7 /* TermsAndCondition.swift in Sources */,
 				998DB96D1B77150F005B7E2E /* Venue.swift in Sources */,
 				998DB9621B77143E005B7E2E /* FavoritesCell.swift in Sources */,
 				99FA89971B86B3A90068B676 /* CardView.swift in Sources */,
