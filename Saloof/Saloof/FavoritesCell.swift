@@ -23,6 +23,10 @@ class FavoritesCell: UITableViewCell {
     
     @IBOutlet var likesBarView: UIView!
     
+    @IBOutlet var foursquareBarView: UIView!
+    
+    @IBOutlet var foursquareLabel: UILabel!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -52,8 +56,36 @@ class FavoritesCell: UITableViewCell {
         locationImage?.setImageCacheWithAddress(imgAddress, placeHolderImage: UIImage (named: "placeholder")!)
     }
     
-    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {
+    func setUpFoursquareBar(price: Int, distance: String) {
+        likesBarView.hidden = true
+        foursquareBarView.hidden = false
+        // Number Labels
+        if var tierLabel = priceDistanceLabel {
+            var priceTierValue = price
+            var priceString = ""
+            switch priceTierValue {
+            case 0:
+                priceString = ""
+            case 1:
+                priceString = "$"
+            case 2:
+                priceString = "$$"
+            case 3:
+                priceString = "$$$"
+            default:
+                priceString = ""
+            }
+            var distance = distance
+            tierLabel.text = (distance == "1.0") ? "  \(priceString)      \(distance) mile" : "\(priceString)      \(distance) miles"
+            
+        }
         
+    }
+
+    
+    func setUpLikesBar(likes: Int, favorites: Int, price: Int, distance: String) {
+        likesBarView.hidden = false
+        foursquareBarView.hidden = true
         likesLabel.text = " \(likes)"
         favoritesLabel.text = " \(favorites)"
         // Number Labels

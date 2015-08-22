@@ -34,7 +34,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     @IBOutlet var indicatorView: UIView!
     var searchBarButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    let actIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+    let actIndicator = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 80, height: 80), color: UIColor.whiteColor(), size: CGSize(width: 80, height: 80))
     var actContainer = CreateActivityView.createView(UIColor.clearColor(), frame: UIScreen.mainScreen().bounds)
     
     
@@ -302,11 +302,9 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
-            println("This deal is still good")
             return true
         } else {
             //the deal has expired
-            println("This deal has expired, deleting it")
             realm.write {
                 self.realm.delete(savedDeal)
             }
@@ -496,12 +494,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             println("Top deal reached")
             self.actContainer.removeFromSuperview()
             self.actIndicator.stopAnimation()
-            selectedDeal = dealList[0]
-            setDealTimer(selectedDeal!)
-            if currentSavedDealId != "" {
-                saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+            if dealList.count > 0 {
+                selectedDeal = dealList[0]
+                setDealTimer(selectedDeal!)
+                if currentSavedDealId != "" {
+                    saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
+                }
+                searchBarButton.enabled = true
             }
-            searchBarButton.enabled = true
         }
         
     }
@@ -547,7 +547,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("dealCell", forIndexPath: indexPath) as! DealCardCell
         let deal: VenueDeal = dealList[indexPath.row]
         cell.setUpVenueDeal(deal)
-        println("This deal's tier: \(deal.venuePriceTier)")
+        //println("This deal's tier: \(deal.venuePriceTier)")
         pageController.numberOfPages = dealList.count
         return cell
     }
@@ -681,7 +681,11 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         if searchBarButton != nil{
             searchBarButton.enabled = false
         }
-        APICalls.getLocalDeals(token, location: userLocation, completion: { result in
+        var token = prefs.stringForKey("TOKEN")
+        //var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+        var urlParameters: String = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
+    
+        APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
                     self.refreshDataArray()
@@ -695,6 +699,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 }
             }
         })
+
     }
     // this method keeps looping
     
@@ -709,6 +714,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
             validDeals = sortedDeals
             self.actIndicator.stopAnimation()
+            saveSwapButton.enabled = true
+            cardButtonsView.hidden = false
             biddingStart()
         } else {
             self.actContainer.removeFromSuperview()
@@ -716,10 +723,26 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             println("No results returned")
             var searchMessage = (searchQuery) ? "\(searchString)" : ""
             var priceMessage = (searchPrice) ? "\(searchString)" : ""
+            if searchPrice {
+                switch searchString {
+                case "1":
+                    priceMessage = "$"
+                case "2":
+                    priceMessage = "$$"
+                case "3":
+                    priceMessage = "$$$"
+                case "4":
+                        priceMessage = "$$$$"
+                default:
+                    priceMessage = ""
+                }
+            }
             alertUser("Bummer", message: "There are no \(priceMessage)\(searchMessage) deals near you")
+            saveSwapButton.enabled = false
             timeLimitLabel.stop()
             timeLimitLabel.startValue = 0
             searchBarButton.enabled = true
+            cardButtonsView.hidden = true
         }
     }
     
@@ -746,6 +769,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         case 0:
             priceTextField.text = "";
             searchString = ""
+            searchPrice = false
         case 1:
             priceTextField.text = "$";
             searchString = "1"
@@ -761,6 +785,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         default:
             priceTextField.text = ""
             searchString = ""
+             searchPrice = false
         }
         priceTextField.resignFirstResponder()
         // reload search
@@ -808,7 +833,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         println("resetting view")
         //activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
-        searchPrice = shouldSearch
+        //searchPrice = shouldSearch
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         if shouldSearch {
            pullNewSearchResults(true)
@@ -870,6 +895,39 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         }
     }
     
+    func fetchNewDeals() {
+        var token = prefs.stringForKey("TOKEN")
+        let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
+        let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
+        var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+        var urlParameters: String = ""
+        if searchQuery {
+            urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
+        } else if searchPrice {
+            urlParameters = "venue/GetVenuesByPriceNLocation?\(priceTier)&\(userLocation)"
+        } else {
+            urlParameters = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
+        }
+        
+        APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
+            if result{
+                dispatch_async(dispatch_get_main_queue()){
+                    println("refreshing data array from get local deals by price")
+                    self.actIndicator.stopAnimation()
+                    self.actContainer.removeFromSuperview()
+                    self.refreshDataArray()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()){
+                    println("No new deals")
+                    self.actIndicator.stopAnimation()
+                    self.actContainer.removeFromSuperview()
+                }
+            }
+        })
+    }
+
+    
     
     func pullNewSearchResults (pricePoint: Bool) {
         self.navigationController?.view.addSubview(actContainer)
@@ -898,73 +956,39 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.topDealReached = false
                 self.pageController.currentPage = 0
                 self.pageController.numberOfPages = 0
-                if self.searchPrice {
-                    println("searching price point")
-                    var call = "priceTier=\(self.searchString)&\(self.userLocation)"
-                    //println(call)
-                    APICalls.getLocalDealsByPrice(self.token, call: call){ result in
-                        if result{
-                            dispatch_async(dispatch_get_main_queue()){
-                                println("refreshing data array from get local deals by price")
-                                self.actIndicator.stopAnimation()
-                                self.actContainer.removeFromSuperview()
-                                self.refreshDataArray()
-                            }
-                        } else {
-                            dispatch_async(dispatch_get_main_queue()){
-                                println("No new deals")
-                                self.actIndicator.stopAnimation()
-                                self.actContainer.removeFromSuperview()
-                            }
-                        }
-                    }
-                } else {
-                    // see if we have a query
-                    if self.searchQuery {
-                        println("searching tag")
-                        var formattedSearch = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
-                        println(self.location)
-                        // category=burger&lat=39.1167&lng=-77.5500
-                        var call = "category=\(formattedSearch)&\(self.userLocation)"
-                        // println(call)
-                        
-                        APICalls.getLocalDealsByCategory(self.token, call: call){ result in
-                            if result{
-                                dispatch_async(dispatch_get_main_queue()){
-                                    println("refreshing data array from get local deals by category")
-                                    self.refreshDataArray()
-                                    self.actIndicator.stopAnimation()
-                                    self.actContainer.removeFromSuperview()
-                                }
-                            } else {
-                                dispatch_async(dispatch_get_main_queue()){
-                                    println("No new deals")
-                                    self.actIndicator.stopAnimation()
-                                    self.actContainer.removeFromSuperview()
-                                }
-                            }
-                        }
-
-                    } else {
-                        // run a basic search for any price point
-                        APICalls.getLocalDeals(self.token, location: self.userLocation, completion: { result in
-                            if result {
-                                dispatch_async(dispatch_get_main_queue()){
-                                    self.refreshDataArray()
-                                    println("Refreshing data array from new any price search")
-                                    self.actIndicator.stopAnimation()
-                                    self.actContainer.removeFromSuperview()
-                                }
-                            } else {
-                                dispatch_async(dispatch_get_main_queue()){
-                                    self.actContainer.removeFromSuperview()
-                                    self.actIndicator.stopAnimation()
-                                    println("Unable to retrieve deals")
-                                }
-                            }
-                        })
-                    }
+                
+                var token = self.prefs.stringForKey("TOKEN")
+                if self.searchQuery {
+                    self.searchString = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
                 }
+                let searchTerm = (self.searchQuery) ? "category=\(self.searchString)" : ""
+                let priceTier = (self.searchPrice) ? "priceTier=\(self.searchString)" : ""
+                var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+                var urlParameters: String = ""
+                if self.searchQuery {
+                    urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
+                } else if self.searchPrice {
+                    urlParameters = "venue/GetVenuesByPriceNLocation?\(priceTier)&\(userLocation)"
+                } else {
+                    urlParameters = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
+                }
+                
+                APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
+                    if result{
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("refreshing data array from get local deals by price")
+                            self.actIndicator.stopAnimation()
+                            self.actContainer.removeFromSuperview()
+                            self.refreshDataArray()
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("No new deals")
+                            self.actIndicator.stopAnimation()
+                            self.actContainer.removeFromSuperview()
+                        }
+                    }
+                })
                 self.searchDisplayOverview.hidden = true
 
             } else {
