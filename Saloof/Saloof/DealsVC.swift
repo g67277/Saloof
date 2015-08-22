@@ -15,6 +15,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var addBtn: UIBarButtonItem!
     @IBOutlet weak var dealsList: UITableView!
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    var firstDeal = true
     
     var savedDealsArray = Realm().objects(BusinessDeal).sorted("value", ascending: true)
     var dealsArray : [BusinessDeal] = []
@@ -37,8 +38,11 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
             dealsList.reloadData()
         }
-        
-        if dealsArray.count == 10 {
+        println(dealsArray.count)
+        if dealsArray.count == 0 && firstDeal{
+            firstDeal = false
+            self.performSegueWithIdentifier("toAdd", sender: nil)
+        }else if dealsArray.count == 10 {
             addBtn.enabled = false
         }else{
             addBtn.enabled = true

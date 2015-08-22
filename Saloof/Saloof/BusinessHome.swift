@@ -63,6 +63,7 @@ class BusinessHome: UIViewController {
         var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         var imgID = data?.imgUri
         println(imgID)
+        
         var url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
         println(url)
         DPImageCache.cleanCace()
