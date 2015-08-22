@@ -53,10 +53,8 @@ public class JSONParser {
                         var compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
                         if compareDates == NSComparisonResult.OrderedAscending {
                             // the deal has not expired yet
-                            //  println("This deal is still good")
                         } else {
                             //the deal has expired
-                            // println("This deal has expired")
                             // TODO: If deal is over 3 hours old, delete it immedietly and reload
                             venueDeal.validValue = 2
                             // update the db

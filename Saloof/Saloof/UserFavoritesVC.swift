@@ -82,8 +82,12 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         var cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("favoritesCell") as! FavoritesCell
         let venue: FavoriteVenue = venueList[indexPath.row]
+        if venue.sourceType == Constants.sourceTypeSaloof {
+            cell.setUpLikesBar(venue.likes, favorites: venue.favorites, price: venue.priceTier, distance: venue.distance)
+        } else {
+            cell.setUpFoursquareBar(venue.priceTier, distance: venue.distance)
+        }
         cell.setUpCell(venue.name, phone: venue.phone, imageUrl: venue.imageUrl)
-        cell.setUpLikesBar(venue.likes, favorites: venue.favorites, price: venue.priceTier, distance: venue.distance)
         cell.setImageWithURL(venue.imageUrl)
         return cell
     }
@@ -151,11 +155,9 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
-            println("This deal is still good")
             return true
         } else {
             //the deal has expired
-            println("This deal has expired, deleting it")
             realm.write {
                 realm.delete(savedDeal)
             }

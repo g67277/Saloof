@@ -233,6 +233,7 @@ public class APICalls {
     class func getLocalVenues(token: NSString, venueParameters: NSString, completion: Bool -> ()){
         
         var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+        //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&\(venueParameters)")!
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
@@ -267,12 +268,53 @@ public class APICalls {
             }
         })
     }
-
+    
+    
+    class func getSaloofDeals(token: NSString, venueParameters: NSString, completion: Bool -> ()){
+        
+        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+        //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&\(venueParameters)")!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            let res = response as! NSHTTPURLResponse!
+            if res != nil {
+                println(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
+                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+                    
+                    if let returnedVenues = JSONObject as? [AnyObject] {
+                        for venue in returnedVenues {
+                            let venueJson = JSON(venue)
+                            // Parse the JSON file using SwiftlyJSON
+                            APICalls.parseJSONDeals(venueJson)
+                        }
+                        completion (true)
+                    }
+                } else {
+                    completion (false)
+                }
+            } else {
+                completion (false)
+            }
+        })
+    }
+    /*
     class func getLocalDeals(token: NSString, location: NSString, completion: Bool -> ()){
         NSLog("Pulling local venues");
         if Reachability.isConnectedToNetwork(){
             //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=39.1167&lng=-77.5500")!
             var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?\(location)")!
+            //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&
             var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
             request.HTTPMethod = "GET"
             request.timeoutInterval = 60
@@ -317,7 +359,7 @@ public class APICalls {
             completion (false)
         }
     }
-
+*/
     
     class func  updateLikeCountForVenue (venue: String, didLike: Bool, completion: Bool -> ()) {
         
@@ -375,14 +417,14 @@ public class APICalls {
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println("Retrieved status code for favoriting")
-                println("Favorited item: status code: \(res.statusCode)")
+                //println("Retrieved status code for favoriting")
+                //println("Favorited item: status code: \(res.statusCode)")
                 if res.statusCode >= 200 && res.statusCode < 300 {
                      var testString = (didFav) ? "increased" : "decreased"
-                    println("\(testString) this venue's favorite count")
+                   // println("\(testString) this venue's favorite count")
                     completion (true)
                 } else {
-                    println("unable to favorite venue")
+                    //println("unable to favorite venue")
                     completion (false)
                 }
             } else {
@@ -463,11 +505,12 @@ public class APICalls {
         })
     }
 
-    
+    /*
     class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
         
         var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
         //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=39.1167&lng=-77.5500"
+        // http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=restaurant&lat=38.907192&lng=-77.036871
         var url:NSURL = NSURL(string: callString)!
         println(url)
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
@@ -505,6 +548,7 @@ public class APICalls {
     
     class func getLocalDealsByPrice(token: String, call: String, completion: Bool -> ()){
         var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?\(call)"
+        // http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&lat=38.907192&lng=-77.036871
         var url:NSURL = NSURL(string: callString)!
         println(url)
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
@@ -540,7 +584,7 @@ public class APICalls {
         })
     }
     
-    
+    */
     class func parseJSONVenues(json: JSON) {
         let venue = Venue()
         // get venue information information
@@ -554,7 +598,12 @@ public class APICalls {
         let state = json["location"]["state"].stringValue
         let zip = json["location"]["postalcode"].stringValue
         venue.address = "\(street) \n \(city), \(state)  \(zip)"
-        
+        let distanceInMeters = json["dist_to_location"].floatValue
+        var distanceInMiles = distanceInMeters / 1609.344
+        // make sure it is greater than 0
+        distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
+        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        venue.distance = formattedDistance
         
         let imageUrlString = json["defaultPicUrl"].stringValue
         venue.hours = json["status"].stringValue
@@ -574,13 +623,6 @@ public class APICalls {
         let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/nYmm3rydT6pgwlY.jpg
         venue.imageUrl = formattedImageUrl
-        /*
-        let imageUrl = NSURL(string: formattedImageUrl)
-        if let data = NSData(contentsOfURL: imageUrl!){
-            venue.hasImage = true
-            let venueImage = UIImage(data: data)
-            venue.image = venueImage
-        }*/
         let realm = Realm()
         realm.write {
             //realm.add(venue)
@@ -609,13 +651,6 @@ public class APICalls {
                     venueDeal.venuePriceTier = json["priceTier"].intValue
                     let imageUrlString = json["defaultPicUrl"].stringValue
                     let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
-                    /*
-                    let imageUrl = NSURL(string: formattedImageUrl)
-                    if let data = NSData(contentsOfURL: imageUrl!){
-                        venueDeal.hasImage = true
-                        let venueImage = UIImage(data: data)
-                        venueDeal.image = venueImage
-                    }*/
                     venueDeal.venueImageUrl = formattedImageUrl
                     // check for current object
                     let realm = Realm()
@@ -629,10 +664,8 @@ public class APICalls {
                         var compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
                         if compareDates == NSComparisonResult.OrderedAscending {
                             // the deal has not expired yet
-                            //  println("This deal is still good")
                         } else {
                             //the deal has expired
-                            // println("This deal has expired")
                             // TODO: If deal is over 3 hours old, delete it immedietly and reload
                             venueDeal.validValue = 2
                             // update the db

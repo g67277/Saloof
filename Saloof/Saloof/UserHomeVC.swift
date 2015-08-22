@@ -49,9 +49,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     @IBOutlet var searchView: UIView!
     @IBOutlet var priceView: UIView!
     @IBOutlet var priceTextField: UITextField!
- //   @IBOutlet var searchPickerView: UIView!
-  //  @IBOutlet var pickerSpinnerView: UIView!
-   // @IBOutlet var searchPicker: UIPickerView!
     
     // Search Properties
     var searchPrice : Bool = false
@@ -132,12 +129,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     @IBAction func openPricePicker(sender: AnyObject) {
        priceTextField.tintColor = UIColor.clearColor()
-        println("pressed price")
         if priceTextField.isFirstResponder() {
-             println("is responder")
+             //println("is responder")
             priceTextField.resignFirstResponder()
         } else {
-            println("becomming responder")
+          //  println("becomming responder")
             priceTextField.becomeFirstResponder()
         }
     }
@@ -194,6 +190,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         case 0:
             priceTextField.text = "";
             searchString = ""
+            searchPrice = false
         case 1:
             priceTextField.text = "$";
             searchString = "1"
@@ -209,6 +206,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         default:
             priceTextField.text = ""
             searchString = ""
+            searchPrice = false
         }
         priceTextField.resignFirstResponder()
         // reload search
@@ -256,7 +254,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
-        searchPrice = shouldSearch
+        //searchPrice = shouldSearch
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: false)
         if shouldSearch {
             // reload search
@@ -296,12 +294,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == 4 {
-            println("User searching price")
             burgerTextField.text = ""
             burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         } else if textField.tag == 3 {
-            println("User searching tag")
             // user searching query
             textField.placeholder = ""
             priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
@@ -310,7 +306,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        println("Textfield returned")
         textField.endEditing(true)
         self.view.endEditing(true)
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
@@ -323,7 +318,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
-                textField.placeholder = "Burger"
+                textField.attributedPlaceholder = NSAttributedString(string:"Burger",
+                    attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
                 pullNewSearchResults()
             }
         }
@@ -431,25 +427,26 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 swipedVenue.swipeValue = 2
                 self.realm.create(Venue.self, value: swipedVenue, update: true)
             }
-            APICalls.updateFavoriteCountForVenue(favorite.identifier, didFav: true, completion: { result in
-                if result {
-                    dispatch_async(dispatch_get_main_queue()){
+            if favorite.sourceType == Constants.sourceTypeSaloof {
+                APICalls.updateFavoriteCountForVenue(favorite.identifier, didFav: true, completion: { result in
+                    if result {
+                        dispatch_async(dispatch_get_main_queue()){
                             println("Favorited this venue")
+                        }
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()){
+                            println("unable to favorite this venue")
+                        }
+                        
                     }
-                } else {
-                    dispatch_async(dispatch_get_main_queue()){
-                        println("unable to favorite this venue")
-                    }
-
-                }
-            })
+                })
+            }
         }
         
     }
 
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
-        println("Ran out of cards, getting foursquare locations")
         self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         resetSwipeableVieForReload()
@@ -520,6 +517,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
 
     
     }
+    
     func fetchSaloofVenues() {
         var token = prefs.stringForKey("TOKEN")
         let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
@@ -529,9 +527,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         if searchQuery {
             urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
         } else if searchPrice {
-            urlParameters = "venue/GetVenuesByPriceTierNLocation?\(priceTier)&\(userLocation)"
+            urlParameters = "venue/GetVenuesByPriceNLocation?\(priceTier)&\(userLocation)"
         } else {
-            urlParameters = "Venue/GetLocal?\(userLocation)"
+            urlParameters = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
         }
         
         APICalls.getLocalVenues(token!, venueParameters: urlParameters, completion: { result in
@@ -583,7 +581,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                         parseJSON(venueJson, source: Constants.sourceTypeFoursquare)
                     }
                 }
-                println("Data gathering completed, retrieved \(venues.count) venues")
+                println("Foursquare returned \(venues.count) venues")
             }
             offsetCount = offsetCount + 10
         }
@@ -691,11 +689,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
-            println("This deal is still good")
             return true
         } else {
             //the deal has expired
-            println("This deal has expired, deleting it")
             realm.write {
                 realm.delete(savedDeal)
             }
