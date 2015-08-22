@@ -11,8 +11,9 @@ import MobileCoreServices
 import ActionSheetPicker_3_0
 import RealmSwift
 import AssetsLibrary
+import MessageUI
 
-class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MFMailComposeViewControllerDelegate {
     
     
     @IBOutlet weak var RestaurantTitleLabel: UILabel!
@@ -69,7 +70,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         var category = data?.category
         catButton.setTitle(category, forState: UIControlState.Normal)
         var price = data?.priceTier
-        priceControls.selectedSegmentIndex = price!
+        priceControls.selectedSegmentIndex = price! - 1
         var week = data?.weekdayHours
         var weekend = data?.weekendHours
         parseHours(week!, weekend: weekend!)
@@ -239,6 +240,11 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         }else if _sender.tag == 2{
             // Log out here
             self.signOff()
+        }else if _sender.tag == 3{
+            // open email here to change address, phone number or website
+            let email = "nazir.shuqair@gmail.com"
+            let url = NSURL(string: "mailto:\(email)")
+            UIApplication.sharedApplication().openURL(url!)
         }
         
     }
@@ -429,6 +435,43 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    //Email view methods
+    @IBAction func launchEmail(sender: AnyObject) {
+        
+        var emailTitle = "Change of Info"
+        var messageBody = "For safety and security reasons, a restaurant address, phone number and website are required to be validated before the listing is updated on Saloof.  Please add your changes to this form, and we will update this restaurant's info as soon as possible. \n\n Address: \n\n Phone Number: \n\n Website: \n \nThank you!\n\n Saloof\n Find Customers Faster and Easier than ever"
+        var toRecipents = ["nazir.shuqair@gmail.com"]
+        var mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setSubject(emailTitle)
+        mc.setMessageBody(messageBody, isHTML: false)
+        mc.setToRecipients(toRecipents)
+        
+        self.presentViewController(mc, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError) {
+        switch result.value {
+        case MFMailComposeResultCancelled.value:
+            println("Mail cancelled")
+        case MFMailComposeResultSaved.value:
+            println("Mail saved")
+        case MFMailComposeResultSent.value:
+            println("Mail sent")
+            var alertView:UIAlertView = UIAlertView()
+            alertView.title = "Sent"
+            alertView.message = "We've recived your request and will proccess it shortly"
+            alertView.delegate = self
+            alertView.addButtonWithTitle("OK")
+            alertView.show()
+        case MFMailComposeResultFailed.value:
+            println("Mail sent failure: %@", [error.localizedDescription])
+        default:
+            break
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

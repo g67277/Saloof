@@ -65,11 +65,6 @@ class BusinessHome: UIViewController {
         println(imgID)
         var url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
         println(url)
-        if data != nil{
-            dealsCount = data!.dealsCount
-        }else{
-            dealsCount = 0
-        }
         DPImageCache.cleanCace()
         profileImgView?.setImageCacheWithAddress(url, placeHolderImage: UIImage (named: "placeholder")!)
 
@@ -131,6 +126,7 @@ class BusinessHome: UIViewController {
                 
                 self.parseSummery(result)
                 dispatch_async(dispatch_get_main_queue()){
+                    self.dealsCount = self.prefs.integerForKey("DealCount")
                     self.numberOfDeals.text = "\(self.dealsCount)"
                     if self.availableCredits > 0 {
                         self.creditBalanceLabel.text = "\(self.availableCredits)C"

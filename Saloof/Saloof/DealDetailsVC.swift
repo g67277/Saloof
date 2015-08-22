@@ -32,7 +32,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     var dealTitle = ""
     var desc = ""
     var value = 0.0
-    var hours = 0
+    var hours = 1
     var dealID = ""
     var editingMode = false
     var deleteEnabled = true
@@ -68,7 +68,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     override func viewDidAppear(animated: Bool) {
         if hours > 0 {
-            timeController.selectedSegmentIndex = hours
+            timeController.selectedSegmentIndex = hours - 1
             timeLabel.text =  "\(hours)hr limit"
         }
     }
@@ -210,6 +210,9 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
                 self.realm.add(deal, update: self.editingMode)
             }
             
+            var count = prefs.integerForKey("DealCount")
+            prefs.setInteger(count + 1, forKey: "DealCount")
+            prefs.synchronize()
             println("saved")
             
             var refreshAlert = UIAlertController(title: "Saved", message: "Deal has been saved", preferredStyle: UIAlertControllerStyle.Alert)
@@ -245,6 +248,9 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
                 self.realm.write{
                     self.realm.delete(dealToDelete!)
                 }
+                var count = self.prefs.integerForKey("DealCount")
+                self.prefs.setInteger(count - 1, forKey: "DealCount")
+                self.prefs.synchronize()
                 
                 self.navigationController?.popViewControllerAnimated(true)
             }))

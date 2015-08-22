@@ -2668,6 +2668,7 @@
                         <viewControllerLayoutGuide type="bottom" id="7ah-4i-wDs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="snZ-eO-aus">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sNS-69-HVO">
@@ -2764,10 +2765,10 @@
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="Gij-Uu-Kbd"/>
-                                        <exclude reference="ivU-aa-A2C"/>
-                                        <exclude reference="xi4-9S-Ksq"/>
                                         <exclude reference="lMn-Dr-Y6r"/>
                                         <exclude reference="whJ-5U-mV2"/>
+                                        <exclude reference="ivU-aa-A2C"/>
+                                        <exclude reference="xi4-9S-Ksq"/>
                                         <exclude reference="8co-i3-cVv"/>
                                         <exclude reference="Uky-Nt-7wG"/>
                                     </mask>
@@ -2780,10 +2781,10 @@
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="Gij-Uu-Kbd"/>
-                                        <include reference="ivU-aa-A2C"/>
-                                        <include reference="xi4-9S-Ksq"/>
                                         <include reference="lMn-Dr-Y6r"/>
                                         <include reference="whJ-5U-mV2"/>
+                                        <include reference="ivU-aa-A2C"/>
+                                        <include reference="xi4-9S-Ksq"/>
                                         <include reference="8co-i3-cVv"/>
                                         <include reference="Uky-Nt-7wG"/>
                                     </mask>
@@ -2900,13 +2901,13 @@ Last Updated: 08/21/2015
                                 <exclude reference="SDB-mK-0va"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="6n3-CK-FaN"/>
-                                <exclude reference="Hhx-M7-buY"/>
-                                <exclude reference="oTL-IN-org"/>
                                 <exclude reference="5Pm-Ct-nRr"/>
                                 <exclude reference="eJc-Vn-fPp"/>
                                 <exclude reference="sth-9e-eum"/>
                                 <exclude reference="v8o-bC-VaL"/>
+                                <exclude reference="6n3-CK-FaN"/>
+                                <exclude reference="Hhx-M7-buY"/>
+                                <exclude reference="oTL-IN-org"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -2915,13 +2916,13 @@ Last Updated: 08/21/2015
                                 <include reference="SDB-mK-0va"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="6n3-CK-FaN"/>
-                                <include reference="Hhx-M7-buY"/>
-                                <include reference="oTL-IN-org"/>
                                 <include reference="5Pm-Ct-nRr"/>
                                 <include reference="eJc-Vn-fPp"/>
                                 <include reference="sth-9e-eum"/>
                                 <include reference="v8o-bC-VaL"/>
+                                <include reference="6n3-CK-FaN"/>
+                                <include reference="Hhx-M7-buY"/>
+                                <include reference="oTL-IN-org"/>
                             </mask>
                         </variation>
                     </view>
@@ -3091,8 +3092,7 @@ Last Updated: 08/21/2015
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="24" y="27" width="25" height="27"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>

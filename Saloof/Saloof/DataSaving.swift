@@ -77,6 +77,11 @@ public class DataSaving{
                     data?.website = url
                 }
                 
+                if prefs.integerForKey("DealCount") > 0 {
+                    prefs.setInteger(0, forKey: "DealCount")
+                    prefs.synchronize()
+                }
+                
                 if object["deals"] != nil{
                     
                     if let deals = object["deals"].array {
@@ -103,6 +108,8 @@ public class DataSaving{
                             }
                             count++
                         }
+                        prefs.setInteger(count, forKey: "DealCount")
+                        prefs.synchronize()
                         data!.dealsCount = count
                     }
                     
@@ -162,6 +169,11 @@ public class DataSaving{
 
             restaurant.id = prefs.stringForKey("restID")!
             
+            if prefs.integerForKey("DealCount") > 0 {
+                prefs.setInteger(0, forKey: "DealCount")
+                prefs.synchronize()
+            }
+            
             if object["deals"] != nil{
                 
                 if let deals = object["deals"].array {
@@ -188,6 +200,8 @@ public class DataSaving{
                         }
                         count++
                     }
+                    prefs.setInteger(count, forKey: "DealCount")
+                    prefs.synchronize()
                     restaurant.dealsCount = count
 
                 }
