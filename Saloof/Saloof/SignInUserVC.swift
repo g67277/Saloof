@@ -34,26 +34,28 @@ class SignInUserVC: UIViewController {
         
         passwordField.attributedPlaceholder = NSAttributedString(string:"Password",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
-        
-        //authenticationCall.displayIndicator(self.view, stop: false)
-        
     }
-    
-    override func viewDidLayoutSubviews() {
-        // set the rounded corners after autolayout has finished
-        //logInButtonView.roundCorners(.AllCorners, radius: 14)
-    }
+
     
     override func viewDidAppear(animated: Bool) {
         
         if (prefs.objectForKey("TOKEN") == nil) {
             debugPrint("NO token")
-            //self.performSegueWithIdentifier("goto_login", sender: self)
         } else {
-            //self.performSegueWithIdentifier("toUserMain", sender: self)
-            var storyboard = UIStoryboard(name: "User", bundle: nil)
-            var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
-            self.presentViewController(controller, animated: true, completion: nil)
+            let hasPreviousLaunch = NSUserDefaults.standardUserDefaults().boolForKey("Saloof.User.First.Launch")
+            if hasPreviousLaunch  {
+                var storyboard = UIStoryboard(name: "User", bundle: nil)
+                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
+            else {
+                // Set it as first launch
+                NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Saloof.User.First.Launch")
+                // load tutorial
+                var storyboard = UIStoryboard(name: "Main", bundle: nil)
+                var controller = storyboard.instantiateViewControllerWithIdentifier("userTutorialVC")as! UIViewController
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
         }
         
     }

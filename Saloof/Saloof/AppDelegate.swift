@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        DPImageCache.cleanCace()
         var navBarAppearance = UINavigationBar.appearance()
         navBarAppearance.tintColor = UIColor.whiteColor()
         navBarAppearance.translucent = false

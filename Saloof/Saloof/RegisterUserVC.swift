@@ -37,11 +37,6 @@ class RegisterUserVC: UIViewController {
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
     }
     
-    override func viewDidLayoutSubviews() {
-        
-        //registerButtonView.roundCorners(.AllCorners, radius: 14)
-    }
-    
     
     func DismissKeyboard(){
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -53,7 +48,6 @@ class RegisterUserVC: UIViewController {
         if _sender.tag == 0{
             
             //sign up here
-            
             var testing = usernameField.text
             
             if validation.validateInput(usernameField.text, check: 2, title: "Somethings Missing", message: "Please enter a valid username")

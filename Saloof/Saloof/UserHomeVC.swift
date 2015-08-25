@@ -400,6 +400,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         let swipedVenue: Venue = venueList[Int(index)]
         // check the direction
         if direction == SwipeResultDirection.Left {
+            DPImageCache.removeCachedImage(swipedVenue.imageUrl)
             // set up for deletion
             realm.write {
                 swipedVenue.swipeValue = 2

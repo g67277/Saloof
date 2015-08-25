@@ -25,6 +25,47 @@ class DPImageCache: NSObject {
             }
         }
     }
+    
+    internal static func removeCachedImage(imageAddress: String) {
+        var fileMan = NSFileManager.defaultManager()
+        var cacheDir = (NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory,
+            .UserDomainMask, true)[0] as! NSString)
+            .stringByAppendingPathComponent(DPImageCache.CACHEPATH)
+        /*   // to print out contents of cache BEFORE delete
+        if fileMan.contentsOfDirectoryAtPath(cacheDir, error: nil)?.count != nil {
+            // see if our image exists
+            var allFiles: Array = fileMan.contentsOfDirectoryAtPath(cacheDir, error: nil)!
+            for object in enumerate(allFiles) {
+                println("Before delete object: \(object)")
+            }
+        }*/
+        if fileMan.fileExistsAtPath(cacheDir) {
+            var imageId = imageAddress.kf_MD5()
+            var imageCacheDir = NSSearchPathForDirectoriesInDomains(
+                .DocumentDirectory,
+                .UserDomainMask, true)[0] as! NSString
+            var imageCachePath = imageCacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH)
+                .stringByAppendingPathComponent(imageId)
+            var fileManager = NSFileManager.defaultManager()
+            if fileManager.fileExistsAtPath(imageCachePath) {
+                //println("File exists to delete at path: \(imageCachePath)")
+                fileManager.removeItemAtPath(imageCachePath, error: nil)
+                //println("deleted item at path)")
+            }
+        }
+        // to print out contents of cache AFTER delete
+        /*
+        if fileMan.contentsOfDirectoryAtPath(cacheDir, error: nil)?.count != nil {
+            // see if our image exists
+            var allFiles: Array = fileMan.contentsOfDirectoryAtPath(cacheDir, error: nil)!
+            for object in enumerate(allFiles) {
+                println("after delete object: \(object)")
+            }
+        }*/
+
+    }
+    
 }
 
 extension UIImageView {
