@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Montserrat-Light.otf">
@@ -45,6 +46,12 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Ll-xX-494">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="508"/>
                 </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="orangeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="5Sd-z1-2g5">
+                    <rect key="frame" x="8" y="553" width="40" height="39"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="5Sd-z1-2g5" secondAttribute="height" multiplier="53:52" id="Mh0-wK-pai"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
@@ -53,17 +60,24 @@
                 <constraint firstItem="0Ll-xX-494" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="3LF-W1-6nn"/>
                 <constraint firstAttribute="trailing" secondItem="0Ll-xX-494" secondAttribute="trailing" id="4L2-2X-bDb"/>
                 <constraint firstItem="vo3-W6-xYD" firstAttribute="top" secondItem="0Ll-xX-494" secondAttribute="bottom" id="8WI-ji-qxY"/>
+                <constraint firstItem="5Sd-z1-2g5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="8kM-kn-TCO"/>
                 <constraint firstItem="mbd-si-3O2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="EBs-v4-E9a"/>
+                <constraint firstItem="mbd-si-3O2" firstAttribute="height" secondItem="5Sd-z1-2g5" secondAttribute="height" id="Gea-Rm-JSN"/>
                 <constraint firstAttribute="trailing" secondItem="vo3-W6-xYD" secondAttribute="trailing" id="MD2-uv-0ny"/>
+                <constraint firstAttribute="bottom" secondItem="5Sd-z1-2g5" secondAttribute="bottom" constant="8" id="Tan-1c-zek"/>
                 <constraint firstItem="0Ll-xX-494" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="jcn-MC-1Jl"/>
                 <constraint firstItem="mbd-si-3O2" firstAttribute="top" secondItem="vo3-W6-xYD" secondAttribute="bottom" id="je6-B1-Mvq"/>
                 <constraint firstAttribute="bottom" secondItem="mbd-si-3O2" secondAttribute="bottom" id="m1F-Kn-mOE"/>
             </constraints>
             <connections>
+                <outlet property="sourceImageView" destination="5Sd-z1-2g5" id="Nmo-Fz-FbL"/>
                 <outlet property="venueImageView" destination="0Ll-xX-494" id="ar1-Q6-ewX"/>
                 <outlet property="venueNameLabel" destination="vo3-W6-xYD" id="ixH-1m-h5T"/>
                 <outlet property="venuePhoneLabel" destination="mbd-si-3O2" id="veM-Ri-RT5"/>
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="orangeLogo" width="43" height="39"/>
+    </resources>
 </document>

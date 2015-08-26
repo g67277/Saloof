@@ -44,9 +44,6 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     @IBOutlet var searchView: UIView!
     @IBOutlet var priceView: UIView!
     @IBOutlet var priceTextField: UITextField!
-    //@IBOutlet var searchPickerView: UIView!
-    //@IBOutlet var pickerSpinnerView: UIView!
-    //@IBOutlet var searchPicker: UIPickerView!
     
     // Search Properties
     var searchPrice : Bool = false
@@ -500,7 +497,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 if currentSavedDealId != "" {
                     saveSwapButton.enabled = (currentSavedDealId == selectedDeal?.id) ? false : true
                 }
-                searchBarButton.enabled = true
+                if searchBarButton != nil {
+                    searchBarButton.enabled = true
+                } else {
+                    searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
+                    self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
+                }
             }
         }
         
@@ -711,6 +713,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         validDeals = Realm().objects(VenueDeal)
         println("We have \(validDeals.count) returned deals")
         if validDeals.count > 0 {
+            println("Have valid deals")
             //Sort all deals by value
             let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
             validDeals = sortedDeals
@@ -742,7 +745,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             saveSwapButton.enabled = false
             timeLimitLabel.stop()
             timeLimitLabel.startValue = 0
-            searchBarButton.enabled = true
+            if searchBarButton != nil {
+                searchBarButton.enabled = true
+            } else {
+                searchBarButton = UIBarButtonItem(image: UIImage(named: "searchButton"), style: .Plain, target: self, action: "shouldOpenSearch")
+                self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
+            }
             cardButtonsView.hidden = true
         }
     }

@@ -24,6 +24,7 @@ extension UIImageView {
 class CardView: UIView {
     
     @IBOutlet var venueImageView: UIImageView?
+    @IBOutlet var sourceImageView: UIImageView?
     @IBOutlet var venueNameLabel: UILabel?
     @IBOutlet var venuePhoneLabel: UILabel?
     

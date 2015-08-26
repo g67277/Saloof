@@ -384,6 +384,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         cardView?.venueImageView?.clipsToBounds = true
         cardView?.venueNameLabel?.text = restaurant.name
         cardView?.venuePhoneLabel?.text = restaurant.phone
+        cardView?.sourceImageView?.image = (restaurant.sourceType == Constants.sourceTypeSaloof) ? UIImage(named: "orangeLogo") : UIImage(named: "foursquareLogo")
         cardView?.setBorderShadow()
         return cardView!
 
@@ -475,7 +476,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         }
         swipeableView.resetCurrentCardNumber()
         fetchFoursquareVenues()
-        swipeableView.reloadData()
+        if venueItems?.count == 0 {
+            println("Have no venues")
+        } else {
+            println("Have new venues")
+            swipeableView.reloadData()
+        }
     }
     
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt) {
@@ -565,6 +571,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
 
     
+    
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
         // get the location & possible search
@@ -573,7 +580,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         //let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
         let foursquareURl = NSURL(string: "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)")!
-        //println(foursquareURl)
+        println("Foursquare URL: \(foursquareURl)")
         if  let response = NSData(contentsOfURL: foursquareURl) {
             let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
                 options: NSJSONReadingOptions(0),
@@ -599,7 +606,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         self.containerView.removeFromSuperview()
         self.activityIndicator.stopAnimation()
     }
-    
     
     func parseJSON(json: JSON, source: String) {
         let venue = Venue()
