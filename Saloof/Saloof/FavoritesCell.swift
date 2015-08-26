@@ -18,7 +18,10 @@ class FavoritesCell: UITableViewCell {
     @IBOutlet weak var locationPhone: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
     @IBOutlet weak var favoritesLabel: UILabel!
-    @IBOutlet weak var priceDistanceLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var fsPriceLabel: UILabel!
+    @IBOutlet weak var fsDistanceLabel: UILabel!
     @IBOutlet weak var locationImage: UIImageView!
     
     @IBOutlet var likesBarView: UIView!
@@ -60,7 +63,7 @@ class FavoritesCell: UITableViewCell {
         likesBarView.hidden = true
         foursquareBarView.hidden = false
         // Number Labels
-        if var tierLabel = priceDistanceLabel {
+        if var tierLabel = fsPriceLabel {
             var priceTierValue = price
             var priceString = ""
             switch priceTierValue {
@@ -72,12 +75,16 @@ class FavoritesCell: UITableViewCell {
                 priceString = "$$"
             case 3:
                 priceString = "$$$"
+            case 4:
+                priceString = "$$$$"
             default:
                 priceString = ""
             }
+            priceLabel.text = priceString
+        }
+        if var distanceLab = fsDistanceLabel {
             var distance = distance
-            tierLabel.text = (distance == "1.0") ? "  \(priceString)      \(distance) mile" : "\(priceString)      \(distance) miles"
-            
+            distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         
     }
@@ -89,7 +96,7 @@ class FavoritesCell: UITableViewCell {
         likesLabel.text = " \(likes)"
         favoritesLabel.text = " \(favorites)"
         // Number Labels
-        if var tierLabel = priceDistanceLabel {
+        if var tierLabel = priceLabel {
             var priceTierValue = price
             var priceString = ""
             switch priceTierValue {
@@ -101,12 +108,16 @@ class FavoritesCell: UITableViewCell {
                 priceString = "$$"
             case 3:
                 priceString = "$$$"
+            case 4:
+                priceString = "$$$$"
             default:
                 priceString = ""
             }
+            priceLabel.text = priceString
+        }
+        if var distanceLab = distanceLabel {
             var distance = distance
-            tierLabel.text = (distance == "1.0") ? "  \(priceString)   \(distance) mile" : "\(priceString)  \(distance) miles"
-            
+            distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         
     }

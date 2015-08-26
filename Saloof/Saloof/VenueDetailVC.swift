@@ -149,6 +149,7 @@ class VenueDetailVC: UIViewController {
             // Number Labels
             if var tierLabel = priceTierlabel {
                 var priceTierValue = venue.priceTier
+                println(venue.priceTier)
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -158,6 +159,8 @@ class VenueDetailVC: UIViewController {
                     tierLabel.text = "$$"
                 case 3:
                     tierLabel.text = "$$$"
+                case 4:
+                    tierLabel.text = "$$$$"
                 default:
                     tierLabel.text = ""
                 }
@@ -190,6 +193,7 @@ class VenueDetailVC: UIViewController {
             // Number Labels
             if var tierLabel = fsPriceLabel {
                 var priceTierValue = venue.priceTier
+                println(venue.priceTier)
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -199,6 +203,8 @@ class VenueDetailVC: UIViewController {
                     tierLabel.text = "$$"
                 case 3:
                     tierLabel.text = "$$$"
+                case 4:
+                    tierLabel.text = "$$$$"
                 default:
                     tierLabel.text = ""
                 }
@@ -269,6 +275,8 @@ class VenueDetailVC: UIViewController {
                     tierLabel.text = "$$"
                 case 3:
                     tierLabel.text = "$$$"
+                case 4:
+                    tierLabel.text = "$$$$"
                 default:
                     tierLabel.text = ""
                 }
@@ -311,6 +319,8 @@ class VenueDetailVC: UIViewController {
                     tierLabel.text = "$$"
                 case 3:
                     tierLabel.text = "$$$"
+                case 4:
+                    tierLabel.text = "$$$$"
                 default:
                     tierLabel.text = ""
                 }

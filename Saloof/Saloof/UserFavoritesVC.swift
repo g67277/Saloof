@@ -12,10 +12,7 @@ import RealmSwift
 
 class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var tableview: UITableView!
-    // Query using a predicate string
-    //var favoriteVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
-    
+    @IBOutlet weak var tableview: UITableView!    
     let venueList = List<FavoriteVenue>()
     
     /* -----------------------  VIEW CONTROLLER  METHODS --------------------------- */
@@ -44,6 +41,9 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         // delete any rejected favorite venues
         var realm = Realm()
         var rejectedVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        for eachVenue in rejectedVenues {
+            DPImageCache.removeCachedImage(eachVenue.imageUrl)
+        }
         realm.write {
             realm.delete(rejectedVenues)
         }
