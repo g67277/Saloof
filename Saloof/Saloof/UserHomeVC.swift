@@ -567,6 +567,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
         // get the location & possible search
+        
         let searchTerm = (searchQuery) ? "&query=restaurants,\(searchString)" : "&query=restaurants"
         let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
         //let location = self.locationManager.location
