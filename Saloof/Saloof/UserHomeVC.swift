@@ -564,14 +564,16 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
-        // get the location & possible search
-        let searchTerm = (searchQuery) ? "&query=restaurants,\(searchString)" : "&query=restaurants"
-        let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
-        let foursquareURl = NSURL(string: "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)")!
-        println("Foursquare URL: \(foursquareURl)")
-        let foursquareParameter = "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)"
-        //println("Foursquare URL: \(foursquareURl)"
+        
+        var foursquareParameter: String = ""
+        if searchQuery {
+            foursquareParameter = "&offset=\(offsetCount)&ll=\(userLocation)&query=\(searchString)%20restaurant"
+        } else if searchPrice {
+            foursquareParameter = "&offset=\(offsetCount)&ll=\(userLocation)&query=restaurants&price=\(searchString)"
+        } else {
+            foursquareParameter = "&offset=\(offsetCount)&ll=\(userLocation)&query=restaurant"
+        }
         APICalls.shouldFetchFoursquareLocations(foursquareParameter, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
