@@ -452,6 +452,45 @@ public class APICalls {
             
         })
     }
+    
+    class func shouldFetchFoursquareLocations(foursquareURl: NSString, completion: Bool -> ()){
+                var url:NSURL = NSURL(string: foursquareURl as String)!
+        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        var reponseError: NSError?
+        var response: NSURLResponse?
+        let queue:NSOperationQueue = NSOperationQueue()
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            if  let response = NSData(contentsOfURL: url) {
+                let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
+                    options: NSJSONReadingOptions(0),
+                    error: nil) as! NSDictionary)["response"]
+                if let object: AnyObject = json {
+                    // haveItems = true
+                    var groups = object["groups"] as! [AnyObject]
+                    //  get array of items
+                    var venues = groups[0]["items"] as! [AnyObject]
+                    for item in venues {
+                        // get the venue
+                        if let venue = item["venue"] as? [String: AnyObject] {
+                            //println(venue)
+                            let venueJson = JSON(venue)
+                            // Parse the JSON file using SwiftlyJSON
+                            //parseJSON(venueJson, source: Constants.sourceTypeFoursquare)
+                            self.parseFoursquareJSON(venueJson, source: Constants.sourceTypeFoursquare)
+                        }
+                    }
+                    println("Foursquare returned \(venues.count) venues")
+                    completion(true)
+                }
+                //offsetCount = offsetCount + 10
+            } else {
+                completion (false)
+            }
+            
+        })
+    }
 
     class func parseJSONVenues(json: JSON) {
         let venue = Venue()
@@ -497,6 +536,54 @@ public class APICalls {
             realm.create(Venue.self, value: venue, update: true)
             
         }
+    }
+    class  func parseFoursquareJSON(json: JSON, source: String) {
+        let venue = Venue()
+        venue.identifier = json["id"].stringValue
+        venue.phone = json["contact"]["formattedPhone"].stringValue
+        venue.name = json["name"].stringValue
+        venue.webUrl = json["url"].stringValue
+        let imagePrefix = json["photos"]["groups"][0]["items"][0]["prefix"].stringValue
+        let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
+        let imageName = imagePrefix + "400x400" +  imageSuffix
+        // Address
+        venue.imageUrl = imagePrefix + "400x400" +  imageSuffix
+        var locationStreet = json["location"]["address"].stringValue
+        var locationCity = json["location"]["city"].stringValue
+        var locationState = json["location"]["state"].stringValue
+        var locationZip = json["location"]["postalCode"].stringValue
+        var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
+        venue.address = address
+        venue.hours = json["hours"]["status"].stringValue
+        var distanceInMeters = json["location"]["distance"].floatValue
+        var distanceInMiles = distanceInMeters / 1609.344
+        // make sure it is greater than 0
+        distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
+        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        venue.distance = formattedDistance
+        venue.priceTier = json["price"]["tier"].intValue
+        venue.sourceType = source
+        venue.swipeValue = 0
+        if source == Constants.sourceTypeSaloof {
+            // get the default deal
+            venue.defaultDealTitle = json["deals"]["deal"][0]["title"].stringValue
+            venue.defaultDealDesc = json["deals"]["deal"][0]["description"].stringValue
+            venue.defaultDealValue = json["deals"]["deal"][0]["value"].floatValue
+            venue.favorites = json[Constants.restStats][Constants.restFavorites].intValue
+            venue.likes = json[Constants.restStats][Constants.restLikes].intValue
+        }
+        let imageUrl = NSURL(string: imageName)
+        if let data = NSData(contentsOfURL: imageUrl!){
+            
+            let venueImage = UIImage(data: data)
+            venue.image = venueImage
+            venue.hasImage = true
+        }
+        let realm = Realm()
+        realm.write {
+            realm.create(Venue.self, value: venue, update: true)
+        }
+       // venueList.append(venue)
     }
     
     class func parseJSONDeals(json: JSON) {
