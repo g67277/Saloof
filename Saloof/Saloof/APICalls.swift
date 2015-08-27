@@ -194,15 +194,13 @@ public class APICalls {
     class func uploadBalance(credits: Double, restID: String, token: String){
         
             var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(Int(credits))"
-            //var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=B054B184-104E-431B-B007-A53130BF8005&credit=5"
+            //var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=B1287897-C687-4724-8A21-9BFA7023A881&credit=5"
             println(call)
             var url:NSURL = NSURL(string: call)!
             
-            var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
-            
+        
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
-        request.HTTPBody = postData
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

@@ -1049,11 +1049,11 @@
                                 <exclude reference="Ak1-Cb-w9E"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="FB1-DP-Cpo"/>
+                                <exclude reference="jVA-6x-M6o"/>
                                 <exclude reference="Qfd-CQ-z5J"/>
                                 <exclude reference="afV-y3-ifj"/>
                                 <exclude reference="g5G-b8-ww1"/>
-                                <exclude reference="FB1-DP-Cpo"/>
-                                <exclude reference="jVA-6x-M6o"/>
                                 <exclude reference="FJ4-RK-aKP"/>
                                 <exclude reference="OaT-pR-I5b"/>
                                 <exclude reference="cfq-tT-hnC"/>
@@ -1068,11 +1068,11 @@
                                 <include reference="Ak1-Cb-w9E"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="FB1-DP-Cpo"/>
+                                <include reference="jVA-6x-M6o"/>
                                 <include reference="Qfd-CQ-z5J"/>
                                 <include reference="afV-y3-ifj"/>
                                 <include reference="g5G-b8-ww1"/>
-                                <include reference="FB1-DP-Cpo"/>
-                                <include reference="jVA-6x-M6o"/>
                                 <include reference="FJ4-RK-aKP"/>
                                 <include reference="OaT-pR-I5b"/>
                                 <include reference="cfq-tT-hnC"/>

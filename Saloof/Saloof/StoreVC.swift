@@ -12,9 +12,11 @@ import StoreKit
 class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     @IBOutlet weak var tableView: UITableView!
     
+    
     let productIdenifiers = Set(["com.nazir.tier1", "com.nazir.tier2", "com.nazir.tier3", "com.nazir.tier4"])
     var product: SKProduct?
     var productsArray = Array<SKProduct>()
+    var bought = false
     
     var containerView = UIView()
     var aIView = CustomActivityView(frame: CGRect (x: 0, y: 100, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
@@ -31,7 +33,6 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         requestProductData()
         
     }
-    
     func requestProductData(){
         
         if SKPaymentQueue.canMakePayments(){
@@ -76,7 +77,7 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         products = response.invalidProductIdentifiers
         
         for product in products {
-            println("Product not found: \(product)")
+            //println("Product not found: \(product)")
         }
         
     }
@@ -143,7 +144,10 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         var restId = prefs.stringForKey("restID")!
         var token = prefs.stringForKey("TOKEN")!
         println("about to upload \(price) to id: \(restId)")
-        APICalls.uploadBalance(Double(price), restID: restId.uppercaseString, token: token)
+        if bought{
+            bought = false
+            APICalls.uploadBalance(Double(price), restID: restId.uppercaseString, token: token)
+        }
         aIView.stopAnimation()
         containerView.removeFromSuperview()
     }
@@ -158,7 +162,6 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
-        
         cell.textLabel?.text = productsArray[indexPath.row].localizedTitle
         cell.detailTextLabel?.text = "$\(productsArray[indexPath.row].price)"
         
@@ -172,7 +175,8 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         containerView.center = self.view.center
         win.addSubview(containerView)
         aIView.startAnimation()
-        println(productsArray[indexPath.row].localizedTitle)
+        //println(productsArray[indexPath.row].localizedTitle)
+        bought = true
         let payment = SKPayment(product: productsArray[indexPath.row])
         SKPaymentQueue.defaultQueue().addPayment(payment)
         
