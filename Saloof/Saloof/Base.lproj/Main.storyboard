@@ -566,7 +566,8 @@
                                                 <exclude reference="c3L-GK-VIu"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="23" y="77" width="25" height="27"/>
                                             <mask key="constraints">
                                                 <include reference="APm-19-Tqb"/>
                                                 <include reference="c3L-GK-VIu"/>
@@ -3092,8 +3093,7 @@ Last Updated: 08/21/2015
                                                 <exclude reference="nZD-7f-V6p"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="24" y="27" width="25" height="27"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="c1x-Rc-iKq"/>
                                                 <include reference="nZD-7f-V6p"/>
@@ -3583,11 +3583,14 @@ Last Updated: 08/21/2015
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="Sua-5S-aak"/>
+                                                        </connections>
                                                     </textField>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="q42-Kf-Qjz" userLabel="Phon Img">
                                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     </imageView>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gxn-h1-gvU">
+                                                    <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gxn-h1-gvU">
                                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3606,6 +3609,9 @@ Last Updated: 08/21/2015
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="aPW-be-nt0"/>
+                                                        </connections>
                                                     </textField>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="YB7-QW-VTh" userLabel="street Img">
                                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -3616,6 +3622,9 @@ Last Updated: 08/21/2015
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="no"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="Zhr-p7-2nb"/>
+                                                        </connections>
                                                     </textField>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="textFieldBG" translatesAutoresizingMaskIntoConstraints="NO" id="taV-hH-lkp" userLabel="city Img">
                                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -3767,13 +3776,19 @@ Last Updated: 08/21/2015
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="Kg5-TV-ugk"/>
+                                                        </connections>
                                                     </textField>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Zipcode" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Isz-i8-rHS">
+                                                    <textField opaque="NO" clipsSubviews="YES" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Zipcode" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Isz-i8-rHS">
                                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="HlS-Xf-Ahn" id="O7R-FV-wRY"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4468,7 +4483,7 @@ Last Updated: 08/21/2015
                                                             <action selector="onClick:" destination="HlS-Xf-Ahn" eventType="touchUpInside" id="jv8-c9-6xt"/>
                                                         </connections>
                                                     </button>
-                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please fill all the required fields" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Htn-7L-kRo">
+                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please fill all the required fields" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Htn-7L-kRo">
                                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="204" id="tAQ-Hl-qs0"/>
@@ -4485,7 +4500,7 @@ Last Updated: 08/21/2015
                                                         </variation>
                                                         <variation key="heightClass=regular-widthClass=compact">
                                                             <mask key="constraints">
-                                                                <include reference="tAQ-Hl-qs0"/>
+                                                                <exclude reference="tAQ-Hl-qs0"/>
                                                                 <include reference="v6c-u5-gqY"/>
                                                             </mask>
                                                         </variation>
@@ -4493,6 +4508,9 @@ Last Updated: 08/21/2015
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="Htn-7L-kRo" firstAttribute="leading" secondItem="iXt-es-p7N" secondAttribute="leading" constant="82" id="61K-ut-4X6">
+                                                        <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                    </constraint>
                                                     <constraint firstItem="iad-LO-p5V" firstAttribute="width" secondItem="iXt-es-p7N" secondAttribute="width" multiplier="0.95" id="8p0-V1-IoO"/>
                                                     <constraint firstItem="iad-LO-p5V" firstAttribute="height" secondItem="iXt-es-p7N" secondAttribute="height" multiplier="0.4" id="H0V-MN-Aqt">
                                                         <variation key="heightClass=regular-widthClass=compact" constant="-30.600000000000009"/>
@@ -4501,6 +4519,9 @@ Last Updated: 08/21/2015
                                                         <variation key="heightClass=regular-widthClass=compact" constant="234"/>
                                                     </constraint>
                                                     <constraint firstAttribute="centerX" secondItem="egh-9c-8Bp" secondAttribute="centerX" id="Jf9-Ef-VQ9"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Htn-7L-kRo" secondAttribute="trailing" constant="82" id="R3M-MN-ptr">
+                                                        <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                                    </constraint>
                                                     <constraint firstItem="iad-LO-p5V" firstAttribute="width" secondItem="egh-9c-8Bp" secondAttribute="width" id="Ru2-K2-W2K"/>
                                                     <constraint firstItem="Htn-7L-kRo" firstAttribute="top" secondItem="egh-9c-8Bp" secondAttribute="bottom" constant="8" id="dHR-ts-0ns"/>
                                                     <constraint firstAttribute="centerX" secondItem="Htn-7L-kRo" secondAttribute="centerX" id="e7J-Bz-1LO"/>
@@ -4519,16 +4540,18 @@ Last Updated: 08/21/2015
                                                     </mask>
                                                     <mask key="constraints">
                                                         <exclude reference="JP6-CF-4fA"/>
-                                                        <exclude reference="dHR-ts-0ns"/>
-                                                        <exclude reference="e7J-Bz-1LO"/>
-                                                        <exclude reference="Jf9-Ef-VQ9"/>
-                                                        <exclude reference="r0c-EM-qjh"/>
                                                         <exclude reference="8p0-V1-IoO"/>
                                                         <exclude reference="H0V-MN-Aqt"/>
                                                         <exclude reference="Ru2-K2-W2K"/>
                                                         <exclude reference="gb9-O9-r1M"/>
                                                         <exclude reference="hkp-7Z-LFa"/>
                                                         <exclude reference="xdE-gV-vtj"/>
+                                                        <exclude reference="Jf9-Ef-VQ9"/>
+                                                        <exclude reference="r0c-EM-qjh"/>
+                                                        <exclude reference="61K-ut-4X6"/>
+                                                        <exclude reference="R3M-MN-ptr"/>
+                                                        <exclude reference="dHR-ts-0ns"/>
+                                                        <exclude reference="e7J-Bz-1LO"/>
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=regular-widthClass=compact">
@@ -4539,16 +4562,18 @@ Last Updated: 08/21/2015
                                                     </mask>
                                                     <mask key="constraints">
                                                         <include reference="JP6-CF-4fA"/>
-                                                        <include reference="dHR-ts-0ns"/>
-                                                        <include reference="e7J-Bz-1LO"/>
-                                                        <include reference="Jf9-Ef-VQ9"/>
-                                                        <include reference="r0c-EM-qjh"/>
                                                         <include reference="8p0-V1-IoO"/>
                                                         <include reference="H0V-MN-Aqt"/>
                                                         <include reference="Ru2-K2-W2K"/>
                                                         <include reference="gb9-O9-r1M"/>
                                                         <include reference="hkp-7Z-LFa"/>
                                                         <include reference="xdE-gV-vtj"/>
+                                                        <include reference="Jf9-Ef-VQ9"/>
+                                                        <include reference="r0c-EM-qjh"/>
+                                                        <include reference="61K-ut-4X6"/>
+                                                        <include reference="R3M-MN-ptr"/>
+                                                        <include reference="dHR-ts-0ns"/>
+                                                        <include reference="e7J-Bz-1LO"/>
                                                     </mask>
                                                 </variation>
                                             </view>

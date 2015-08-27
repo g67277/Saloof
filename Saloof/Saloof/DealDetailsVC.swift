@@ -104,6 +104,10 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             }
         }
         
+        titleTF.attributedPlaceholder = NSAttributedString(string:"Deal's Title",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+        valueTF.attributedPlaceholder = NSAttributedString(string:"Deal's Value",
+            attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         // Addes guesture to hide keyboard when tapping on the view
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
@@ -223,12 +227,18 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
             
             
         }else  if count(titleTF.text) < 1{
-            titleTF.placeholder = "Required"
+            titleTF.attributedPlaceholder = NSAttributedString(string:"Title Required",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+            alertUser("No Title", message: "Please give your deal a title")
         }else if count(descTF.text) < 1 {
-            descTF.text = "Required"
+            descTF.text = "Description Required"
+            alertUser("No Description", message: "Please give your deal a description")
             descTF.textColor = UIColor.lightGrayColor()
         }else if count(valueTF.text) < 1 {
-            valueTF.placeholder = "Required"
+            valueTF.attributedPlaceholder = NSAttributedString(string:"Value Required",
+                attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
+            alertUser("No Value", message: "Please give your deal a value")
+
         }
         
     }
@@ -260,6 +270,15 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         }
     }
     
+    func alertUser(title: String, message: String) {
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = title
+        alertView.message = message
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
+    }
+
     
     func DismissKeyboard(){
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
