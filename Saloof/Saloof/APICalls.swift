@@ -233,6 +233,7 @@ public class APICalls {
         
         var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
         //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&\(venueParameters)")!
+        //println("Getting Venues URL: \(url)")
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
@@ -253,6 +254,7 @@ public class APICalls {
                     
                     if let returnedVenues = JSONObject as? [AnyObject] {
                         println("Saloof returned \(returnedVenues.count) venues")
+                    
                         for venue in returnedVenues {
                             let venueJson = JSON(venue)
                             APICalls.parseJSONVenues(venueJson)
@@ -307,59 +309,6 @@ public class APICalls {
             }
         })
     }
-    /*
-    class func getLocalDeals(token: NSString, location: NSString, completion: Bool -> ()){
-        NSLog("Pulling local venues");
-        if Reachability.isConnectedToNetwork(){
-            //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?lat=39.1167&lng=-77.5500")!
-            var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/GetLocal?\(location)")!
-            //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&
-            var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
-            request.HTTPMethod = "GET"
-            request.timeoutInterval = 60
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
-            
-            var reponseError: NSError?
-            var response: NSURLResponse?
-            let queue:NSOperationQueue = NSOperationQueue()
-            
-            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
-                let res = response as! NSHTTPURLResponse!
-                if res != nil {
-                    println(res.statusCode)
-                    if res.statusCode >= 200 && res.statusCode < 300 {
-                        let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-                        
-                        if let returnedVenues = JSONObject as? [AnyObject] {
-                            for venue in returnedVenues {
-                                let venueJson = JSON(venue)
-                                // Parse the JSON file using SwiftlyJSON
-                                APICalls.parseJSONDeals(venueJson)
-                            }
-                            completion (true)
-                        }
-                    } else {
-                        completion (false)
-                    }
-                } else {
-                    completion (false)
-                }
-            })
-            
-        } else {
-            var alertView:UIAlertView = UIAlertView()
-            alertView.title = "No network"
-            alertView.message = "Please make sure you are connected then try again"
-            alertView.delegate = self
-            alertView.addButtonWithTitle("OK")
-            alertView.show()
-            completion (false)
-        }
-    }
-*/
-    
     class func  updateLikeCountForVenue (venue: String, didLike: Bool, completion: Bool -> ()) {
         
     //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=CB29A448-84C9-4630-A0B0-06497A613DA6&like=true
@@ -503,87 +452,46 @@ public class APICalls {
             
         })
     }
-
-    /*
-    class func getLocalDealsByCategory(token: NSString, call: String, completion: Bool -> ()){
-        
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?\(call)"
-        //var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=burger&lat=39.1167&lng=-77.5500"
-        // http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByCategoryNLocation?category=restaurant&lat=38.907192&lng=-77.036871
-        var url:NSURL = NSURL(string: callString)!
-        println(url)
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
-        request.timeoutInterval = 60
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        var reponseError: NSError?
-        var response: NSURLResponse?
-        let queue:NSOperationQueue = NSOperationQueue()
-
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
-            /* Your code */
-            let res = response as! NSHTTPURLResponse!
-            if res != nil{
-                println(res.statusCode)
-                if res.statusCode >= 200 && res.statusCode < 300{
-                    //let json = JSON(data: urlData!)
-                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-
-                    if let returnedVenues = JSONObject as? [AnyObject] {
-                        for venue in returnedVenues {
-                            let venueJson = JSON(venue)
-                            // Parse the JSON file using SwiftlyJSON
-                            APICalls.parseJSONDeals(venueJson)
-                        }
-                        completion(true)
-                    }
-                }
-            }
-        })
-    }
     
-    class func getLocalDealsByPrice(token: String, call: String, completion: Bool -> ()){
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceTierNLocation?\(call)"
-        // http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&lat=38.907192&lng=-77.036871
-        var url:NSURL = NSURL(string: callString)!
-        println(url)
+    class func shouldFetchFoursquareLocations(foursquareURl: NSString, completion: Bool -> ()){
+                var url:NSURL = NSURL(string: foursquareURl as String)!
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
-        request.timeoutInterval = 60
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
         var reponseError: NSError?
         var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
-            /* Your code */
-            let res = response as! NSHTTPURLResponse!
-            if res != nil{
-                println(res.statusCode)
-                if res.statusCode >= 200 && res.statusCode < 300{
-                    //let json = JSON(data: urlData!)
-                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-                    
-                    if let returnedVenues = JSONObject as? [AnyObject] {
-                        for venue in returnedVenues {
+            if  let response = NSData(contentsOfURL: url) {
+                let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
+                    options: NSJSONReadingOptions(0),
+                    error: nil) as! NSDictionary)["response"]
+                if let object: AnyObject = json {
+                    // haveItems = true
+                    var groups = object["groups"] as! [AnyObject]
+                    //  get array of items
+                    var venues = groups[0]["items"] as! [AnyObject]
+                    for item in venues {
+                        // get the venue
+                        if let venue = item["venue"] as? [String: AnyObject] {
+                            //println(venue)
                             let venueJson = JSON(venue)
                             // Parse the JSON file using SwiftlyJSON
-                            APICalls.parseJSONDeals(venueJson)
+                            //parseJSON(venueJson, source: Constants.sourceTypeFoursquare)
+                            self.parseFoursquareJSON(venueJson, source: Constants.sourceTypeFoursquare)
                         }
-                        completion(true)
                     }
+                    println("Foursquare returned \(venues.count) venues")
+                    completion(true)
                 }
+                //offsetCount = offsetCount + 10
+            } else {
+                completion (false)
             }
+            
         })
     }
-    
-    */
+
     class func parseJSONVenues(json: JSON) {
         let venue = Venue()
         // get venue information information
@@ -628,6 +536,54 @@ public class APICalls {
             realm.create(Venue.self, value: venue, update: true)
             
         }
+    }
+    class  func parseFoursquareJSON(json: JSON, source: String) {
+        let venue = Venue()
+        venue.identifier = json["id"].stringValue
+        venue.phone = json["contact"]["formattedPhone"].stringValue
+        venue.name = json["name"].stringValue
+        venue.webUrl = json["url"].stringValue
+        let imagePrefix = json["photos"]["groups"][0]["items"][0]["prefix"].stringValue
+        let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
+        let imageName = imagePrefix + "400x400" +  imageSuffix
+        // Address
+        venue.imageUrl = imagePrefix + "400x400" +  imageSuffix
+        var locationStreet = json["location"]["address"].stringValue
+        var locationCity = json["location"]["city"].stringValue
+        var locationState = json["location"]["state"].stringValue
+        var locationZip = json["location"]["postalCode"].stringValue
+        var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
+        venue.address = address
+        venue.hours = json["hours"]["status"].stringValue
+        var distanceInMeters = json["location"]["distance"].floatValue
+        var distanceInMiles = distanceInMeters / 1609.344
+        // make sure it is greater than 0
+        distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
+        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        venue.distance = formattedDistance
+        venue.priceTier = json["price"]["tier"].intValue
+        venue.sourceType = source
+        venue.swipeValue = 0
+        if source == Constants.sourceTypeSaloof {
+            // get the default deal
+            venue.defaultDealTitle = json["deals"]["deal"][0]["title"].stringValue
+            venue.defaultDealDesc = json["deals"]["deal"][0]["description"].stringValue
+            venue.defaultDealValue = json["deals"]["deal"][0]["value"].floatValue
+            venue.favorites = json[Constants.restStats][Constants.restFavorites].intValue
+            venue.likes = json[Constants.restStats][Constants.restLikes].intValue
+        }
+        let imageUrl = NSURL(string: imageName)
+        if let data = NSData(contentsOfURL: imageUrl!){
+            
+            let venueImage = UIImage(data: data)
+            venue.image = venueImage
+            venue.hasImage = true
+        }
+        let realm = Realm()
+        realm.write {
+            realm.create(Venue.self, value: venue, update: true)
+        }
+       // venueList.append(venue)
     }
     
     class func parseJSONDeals(json: JSON) {

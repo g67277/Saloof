@@ -93,17 +93,14 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func textFieldDidBeginEditing(textField: UITextField) {
+        errorLabel.hidden = true
+        errorLabel.text = "Please fill all the required fields"
+    }
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-       /* if textField.tag == 0{
-            println(count(phoneNumField.text))
-            
-            if count(phoneNumField.text) > 10{
-                //var updatedInput = count(descTF.text)
-                phoneNumField.text = phoneNumField.text.substringToIndex(phoneNumField.text.endIndex.predecessor())
-            }
-        }
-        return true*/
-        if textField.tag == 0 {
+        if textField == phoneNumField {
+            //println("formatting phone field")
             var newString = (phoneNumField.text as NSString).stringByReplacingCharactersInRange(range, withString: string)
             var components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
             
@@ -130,6 +127,12 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
             formattedString.appendString(remainder)
             phoneNumField.text = formattedString as String
             return false
+        } else if textField == zipecodeField {
+            // limit the zip code to 5 digits
+            //println("Limiting the zip code length to 5 digits")
+            let newLength = count(textField.text.utf16) + count(string.utf16) - range.length
+            return newLength <= 5
+            
         } else {
             return true
         }
@@ -141,7 +144,8 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         if _sender.tag == 5{
             
             //sign up here
-            self.continueRegistration()
+            self.checkFields()
+            //self.continueRegistration()
             
         } else if _sender.tag == 10 {
             if continueSession{
@@ -156,7 +160,8 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func pickerSelected(sender: AnyObject) {
-        
+        errorLabel.hidden = true
+        errorLabel.text = "Please fill all the required fields"
         if sender.tag == 4 {
             ActionSheetStringPicker.showPickerWithTitle("Category", rows: categoryArray as [AnyObject], initialSelection: 1, doneBlock: {
                 picker, value, index in
@@ -196,7 +201,8 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func priceControl(sender: AnyObject) {
-        
+        errorLabel.hidden = true
+        errorLabel.text = "Please fill all the required fields"
         switch sender.selectedSegmentIndex{
         case 0:
             selectedPrice = 1
@@ -218,7 +224,6 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     func continueRegistration(){
         
        // runTestingMethod()
-        
         var restaurantName = restNameField.text
         var street = streetField.text
         var city = cityField.text
@@ -235,20 +240,93 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         var weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
         
         println("Lat: \(validatedlat), Lng: \(validatedlng)")
-        
+        call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\""
+        println(call)
+        self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
+        /*
         if validation.validateInput(restaurantName, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name")
             && validation.validateAddress(street, city: city, zipcode: zipcode, lat: self.validatedlat, lng: self.validatedlng).valid
             //&& validation.validatePhone(phoneNumField.text, check: 10, title: "Invalid Number", message: "Please enter a valid Phone number")
             && validation.validatePhone(phoneNumField.text, check: 14, title: "Invalid Number", message: "Please enter a valid Phone number")
             && validation.category(selectedCategory!){
-                
+
                 call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\""
                 println(call)
                 self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
         }else {
             errorLabel.hidden = false
-        }
+        }*/
         
+    }
+    
+    func checkFields() {
+        if Reachability.isConnectedToNetwork(){
+            var restaurantName = restNameField.text
+            var website = websiteField.text
+            
+            // check the name
+            if validation.validateInput(restaurantName, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name") {
+                // then phone number
+                if validation.validatePhone(phoneNumField.text, check: 14, title: "Invalid Number", message: "Please enter a valid Phone number") {
+                    // then site
+                    var prefix = "http://" + website
+                    validation.shouldValidateWebsiteUrl(prefix, completion: { result in
+                        if result {
+                            dispatch_async(dispatch_get_main_queue()){
+                                self.validateRemainingFields()
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("website is invalid")
+                                self.errorLabel.hidden = false
+                                self.errorLabel.text = "Please enter a valid website"
+                                self.alertUser("Invalid Website", message: "Please enter a valid website")
+                            }
+                        }
+                    })
+                } else {
+                    self.errorLabel.hidden = false
+                    self.errorLabel.text = "Please enter a valid phone number"
+                }
+            } else {
+                self.errorLabel.hidden = false
+                self.errorLabel.text = "Please enter a valid Restaurant name"
+            }
+
+        } else {
+            alertUser("No Network", message: "Please check your network connection")
+        }
+    }
+    
+    func validateRemainingFields() {
+        var street = streetField.text
+        var city = cityField.text
+        var zipcode = zipecodeField.text
+        var selectedCategory = catButton.titleLabel?.text as String!
+        // check address
+        if self.validation.validateAddress(street, city: city, zipcode: zipcode, lat: self.validatedlat, lng: self.validatedlng).valid {
+                // check categorry
+            if self.validation.category(selectedCategory!){
+                println("All fields are valid")
+                continueRegistration()
+            } else {
+                println("fields are invalid")
+                self.errorLabel.hidden = false
+                self.errorLabel.text = "Please select a category"
+            }
+        } else {
+            self.errorLabel.hidden = false
+            self.errorLabel.text = "Please enter a valid location address"
+        }
+    }
+    
+    func alertUser(title: String, message: String) {
+        var alertView:UIAlertView = UIAlertView()
+        alertView.title = title
+        alertView.message = message
+        alertView.delegate = self
+        alertView.addButtonWithTitle("OK")
+        alertView.show()
     }
     
     func runTestingMethod(){

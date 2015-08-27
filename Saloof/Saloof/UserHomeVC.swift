@@ -66,7 +66,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         // Set up the Kolodo view delegate and data source
         swipeableView.dataSource = self
         swipeableView.delegate = self
-        indicatorView.addSubview(activityIndicator)
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
         var pickerView = UIPickerView()
@@ -260,7 +259,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
 
     func resetView(shouldSearch: Bool) {
-        //activityIndicator.startAnimation()
         self.navigationController?.view.addSubview(containerView)
         activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
@@ -384,6 +382,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         cardView?.venueImageView?.clipsToBounds = true
         cardView?.venueNameLabel?.text = restaurant.name
         cardView?.venuePhoneLabel?.text = restaurant.phone
+        cardView?.sourceImageView?.image = (restaurant.sourceType == Constants.sourceTypeSaloof) ? UIImage(named: "orangeLogo") : UIImage(named: "foursquareLogo")
         cardView?.setBorderShadow()
         return cardView!
 
@@ -458,13 +457,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
 
     
     func kolodaDidRunOutOfCards(koloda: KolodaView) {
-        self.navigationController?.view.addSubview(containerView)
-        activityIndicator.startAnimation()
         resetSwipeableVieForReload()
     }
     
     func resetSwipeableVieForReload() {
-    
+        self.navigationController?.view.addSubview(containerView)
+        activityIndicator.startAnimation()
         venueList.removeAll()
         // delete any current venues
         var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
@@ -474,8 +472,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
             self.realm.delete(unswipedVenues)
         }
         swipeableView.resetCurrentCardNumber()
+        // get more foursquare items
         fetchFoursquareVenues()
-        swipeableView.reloadData()
+        searchDisplayOverview.hidden = true
     }
     
     func kolodaDidSelectCardAtIndex(koloda: KolodaView, index: UInt) {
@@ -505,7 +504,6 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 alertUser("No Saloof Locations", message: "Looks like you are outside our deals area, but we can still show you some great locations near you!")
                 // just look for foursquare locations
                 fetchFoursquareVenues()
-                swipeableView.reloadData()
             } else {
                 // begin loading saloof & foursquare locations
                 self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
@@ -553,17 +551,16 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                     //makesure the deals button is viewable
                     self.navigationItem.setLeftBarButtonItems([self.menuButton, self.dealsButton], animated: true)
                     self.fetchFoursquareVenues()
-                    self.swipeableView.reloadData()
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()){
                     self.fetchFoursquareVenues()
-                    self.swipeableView.reloadData()
                 }
             }
         })
     }
 
+    
     
     func fetchFoursquareVenues() {
         // Begin loading data from foursquare
@@ -571,84 +568,48 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         
         let searchTerm = (searchQuery) ? "&query=restaurants,\(searchString)" : "&query=restaurants"
         let priceTier = (searchPrice) ? "&price=\(searchString)" : ""
-        //let location = self.locationManager.location
         let userLocation  = "\(location.coordinate.latitude),\(location.coordinate.longitude)"
         let foursquareURl = NSURL(string: "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)")!
-        //println(foursquareURl)
-        if  let response = NSData(contentsOfURL: foursquareURl) {
-            let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
-                options: NSJSONReadingOptions(0),
-                error: nil) as! NSDictionary)["response"]
-            if let object: AnyObject = json {
-                haveItems = true
-                var groups = object["groups"] as! [AnyObject]
-                //  get array of items
-                var venues = groups[0]["items"] as! [AnyObject]
-                for item in venues {
-                    // get the venue
-                    if let venue = item["venue"] as? JSONParameters {
-                        //println(venue)
-                        let venueJson = JSON(venue)
-                        // Parse the JSON file using SwiftlyJSON
-                        parseJSON(venueJson, source: Constants.sourceTypeFoursquare)
+        println("Foursquare URL: \(foursquareURl)")
+        let foursquareParameter = "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&m=foursquare&venuePhotos=1&limit=10&offset=\(offsetCount)&ll=\(userLocation)\(searchTerm)\(priceTier)"
+        //println("Foursquare URL: \(foursquareURl)"
+        APICalls.shouldFetchFoursquareLocations(foursquareParameter, completion: { result in
+            if result {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.haveItems = true
+                    //println("Pulling local data asyncly from saloof!!")
+                    for venue in self.venues {
+                        if venue.sourceType == Constants.sourceTypeFoursquare {
+                             self.venueList.append(venue)
+                        }
+                    }
+                    if self.venueList.count > 0 {
+                        println("we have venues to load")
+                        self.swipeableView.reloadData()
+                    } else {
+                        println("no venues to load")
+                        self.alertUser("Sorry", message: "Looks like there are no locations here")
+                    }
+                    self.containerView.removeFromSuperview()
+                    self.activityIndicator.stopAnimation()
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.containerView.removeFromSuperview()
+                    self.activityIndicator.stopAnimation()
+                    if self.venueList.count > 0 {
+                        println("we have venues to load")
+                        self.swipeableView.reloadData()
+                    } else {
+                        println("no venues to load")
+                        self.alertUser("Sorry", message: "Looks like there are no locations here")
                     }
                 }
-                println("Foursquare returned \(venues.count) venues")
             }
-            offsetCount = offsetCount + 10
-        }
-        self.containerView.removeFromSuperview()
-        self.activityIndicator.stopAnimation()
-    }
-    
-    
-    func parseJSON(json: JSON, source: String) {
-        let venue = Venue()
-        venue.identifier = json["id"].stringValue
-        venue.phone = json["contact"]["formattedPhone"].stringValue
-        venue.name = json["name"].stringValue
-        venue.webUrl = json["url"].stringValue
-        let imagePrefix = json["photos"]["groups"][0]["items"][0]["prefix"].stringValue
-        let imageSuffix = json["photos"]["groups"][0]["items"][0]["suffix"].stringValue
-        let imageName = imagePrefix + "400x400" +  imageSuffix
-        // Address
-        venue.imageUrl = imagePrefix + "400x400" +  imageSuffix
-        var locationStreet = json["location"]["address"].stringValue
-        var locationCity = json["location"]["city"].stringValue
-        var locationState = json["location"]["state"].stringValue
-        var locationZip = json["location"]["postalCode"].stringValue
-        var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
-        venue.address = address
-        venue.hours = json["hours"]["status"].stringValue
-        var distanceInMeters = json["location"]["distance"].floatValue
-        var distanceInMiles = distanceInMeters / 1609.344
-        // make sure it is greater than 0
-        distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
-        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
-        venue.distance = formattedDistance
-        venue.priceTier = json["price"]["tier"].intValue
-        venue.sourceType = source
-        venue.swipeValue = 0
-        if source == Constants.sourceTypeSaloof {
-            // get the default deal
-            venue.defaultDealTitle = json["deals"]["deal"][0]["title"].stringValue
-            venue.defaultDealDesc = json["deals"]["deal"][0]["description"].stringValue
-            venue.defaultDealValue = json["deals"]["deal"][0]["value"].floatValue
-            venue.favorites = json[Constants.restStats][Constants.restFavorites].intValue
-            venue.likes = json[Constants.restStats][Constants.restLikes].intValue
-        }
-        let imageUrl = NSURL(string: imageName)
-        if let data = NSData(contentsOfURL: imageUrl!){
-            
-            let venueImage = UIImage(data: data)
-            venue.image = venueImage
-            venue.hasImage = true
-        }
+
+        })
+        offsetCount = offsetCount + 10
         
-        realm.write {
-            self.realm.create(Venue.self, value: venue, update: true)
-        }
-        venueList.append(venue)
     }
     
     @IBAction func shouldPushToSavedDeal(sender: AnyObject) {

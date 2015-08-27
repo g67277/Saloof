@@ -28,8 +28,6 @@ class FavoritesCell: UITableViewCell {
     
     @IBOutlet var foursquareBarView: UIView!
     
-    @IBOutlet var foursquareLabel: UILabel!
-    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -83,7 +81,6 @@ class FavoritesCell: UITableViewCell {
             priceLabel.text = priceString
         }
         if var distanceLab = fsDistanceLabel {
-            var distance = distance
             distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         

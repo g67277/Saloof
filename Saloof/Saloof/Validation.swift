@@ -97,6 +97,29 @@ public class Validation{
         }
         
     }
+
+    
+    func shouldValidateWebsiteUrl(websiteString: String, completion: Bool -> ()){
+        // try running an asynchronous request to the site to see if it is active
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        let url = NSURL(string: websiteString as String)
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "HEAD"
+        request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = 10.0
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue:NSOperationQueue.mainQueue(), completionHandler:
+            {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                let rsp = response as! NSHTTPURLResponse?
+                // return the status code
+                //completion(rsp?.statusCode == 200)
+                completion((rsp?.statusCode >= 200 && rsp?.statusCode < 400) || rsp?.statusCode == 405)
+        })
+    }
+
     
     func formatHours(weekO: String, weekC: String, weekendO: String, weekendC: String) -> (weekdayHours: String, weekendHours: String){
         

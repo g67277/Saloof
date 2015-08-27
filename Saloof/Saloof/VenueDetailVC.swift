@@ -50,6 +50,7 @@ class VenueDetailVC: UIViewController {
     // Determines if this user likes/favorites this venue
     var doesLike: Bool = false
     var doesFavorite: Bool = false
+    var isFourSquareFavorite: Bool = false
     var thisVenueId: String = ""
     
     override func viewDidLoad() {
@@ -182,13 +183,24 @@ class VenueDetailVC: UIViewController {
             likeButton.hidden = false
 
         } else {
+            // make sure the user didn't favorite this location
+            var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+            // see if we have a favorite venue with this id
+            if favoriteVenue != nil {
+                clearFavoriteButton.enabled = true
+                favoriteButton.hidden = false
+                favoriteButton.selected = true
+                isFourSquareFavorite = true
+                doesFavorite = true
+            } else {
+                clearFavoriteButton.enabled = false
+                favoriteButton.hidden = true
+            }
             // hide the deal and favorites views
             dealView.hidden = true
             halfStatsView.hidden = false
             fullStatsView.hidden = true
-            clearFavoriteButton.enabled = false
             clearLikeButton.enabled = false
-            favoriteButton.hidden = true
             likeButton.hidden = true
             // Number Labels
             if var tierLabel = fsPriceLabel {
@@ -299,13 +311,24 @@ class VenueDetailVC: UIViewController {
             likeButton.hidden = false
             
         } else {
+            // make sure this venue isn't on the favorite list
+            var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+            // see if we have a favorite venue with this id
+            if favoriteVenue != nil {
+                clearFavoriteButton.enabled = true
+                favoriteButton.hidden = false
+                isFourSquareFavorite = true
+                doesFavorite = true
+                favoriteButton.selected = true
+            } else {
+                clearFavoriteButton.enabled = false
+                favoriteButton.hidden = true
+            }
             // hide the deal and favorites views
             dealView.hidden = true
             halfStatsView.hidden = false
             fullStatsView.hidden = true
-            clearFavoriteButton.enabled = false
             clearLikeButton.enabled = false
-            favoriteButton.hidden = true
             likeButton.hidden = true
             // Number Labels
             if var tierLabel = fsPriceLabel {
@@ -427,27 +450,42 @@ class VenueDetailVC: UIViewController {
             // remove this venue
             if doesFavorite {
                 println("unfavoriting")
-                self.favoriteButton.selected = false
-                self.doesFavorite = false
-                self.shouldUpdateFavoriteCountForVenue(false)
-                // unlike/unselect this venue
-                var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
-                if favVenue != nil {
-                    realm.write {
-                        //self.realm.delete(favVenue!)
-                        favVenue?.swipeValue = 2
-                        self.realm.create(FavoriteVenue.self, value: favVenue!, update: true)
-                    }
-                }
-                
-                // remove favorite from API
-                APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: false, completion: { result in
-                    if result {
-                        dispatch_async(dispatch_get_main_queue()){
-                            println("User unfavorited this venue")
+                if isFourSquareFavorite {
+                    println("foursquare location")
+                    isFourSquareFavorite = false
+                    self.favoriteButton.hidden = true
+                    self.doesFavorite = false
+                    var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                    if favVenue != nil {
+                        realm.write {
+                            //self.realm.delete(favVenue!)
+                            favVenue?.swipeValue = 2
+                            self.realm.create(FavoriteVenue.self, value: favVenue!, update: true)
                         }
                     }
-                })
+                } else {
+                    self.favoriteButton.selected = false
+                    self.doesFavorite = false
+                    self.shouldUpdateFavoriteCountForVenue(false)
+                    // unlike/unselect this venue
+                    var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                    if favVenue != nil {
+                        realm.write {
+                            //self.realm.delete(favVenue!)
+                            favVenue?.swipeValue = 2
+                            self.realm.create(FavoriteVenue.self, value: favVenue!, update: true)
+                        }
+                    }
+                    
+                    // remove favorite from API
+                    APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: false, completion: { result in
+                        if result {
+                            dispatch_async(dispatch_get_main_queue()){
+                                println("User unfavorited this venue")
+                            }
+                        }
+                    })
+                }
             } else {
                 println("favoriting")
                 self.shouldUpdateFavoriteCountForVenue(true)
