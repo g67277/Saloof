@@ -437,7 +437,7 @@ public class APICalls {
         NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println(res.statusCode)
+                //println(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
                     debugPrint("Deals swap successful")
                     completion (true)
@@ -454,7 +454,8 @@ public class APICalls {
     }
     
     class func shouldFetchFoursquareLocations(foursquareURl: NSString, completion: Bool -> ()){
-                var url:NSURL = NSURL(string: foursquareURl as String)!
+        var apiUrl = "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&venuePhotos=1&limit=10\(foursquareURl)"
+        var url:NSURL = NSURL(string: apiUrl as String)!
         var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         var reponseError: NSError?
@@ -562,6 +563,7 @@ public class APICalls {
         var formattedDistance : String = String(format: "%.01f", distanceInMiles)
         venue.distance = formattedDistance
         venue.priceTier = json["price"]["tier"].intValue
+        //println("Price tier: \(venue.priceTier)")
         venue.sourceType = source
         venue.swipeValue = 0
         if source == Constants.sourceTypeSaloof {

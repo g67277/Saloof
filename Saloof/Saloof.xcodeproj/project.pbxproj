@@ -19,6 +19,7 @@
 		81FAE1851B87EE3B000F76E7 /* TermsAndCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FAE1841B87EE3B000F76E7 /* TermsAndCondition.swift */; };
 		994B83C61B87A27E003FB5F8 /* DPImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C51B87A27E003FB5F8 /* DPImageCache.swift */; };
 		994B83C81B87AB8A003FB5F8 /* CardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */; };
+		99614F341B8FA76D00630E50 /* washington.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 99614F331B8FA76D00630E50 /* washington.gpx */; };
 		99641A001B8395D500F04F3E /* OneShotLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */; };
 		9980FF141B7BE3760091F286 /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980FF131B7BE3760091F286 /* CustomTextView.swift */; };
 		998DB9151B7709B1005B7E2E /* Business.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 998DB9141B7709B1005B7E2E /* Business.storyboard */; };
@@ -109,6 +110,7 @@
 		81FAE1841B87EE3B000F76E7 /* TermsAndCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndCondition.swift; sourceTree = "<group>"; };
 		994B83C51B87A27E003FB5F8 /* DPImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPImageCache.swift; sourceTree = "<group>"; };
 		994B83C71B87AB8A003FB5F8 /* CardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardOverlayView.swift; sourceTree = "<group>"; };
+		99614F331B8FA76D00630E50 /* washington.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = washington.gpx; sourceTree = "<group>"; };
 		996419FF1B8395D500F04F3E /* OneShotLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneShotLocationManager.swift; sourceTree = "<group>"; };
 		9980FF131B7BE3760091F286 /* CustomTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		998443B936F6F44EEF246EA9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 		81F8C03A1B67BA7D001B9203 = {
 			isa = PBXGroup;
 			children = (
+				99614F331B8FA76D00630E50 /* washington.gpx */,
 				81F8C0451B67BA7D001B9203 /* Saloof */,
 				81F8C05E1B67BA7D001B9203 /* SaloofTests */,
 				81F8C0441B67BA7D001B9203 /* Products */,
@@ -563,6 +566,7 @@
 				998DB9321B770CA8005B7E2E /* Montserrat-Regular.otf in Resources */,
 				998DB9331B770CA8005B7E2E /* Montserrat-SemiBold.otf in Resources */,
 				998DB92D1B770CA8005B7E2E /* Montserrat-Black.otf in Resources */,
+				99614F341B8FA76D00630E50 /* washington.gpx in Resources */,
 				998DB9341B770CA8005B7E2E /* Montserrat-UltraLight.otf in Resources */,
 				81F8C0531B67BA7D001B9203 /* Images.xcassets in Resources */,
 			);

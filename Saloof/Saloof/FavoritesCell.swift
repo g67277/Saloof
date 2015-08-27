@@ -60,11 +60,11 @@ class FavoritesCell: UITableViewCell {
     func setUpFoursquareBar(price: Int, distance: String) {
         likesBarView.hidden = true
         foursquareBarView.hidden = false
+        println("price \(price)")
         // Number Labels
         if var tierLabel = fsPriceLabel {
-            var priceTierValue = price
             var priceString = ""
-            switch priceTierValue {
+            switch price {
             case 0:
                 priceString = ""
             case 1:
@@ -78,7 +78,7 @@ class FavoritesCell: UITableViewCell {
             default:
                 priceString = ""
             }
-            priceLabel.text = priceString
+            fsPriceLabel.text = priceString
         }
         if var distanceLab = fsDistanceLabel {
             distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
@@ -94,9 +94,8 @@ class FavoritesCell: UITableViewCell {
         favoritesLabel.text = " \(favorites)"
         // Number Labels
         if var tierLabel = priceLabel {
-            var priceTierValue = price
             var priceString = ""
-            switch priceTierValue {
+            switch price {
             case 0:
                 priceString = ""
             case 1:
