@@ -82,7 +82,7 @@ class SignInUserVC: UIViewController {
                     self.view.addSubview(containerView)
                     aIView.startAnimation()
                     
-                    let stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
+                    let stringPost="grant_type=password&username=\(userNameField.text!)&password=\(passwordField.text!)"
                     if Reachability.isConnectedToNetwork(){
                         authenticationCall.signIn(stringPost){ result in
                             

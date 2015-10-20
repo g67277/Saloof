@@ -17,20 +17,23 @@ class DPImageCache: NSObject {
             .UserDomainMask,
             true)[0] as NSString).stringByAppendingPathComponent(CACHEPATH)
         let fileManage = NSFileManager.defaultManager()
-        let items = try! fileManage.contentsOfDirectoryAtPath(cachePath)
-        for _ in items {
-            try! fileManage.removeItemAtPath(cachePath)
+        let items = try? fileManage.contentsOfDirectoryAtPath(cachePath)
+        if items?.count > 0{
+            for _ in items! {
+                try! fileManage.removeItemAtPath(cachePath)
+            }
         }
         
-        /*
-        if fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)?.count != nil{
-            var allFiles: Array = fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)!
-            for object in enumerate(allFiles) {
-                fileManage.removeItemAtPath(cachePath.stringByAppendingPathComponent(
-                    object.element as! String),
-                    error: nil)
-            }
-        }*/
+        
+        
+//        if fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)?.count != nil{
+//            var allFiles: Array = fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)!
+//            for object in enumerate(allFiles) {
+//                fileManage.removeItemAtPath(cachePath.stringByAppendingPathComponent(
+//                    object.element as! String),
+//                    error: nil)
+//            }
+//        }
     }
     
     internal static func removeCachedImage(imageAddress: String) {

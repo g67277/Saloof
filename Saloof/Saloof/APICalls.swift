@@ -26,7 +26,7 @@ public class APICalls {
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        let reponseError: NSError?
+        var reponseError: NSError?
         let queue:NSOperationQueue = NSOperationQueue()
             
             NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
@@ -171,7 +171,7 @@ public class APICalls {
         let url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Image"
         print("Size of image to be uploaded: \(jpgImg.length)")
         
-        sendFile(url, fileName: imgName, data: jpgImg, completionHandler: { (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        sendFile(url, fileName: imgName, data: jpgImg, completionHandler: { (response: NSURLResponse?, urlData: NSData!?, error: NSError?) -> Void in
             
             let res = response as! NSHTTPURLResponse!
             
@@ -242,7 +242,12 @@ public class APICalls {
                 print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
                     do {
-                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSDictionary
+                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSMutableArray
+                        //let JSONObject : AnyObject
+                        //let JSONObject : NSDictionary = (NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary)!
+                        
+//                        let jsonData:NSDictionary = (NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as? NSDictionary)!
+//                        let jsonData:NSArray = (NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as? NSArray)!
                         // use jsonData
                         if let returnedVenues = JSONObject as? [AnyObject] {
                             print("Saloof returned \(returnedVenues.count) venues")
@@ -300,7 +305,7 @@ public class APICalls {
                 print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
                     do {
-                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSDictionary
+                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSMutableArray
                         // use jsonData
                         if let returnedVenues = JSONObject as? [AnyObject] {
                             for venue in returnedVenues {
@@ -700,10 +705,10 @@ public class APICalls {
         urlPath:String,
         fileName:String,
         data:NSData,
-        completionHandler: (NSURLResponse!, NSData!, NSError!) -> Void){
+        completionHandler: (NSURLResponse?, NSData?, NSError?) -> Void){
             
-            var url: NSURL = NSURL(string: urlPath)!
-            var request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            let url: NSURL = NSURL(string: urlPath)!
+            let request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
             
             request1.HTTPMethod = "POST"
             

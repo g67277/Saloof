@@ -387,11 +387,11 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     
     func findCoorinates(formattedAddress: String) {
         
-        var geocoder = CLGeocoder()
+        let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(formattedAddress) { (placemarks, error) -> Void in
-            if let placemark = placemarks?[0] as! CLPlacemark {
-                var location:CLLocation = placemark.location!
-                var coordinates:CLLocationCoordinate2D = location.coordinate
+            if let placemark = placemarks?[0]  {
+                let location:CLLocation = placemark.location!
+                let coordinates:CLLocationCoordinate2D = location.coordinate
                 self.validatedlat = coordinates.latitude
                 self.validatedlng = coordinates.longitude
             }
