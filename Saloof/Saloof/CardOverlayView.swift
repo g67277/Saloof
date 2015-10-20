@@ -41,7 +41,7 @@ class CardOverlayView: OverlayView {
     }
     
     // Relay out subviews for auto constraints
-    override func layoutSublayersOfLayer(layer: CALayer!) {
+    override func layoutSublayersOfLayer(layer: CALayer) {
         super.layoutSublayersOfLayer(layer)
         overlayImageView.frame = self.bounds
         overlayImageView.roundCorners( .AllCorners, radius: 14)

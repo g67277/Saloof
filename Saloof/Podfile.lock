@@ -1,30 +1,30 @@
 PODS:
   - ActionSheetPicker-3.0 (1.7.0)
-  - IQKeyboardManager (3.2.4)
+  - IQKeyboardManager (3.3.2)
   - Koloda (1.0.3):
     - pop (~> 1.0)
   - pop (1.0.7)
-  - Realm (0.94.0):
-    - Realm/Headers (= 0.94.0)
-  - Realm/Headers (0.94.0)
-  - RealmSwift (0.94.0):
-    - Realm (= 0.94.0)
-  - SwiftyJSON (2.2.1)
+  - Realm (0.95.2):
+    - Realm/Headers (= 0.95.2)
+  - Realm/Headers (0.95.2)
+  - RealmSwift (0.95.2):
+    - Realm (= 0.95.2)
+  - SwiftyJSON (2.3.0)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
-  - IQKeyboardManager (~> 3.2)
+  - IQKeyboardManager
   - Koloda
-  - RealmSwift (~> 0.94)
-  - SwiftyJSON (~> 2.2.0)
+  - RealmSwift
+  - SwiftyJSON (~> 2.3.0)
 
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: 6516052442fc8ca8f3cc4b3c7aa0436de12373df
-  IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
+  IQKeyboardManager: d863eb0bca424d1f6dad6bdd1f856af52664add8
   Koloda: 8d57fc3278cbea5f25235954e1a65466c795018a
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
-  Realm: a046149653e0ca220b65b5783da907aa5b74d86c
-  RealmSwift: 5efbbf1a5c179a7237e4d428594e41619fa167ba
-  SwiftyJSON: ae2d0a3d68025d136602a33c4ee215091ced3e33
+  Realm: 4c026902041bb39c4bd083ebc5e88f4f17973d72
+  RealmSwift: ac7822fe7ab8dca7fa979f4d576793b111d6dce1
+  SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
 
-COCOAPODS: 0.38.0
+COCOAPODS: 0.38.2

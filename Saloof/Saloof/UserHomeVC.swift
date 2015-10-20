@@ -18,8 +18,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     typealias JSONParameters = [String: AnyObject]
     
     // Realm Data properties
-    let realm = Realm()
-    var venues = Realm().objects(Venue)
+    let realm = try! Realm()
+    var venues = try! Realm().objects(Venue)
     var haveItems: Bool = false
     let venueList = List<Venue>()
     
@@ -68,12 +68,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         swipeableView.delegate = self
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
-        var pickerView = UIPickerView()
+        let pickerView = UIPickerView()
         pickerView.delegate = self
         priceTextField.inputView = pickerView
         
         // close search when user taps outside search field
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "shouldCloseKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "shouldCloseKeyboard")
         searchDisplayOverview.addGestureRecognizer(tap)
         
         
@@ -143,8 +143,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         // delete any items in the array
         venueList.removeAll()
         // delete any current venues
-        var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
-        var unswipedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
+        let rejectedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        let unswipedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
         realm.write {
             self.realm.delete(rejectedVenues)
             self.realm.delete(unswipedVenues)
@@ -158,7 +158,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                self.location = loc
                 self.checkLocationAndAccess()
             } else if let err = error {
-                 println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                 print("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
                 self.containerView.removeFromSuperview()
                 self.activityIndicator.stopAnimation()
                 self.showErrorAlert()
@@ -188,7 +188,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         return pickerDataSource.count;
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerDataSource[row]
     }
     
@@ -224,12 +224,12 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = pickerDataSource[row]
-        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+        let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         return myTitle
     }
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int,
-        reusingView view: UIView!) -> UIView {
+        reusingView view: UIView?) -> UIView {
             var pickerLabel = view as! UILabel!
             if view == nil {  //if no label there yet
                 pickerLabel = UILabel()
@@ -250,7 +250,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func didSelectPricePoint() {
         UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
-            .CurveEaseOut | .TransitionCrossDissolve, animations: {
+            [.CurveEaseOut, .TransitionCrossDissolve], animations: {
                 //...animations
             }, completion: {_ in
                 self.resetView(true)
@@ -321,7 +321,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         if textField.tag == 3 {
             // Search
             if textField.text != "" {
-                searchString = textField.text
+                searchString = textField.text!
                 searchString = searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
                 searchQuery = true
                 searchPrice = false
@@ -339,8 +339,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         activityIndicator.startAnimation()
         venueList.removeAll()
         // delete any current venues
-        var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
-        var unswipedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
+        let rejectedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        let unswipedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
         realm.write {
             self.realm.delete(rejectedVenues)
             self.realm.delete(unswipedVenues)
@@ -374,7 +374,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     func kolodaViewForCardAtIndex(koloda: KolodaView, index: UInt) -> UIView {
         
         
-        var cardView = NSBundle.mainBundle().loadNibNamed("CardView",
+        let cardView = NSBundle.mainBundle().loadNibNamed("CardView",
             owner: self, options: nil)[0] as? CardView
         let restaurant: Venue = venueList[Int(index)]
         cardView?.setImageWithURL(restaurant.imageUrl)
@@ -408,7 +408,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         }
         if direction == SwipeResultDirection.Right {
             // save this venue as a favorite
-            var favorite = FavoriteVenue()
+            let favorite = FavoriteVenue()
             favorite.name = swipedVenue.name
             favorite.phone = swipedVenue.phone
             favorite.webUrl = swipedVenue.webUrl
@@ -441,11 +441,11 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                 APICalls.updateFavoriteCountForVenue(favorite.identifier, didFav: true, completion: { result in
                     if result {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("Favorited this venue")
+                            print("Favorited this venue")
                         }
                     } else {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("unable to favorite this venue")
+                            print("unable to favorite this venue")
                         }
                         
                     }
@@ -465,8 +465,8 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
         activityIndicator.startAnimation()
         venueList.removeAll()
         // delete any current venues
-        var rejectedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
-        var unswipedVenues = Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
+        let rejectedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        let unswipedVenues = try! Realm().objects(Venue).filter("\(Constants.realmFilterFavorites) = \(0)")
         realm.write {
             self.realm.delete(rejectedVenues)
             self.realm.delete(unswipedVenues)
@@ -495,9 +495,9 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     func checkLocationAndAccess () {
         if Reachability.isConnectedToNetwork(){
             // check their location from D.C.
-            var dcLocation = CLLocation(latitude: 38.9, longitude: -77.0)
-            var distanceBetween: CLLocationDistance = location.distanceFromLocation(dcLocation!)
-            var distanceInMiles = distanceBetween / 1609.344
+            let dcLocation = CLLocation(latitude: 38.9, longitude: -77.0)
+            let distanceBetween: CLLocationDistance = location.distanceFromLocation(dcLocation)
+            let distanceInMiles = distanceBetween / 1609.344
             if distanceInMiles > 40 {
                 self.containerView.removeFromSuperview()
                 self.activityIndicator.stopAnimation()
@@ -528,10 +528,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
     
     func fetchSaloofVenues() {
-        var token = prefs.stringForKey("TOKEN")
+        let token = prefs.stringForKey("TOKEN")
         let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
         let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
-        var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+        let userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
         var urlParameters: String = ""
         if searchQuery {
             urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
@@ -585,10 +585,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                         }
                     }
                     if self.venueList.count > 0 {
-                        println("we have venues to load")
+                        print("we have venues to load")
                         self.swipeableView.reloadData()
                     } else {
-                        println("no venues to load")
+                        print("no venues to load")
                         self.alertUser("Sorry", message: "Looks like there are no locations here")
                     }
                     self.containerView.removeFromSuperview()
@@ -599,10 +599,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
                     self.containerView.removeFromSuperview()
                     self.activityIndicator.stopAnimation()
                     if self.venueList.count > 0 {
-                        println("we have venues to load")
+                        print("we have venues to load")
                         self.swipeableView.reloadData()
                     } else {
-                        println("no venues to load")
+                        print("no venues to load")
                         self.alertUser("Sorry", message: "Looks like there are no locations here")
                     }
                 }
@@ -615,7 +615,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     @IBAction func shouldPushToSavedDeal(sender: AnyObject) {
         // Check to make sure we have a saved deal
-        var savedDeal = realm.objects(SavedDeal).first
+        let savedDeal = realm.objects(SavedDeal).first
         if (savedDeal != nil) {
             let valid = checkDealIsValid(savedDeal!)
             if valid {
@@ -647,7 +647,7 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self
@@ -657,10 +657,10 @@ class UserHomeVC:  UIViewController, KolodaViewDataSource, KolodaViewDelegate, U
     
     func checkDealIsValid (savedDeal: SavedDeal) -> Bool {
         // we need to check the date
-        var realm = Realm()
+        let realm = try! Realm()
         let expiresTime = savedDeal.expirationDate
         // see how much time has lapsed
-        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        let compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
             return true

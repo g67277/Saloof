@@ -22,8 +22,8 @@ class BusinessHome: UIViewController {
     @IBOutlet weak var monthsBtn: UIButton!
     
     @IBOutlet weak var profileImgView: UIImageView!
-    var savedDealsArray = Realm().objects(BusinessDeal)
-    let realm = Realm()
+    var savedDealsArray = try! Realm().objects(BusinessDeal)
+    let realm = try! Realm()
     let apiCall = APICalls()
     
     typealias filteredData = (Int, Int)
@@ -46,9 +46,10 @@ class BusinessHome: UIViewController {
         navigationItem.titleView = UIImageView(image: image)
         
         let date = NSDate();
-        var formatter = NSDateFormatter();
+        let formatter = NSDateFormatter();
         formatter.dateFormat = "M";
-        defaultTimeZoneStr = formatter.stringFromDate(date).toInt()!
+        //defaultTimeZoneStr = formatter.stringFromDate(date).Int()!
+        defaultTimeZoneStr = Int(formatter.stringFromDate(date))!
         monthsBtn.setTitle(months[defaultTimeZoneStr - 1], forState: UIControlState.Normal)
         selectedMonth = defaultTimeZoneStr - 1
         updateImg()
@@ -60,12 +61,12 @@ class BusinessHome: UIViewController {
     
     func updateImg(){
         
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
-        var imgID = data?.imgUri
-        println(imgID)
+        let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        let imgID = data?.imgUri
+        print(imgID)
         
-        var url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
-        println(url)
+        let url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imgID!).jpg"
+        print(url)
         DPImageCache.cleanCace()
         profileImgView?.setImageCacheWithAddress(url, placeHolderImage: UIImage (named: "placeholder")!)
 
@@ -75,12 +76,12 @@ class BusinessHome: UIViewController {
         
         selectedDeals.removeAll(keepCapacity: true)
         swappedDeals.removeAll(keepCapacity: true)
-        var returnedData = json.array!
-        println(prefs.stringForKey("restID")!)
-        println(json)
+        let returnedData = json.array!
+        print(prefs.stringForKey("restID")!)
+        print(json)
         for deal in returnedData{
-            var selectedDeal = filteredData(deal["TotalDealsPurchased"].int!, deal["Month"].int!)
-            var swappedDeal = filteredData(deal["TotalDealsSwapped"].int!, deal["Month"].int!)
+            let selectedDeal = filteredData(deal["TotalDealsPurchased"].int!, deal["Month"].int!)
+            let swappedDeal = filteredData(deal["TotalDealsSwapped"].int!, deal["Month"].int!)
             selectedDeals.append(selectedDeal)
             swappedDeals.append(swappedDeal)
             availableCredits = deal["CreditAvailable"].int!
@@ -120,7 +121,7 @@ class BusinessHome: UIViewController {
     
     func updateDisplay(){
         
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         restaurantNameLabel.text = data?.restaurantName
         updateImg()
         
@@ -131,7 +132,7 @@ class BusinessHome: UIViewController {
                 dispatch_async(dispatch_get_main_queue()){
                     self.dealsCount = self.prefs.integerForKey("DealCount")
                     self.numberOfDeals.text = "\(self.dealsCount)"
-                    println(self.availableCredits)
+                    print(self.availableCredits)
                     if self.availableCredits > 0 {
                         self.creditBalanceLabel.text = "\(self.availableCredits)C"
                     }else{
@@ -175,9 +176,9 @@ class BusinessHome: UIViewController {
                 self.monthsBtn.setTitle("\(index)", forState: UIControlState.Normal)
                 self.selectedMonth = value
                 self.filterData(value + 1)
-                println("value = \(value)")
-                println("index = \(index)")
-                println("picker = \(picker)")
+                print("value = \(value)")
+                print("index = \(index)")
+                print("picker = \(picker)")
                 return
                 }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
         }
@@ -185,13 +186,13 @@ class BusinessHome: UIViewController {
   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "toProfile") {
-            var svc = segue.destinationViewController as! ProfileVC
+            let svc = segue.destinationViewController as! ProfileVC
             if profileImgView.image != nil{
                 svc.profileImg = profileImgView.image!
             }
             
         }else if segue.identifier == "toDealList" {
-            var svc = segue.destinationViewController as! DealsVC;
+            let svc = segue.destinationViewController as! DealsVC;
             if profileImgView.image != nil{
                 svc.defaultImg = profileImgView.image!
             }

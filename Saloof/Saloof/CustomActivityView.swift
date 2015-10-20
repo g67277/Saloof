@@ -18,10 +18,10 @@ class CustomActivityView: UIView {
     
     var animating: Bool = false
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.color = defaultColor
         self.size = defaultSize
-        super.init(coder: aDecoder);
+        super.init(coder: aDecoder)!;
     }
     
     init(frame: CGRect, color: UIColor?, size: CGSize?) {
@@ -115,9 +115,9 @@ class CustomActivityView: UIView {
 
     }
     
-    func createRingLayer(# size: CGSize, color: UIColor) -> CALayer {
+    func createRingLayer(size  size: CGSize, color: UIColor) -> CALayer {
         let layer: CAShapeLayer = CAShapeLayer()
-        var path: UIBezierPath = UIBezierPath()
+        let path: UIBezierPath = UIBezierPath()
         let lineWidth: CGFloat = 4
         
         

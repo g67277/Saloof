@@ -57,7 +57,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         
         // Do any additional setup after loading the view.
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         phoneNumField.delegate = self
@@ -101,36 +101,36 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if textField == phoneNumField {
             //println("formatting phone field")
-            var newString = (phoneNumField.text as NSString).stringByReplacingCharactersInRange(range, withString: string)
-            var components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            let newString = (phoneNumField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
+            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
             
-            var decimalString = "".join(components) as NSString
-            var length = decimalString.length
+            let decimalString = components.joinWithSeparator("") as NSString
+            let length = decimalString.length
             if length == 0 || length > 10 || length > 11 {
-                var newLength = (phoneNumField.text as NSString).length + (string as NSString).length - range.length as Int
+                let newLength = (phoneNumField.text! as NSString).length + (string as NSString).length - range.length as Int
                 return (newLength > 10) ? false : true
             }
             var index = 0 as Int
-            var formattedString = NSMutableString()
+            let formattedString = NSMutableString()
             
             if (length - index) > 3 {
-                var areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@) ", areaCode)
                 index += 3
             }
             if length - index > 3 {
-                var prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
-            var remainder = decimalString.substringFromIndex(index)
+            let remainder = decimalString.substringFromIndex(index)
             formattedString.appendString(remainder)
             phoneNumField.text = formattedString as String
             return false
         } else if textField == zipecodeField {
             // limit the zip code to 5 digits
             //println("Limiting the zip code length to 5 digits")
-            let newLength = count(textField.text.utf16) + count(string.utf16) - range.length
+            let newLength = textField.text!.utf16.count + string.utf16.count - range.length
             return newLength <= 5
             
         } else {
@@ -168,9 +168,9 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
                 
                 self.catButton.setTitle("\(index)", forState: UIControlState.Normal)
                 
-                println("value = \(value)")
-                println("index = \(index)")
-                println("picker = \(picker)")
+                print("value = \(value)", terminator: "")
+                print("index = \(index)")
+                print("picker = \(picker)")
                 return
                 }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
             
@@ -189,9 +189,9 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
                     self.weekendC.setTitle("\(index)", forState: UIControlState.Normal)
                 }
                 
-                println("value = \(value)")
-                println("index = \(index)")
-                println("picker = \(picker)")
+                print("value = \(value)", terminator: "")
+                print("index = \(index)", terminator: "")
+                print("picker = \(picker)", terminator: "")
                 return
                 }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
             
@@ -224,25 +224,25 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     func continueRegistration(){
         
        // runTestingMethod()
-        var restaurantName = restNameField.text
-        var street = streetField.text
-        var city = cityField.text
-        var zipcode = zipecodeField.text
-        var phoneNum = phoneNumField.text
-        var website = websiteField.text
-        var selectedCategory = catButton.titleLabel?.text as String!
-        var price = priceControls.selectedSegmentIndex + 1
-        var wkO = weekdayO.titleLabel?.text
-        var wkC = weekdayC.titleLabel?.text
-        var wknO = weekendO.titleLabel?.text
-        var wknC = weekendC.titleLabel?.text
-        var weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
-        var weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
+        let restaurantName = restNameField.text
+        let street = streetField.text
+        let city = cityField.text
+        let zipcode = zipecodeField.text
+        let phoneNum = phoneNumField.text
+        let website = websiteField.text
+        let selectedCategory = catButton.titleLabel?.text as String!
+        let price = priceControls.selectedSegmentIndex + 1
+        let wkO = weekdayO.titleLabel?.text
+        let wkC = weekdayC.titleLabel?.text
+        let wknO = weekendO.titleLabel?.text
+        let wknC = weekendC.titleLabel?.text
+        let weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
+        let weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
         
-        println("Lat: \(validatedlat), Lng: \(validatedlng)")
+        print("Lat: \(validatedlat), Lng: \(validatedlng)", terminator: "")
         call = "\"StreetName\":\"\(street)\",\"City\":\"\(city)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcode)\",\"PhoneNumber\":\"\(phoneNum)\",\"PriceTier\":\(price),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantName)\",\"Lat\":\"\(validatedlat)\",\"Lng\":\"\(validatedlng)\",\"CategoryName\":\"\(selectedCategory)\",\"Website\":\"\(website)\""
-        println(call)
-        self.saveData(restaurantName, street: street, city: city, zipcode: zipcode.toInt()!, phoneNum: phoneNum, website: website, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
+        print(call, terminator: "")
+        self.saveData(restaurantName!, street: street!, city: city!, zipcode: Int(zipcode!)!, phoneNum: phoneNum!, website: website!, category: selectedCategory!, price: price, wkO: wkO!, wkC: wkC!, wknO: wknO!, wknC: wknC!, weekdayString: weekdayString, weekendString: weekendString)
         /*
         if validation.validateInput(restaurantName, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name")
             && validation.validateAddress(street, city: city, zipcode: zipcode, lat: self.validatedlat, lng: self.validatedlng).valid
@@ -261,15 +261,15 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     
     func checkFields() {
         if Reachability.isConnectedToNetwork(){
-            var restaurantName = restNameField.text
-            var website = websiteField.text
+            let restaurantName = restNameField.text
+            let website = websiteField.text
             
             // check the name
-            if validation.validateInput(restaurantName, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name") {
+            if validation.validateInput(restaurantName!, check: 1, title: "Too Short", message: "Please enter a valid Restaurant name") {
                 // then phone number
-                if validation.validatePhone(phoneNumField.text, check: 14, title: "Invalid Number", message: "Please enter a valid Phone number") {
+                if validation.validatePhone(phoneNumField.text!, check: 14, title: "Invalid Number", message: "Please enter a valid Phone number") {
                     // then site
-                    var prefix = "http://" + website
+                    let prefix = "http://" + website!
                     validation.shouldValidateWebsiteUrl(prefix, completion: { result in
                         if result {
                             dispatch_async(dispatch_get_main_queue()){
@@ -277,7 +277,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
                             }
                         } else {
                             dispatch_async(dispatch_get_main_queue()){
-                                println("website is invalid")
+                                print("website is invalid", terminator: "")
                                 self.errorLabel.hidden = false
                                 self.errorLabel.text = "Please enter a valid website"
                                 self.alertUser("Invalid Website", message: "Please enter a valid website")
@@ -299,18 +299,18 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     }
     
     func validateRemainingFields() {
-        var street = streetField.text
-        var city = cityField.text
-        var zipcode = zipecodeField.text
-        var selectedCategory = catButton.titleLabel?.text as String!
+        let street = streetField.text
+        let city = cityField.text
+        let zipcode = zipecodeField.text
+        let selectedCategory = catButton.titleLabel?.text as String!
         // check address
-        if self.validation.validateAddress(street, city: city, zipcode: zipcode, lat: self.validatedlat, lng: self.validatedlng).valid {
+        if self.validation.validateAddress(street!, city: city!, zipcode: zipcode!, lat: self.validatedlat, lng: self.validatedlng).valid {
                 // check categorry
             if self.validation.category(selectedCategory!){
-                println("All fields are valid")
+                print("All fields are valid", terminator: "")
                 continueRegistration()
             } else {
-                println("fields are invalid")
+                print("fields are invalid", terminator: "")
                 self.errorLabel.hidden = false
                 self.errorLabel.text = "Please select a category"
             }
@@ -321,7 +321,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self
@@ -348,7 +348,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "toReg3") {
-            var svc = segue.destinationViewController as! RegisterRestaurantVC3;
+            let svc = segue.destinationViewController as! RegisterRestaurantVC3;
             
             svc.callPart1 = call
             if continueSession{
@@ -359,7 +359,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     
     func saveData(name: String, street: String, city: String, zipcode: Int, phoneNum: String, website: String, category: String, price: Int, wkO: String, wkC: String, wknO: String, wknC: String, weekdayString: String, weekendString: String){
         
-        var model = ProfileModel()
+        let model = ProfileModel()
         model.restaurantName = name
         model.streetAddress = street
         model.city = city
@@ -376,7 +376,7 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
         model.weekendHours = weekendString
         model.id = "will change"
         
-        var realm = Realm()
+        let realm = try! Realm()
         realm.write({
             realm.add(model, update: true)
         })
@@ -388,14 +388,22 @@ class RegisterRestaurantVC2: UIViewController, UITextFieldDelegate {
     func findCoorinates(formattedAddress: String) {
         
         var geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(formattedAddress, completionHandler: {(placemarks: [AnyObject]!, error: NSError!) -> Void in
-            if let placemark = placemarks?[0] as? CLPlacemark {
-                var location:CLLocation = placemark.location
+        geocoder.geocodeAddressString(formattedAddress) { (placemarks, error) -> Void in
+            if let placemark = placemarks?[0] as! CLPlacemark {
+                var location:CLLocation = placemark.location!
                 var coordinates:CLLocationCoordinate2D = location.coordinate
                 self.validatedlat = coordinates.latitude
                 self.validatedlng = coordinates.longitude
             }
-        })
+        }
+        /*geocoder.geocodeAddressString(formattedAddress, completionHandler: {(placemarks: [AnyObject]!, error: NSError!) -> Void in
+            if let placemark = placemarks?[0] as? CLPlacemark {
+                var location:CLLocation = placemark.location!
+                var coordinates:CLLocationCoordinate2D = location.coordinate
+                self.validatedlat = coordinates.latitude
+                self.validatedlng = coordinates.longitude
+            }
+        })*/
         
     }
     

@@ -17,9 +17,9 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     var firstDeal = true
     
-    var savedDealsArray = Realm().objects(BusinessDeal).sorted("value", ascending: true)
+    var savedDealsArray = try! Realm().objects(BusinessDeal).sorted("value", ascending: true)
     var dealsArray : [BusinessDeal] = []
-    var realm = Realm()
+    var realm = try! Realm()
     var topTier = 0
     var defaultImg = UIImage()
     
@@ -28,7 +28,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         navigationController?.navigationBarHidden = false
         
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        //let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         if savedDealsArray.count > 0{
             dealsArray.removeAll(keepCapacity: true)
             for deal in savedDealsArray{
@@ -38,7 +38,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
             dealsList.reloadData()
         }
-        println(dealsArray.count)
+        print(dealsArray.count)
         if dealsArray.count == 0 && firstDeal{
             firstDeal = false
             self.performSegueWithIdentifier("toAdd", sender: nil)
@@ -56,7 +56,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
         
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        //var data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -68,16 +68,16 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if segue.identifier == "toDetails" {
             
-            var selectedItem = dealsArray[(dealsList.indexPathForSelectedRow()?.row)!]
+            let selectedItem = dealsArray[(dealsList.indexPathForSelectedRow?.row)!]
             
-            IVC.tier = (dealsList.indexPathForSelectedRow()?.row)! + 1
+            IVC.tier = (dealsList.indexPathForSelectedRow?.row)! + 1
             IVC.dealTitle = selectedItem.title
             IVC.desc = selectedItem.desc
             IVC.value = selectedItem.value
             IVC.hours = selectedItem.timeLimit
             IVC.dealID = selectedItem.id
             IVC.editingMode = true
-            println(dealsArray.count)
+            print(dealsArray.count)
             if dealsArray.count <= 1{
                 IVC.deleteEnabled = false
             }
@@ -96,7 +96,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if _sender?.tag == 0{
             
             // Publish deals here
-            var alertView:UIAlertView = UIAlertView()
+            let alertView:UIAlertView = UIAlertView()
             alertView.title = "Published!"
             alertView.message = "You are now live, get ready for the swarms"
             alertView.delegate = self
@@ -114,7 +114,7 @@ class DealsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:DealsCell = tableView.dequeueReusableCellWithIdentifier("dealCell") as! DealsCell
+        let cell:DealsCell = tableView.dequeueReusableCellWithIdentifier("dealCell") as! DealsCell
         
         // load items from deal array here
         

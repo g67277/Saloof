@@ -10,12 +10,19 @@ import UIKit
 
 class DPImageCache: NSObject {
     static let CACHEPATH = "Saloof.Com.Images.Cache";
+    
     internal static func cleanCace() {
         let cachePath = (NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory,
             .UserDomainMask,
-            true)[0] as! NSString).stringByAppendingPathComponent(CACHEPATH)
-        let fileManage: NSFileManager = NSFileManager.defaultManager()
+            true)[0] as NSString).stringByAppendingPathComponent(CACHEPATH)
+        let fileManage = NSFileManager.defaultManager()
+        let items = try! fileManage.contentsOfDirectoryAtPath(cachePath)
+        for _ in items {
+            try! fileManage.removeItemAtPath(cachePath)
+        }
+        
+        /*
         if fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)?.count != nil{
             var allFiles: Array = fileManage.contentsOfDirectoryAtPath(cachePath, error: nil)!
             for object in enumerate(allFiles) {
@@ -23,14 +30,14 @@ class DPImageCache: NSObject {
                     object.element as! String),
                     error: nil)
             }
-        }
+        }*/
     }
     
     internal static func removeCachedImage(imageAddress: String) {
-        var fileMan = NSFileManager.defaultManager()
-        var cacheDir = (NSSearchPathForDirectoriesInDomains(
+        let fileMan = NSFileManager.defaultManager()
+        let cacheDir = (NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory,
-            .UserDomainMask, true)[0] as! NSString)
+            .UserDomainMask, true)[0] as NSString)
             .stringByAppendingPathComponent(DPImageCache.CACHEPATH)
         /*   // to print out contents of cache BEFORE delete
         if fileMan.contentsOfDirectoryAtPath(cacheDir, error: nil)?.count != nil {
@@ -41,16 +48,18 @@ class DPImageCache: NSObject {
             }
         }*/
         if fileMan.fileExistsAtPath(cacheDir) {
-            var imageId = imageAddress.kf_MD5()
-            var imageCacheDir = NSSearchPathForDirectoriesInDomains(
+            let imageId = imageAddress.kf_MD5()
+            let imageCacheDir = NSSearchPathForDirectoriesInDomains(
                 .DocumentDirectory,
-                .UserDomainMask, true)[0] as! NSString
-            var imageCachePath = imageCacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH)
-                .stringByAppendingPathComponent(imageId)
-            var fileManager = NSFileManager.defaultManager()
+                .UserDomainMask, true)[0] as NSString
+            let imageCachePath = imageCacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH + imageId)
+            //   .stringByAppendingPathComponent(imageId)
+           // let imageCachePath = imageCacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH)
+             //   .stringByAppendingPathComponent(imageId)
+            let fileManager = NSFileManager.defaultManager()
             if fileManager.fileExistsAtPath(imageCachePath) {
                 //println("File exists to delete at path: \(imageCachePath)")
-                fileManager.removeItemAtPath(imageCachePath, error: nil)
+                try! fileManager.removeItemAtPath(imageCachePath)
                 //println("deleted item at path)")
             }
         }
@@ -73,12 +82,13 @@ extension UIImageView {
     func setImageCacheWithAddress(imageAddress: String, placeHolderImage: UIImage) {
         
         CacheFileManage.checkCachePathOrCreateOne()
-        var imageId = imageAddress.kf_MD5()
-        var cacheDir = NSSearchPathForDirectoriesInDomains(
+        let imageId = imageAddress.kf_MD5()
+        let cacheDir = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory,
-            .UserDomainMask, true)[0] as! NSString
-        var cachePath = cacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH)
-            .stringByAppendingPathComponent(imageId)
+            .UserDomainMask, true)[0] as NSString
+        let cachePath = cacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH + imageId)
+        //let cachePath = cacheDir.stringByAppendingPathComponent(DPImageCache.CACHEPATH)
+           // .stringByAppendingPathComponent(imageId)
         
         self.image = placeHolderImage
         let data = CacheFileManage.dataAtPath(cachePath)
@@ -89,12 +99,12 @@ extension UIImageView {
         }
         
         if let url = NSURL(string: imageAddress) {
-            var request = NSURLRequest(URL: url)
+            let request = NSURLRequest(URL: url)
             NSURLConnection.sendAsynchronousRequest(
                 request,
                 queue: NSOperationQueue.mainQueue(),
                 completionHandler: {
-                    (response: NSURLResponse!, result: NSData!, error: NSError!) -> Void in
+                    (response: NSURLResponse?, result: NSData?, error: NSError?) -> Void in
                     if error != nil {
                         self.image = placeHolderImage
                         return
@@ -110,7 +120,7 @@ extension UIImageView {
     private class CacheFileManage {
         
         private static func dataAtPath(cachePath: String) -> NSData! {
-            var fileManager = NSFileManager.defaultManager()
+            let fileManager = NSFileManager.defaultManager()
             if fileManager.fileExistsAtPath(cachePath) {
                 return NSData(contentsOfFile: cachePath)
             }
@@ -120,17 +130,23 @@ extension UIImageView {
         }
         
         private static func checkCachePathOrCreateOne() {
-            var fileMan = NSFileManager.defaultManager()
-            var cacheDir = (NSSearchPathForDirectoriesInDomains(
+            let fileMan = NSFileManager.defaultManager()
+            let cacheDir = (NSSearchPathForDirectoriesInDomains(
                 .DocumentDirectory,
-                .UserDomainMask, true)[0] as! NSString)
+                .UserDomainMask, true)[0] as NSString)
                 .stringByAppendingPathComponent(DPImageCache.CACHEPATH)
             if !fileMan.fileExistsAtPath(cacheDir) {
-                fileMan.createDirectoryAtPath(
+                do {
+                    // try to make the directory
+                    try NSFileManager.defaultManager().createDirectoryAtPath(cacheDir, withIntermediateDirectories: false, attributes: nil)
+                } catch let error as NSError {
+                    NSLog("\(error.localizedDescription) creating cache directory")
+                }
+            /*    fileMan.createDirectoryAtPath(
                     cacheDir,
                     withIntermediateDirectories: false,
                     attributes: nil,
-                    error: nil)
+                    error: nil)*/
             }
         }
         
@@ -158,12 +174,12 @@ extension String {
 
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
     let totalBytes = length ?? (sizeofValue(value) * 8)
-    var v = value
+    //var v = value
     
-    var valuePointer = UnsafeMutablePointer<T>.alloc(1)
+    let valuePointer = UnsafeMutablePointer<T>.alloc(1)
     valuePointer.memory = value
     
-    var bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
+    let bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
     var bytes = [UInt8](count: totalBytes, repeatedValue: 0)
     for j in 0..<min(sizeof(T),totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
@@ -176,7 +192,7 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
 }
 
 extension Int {
-    func bytes(_ totalBytes: Int = sizeof(Int)) -> [UInt8] {
+    func bytes(totalBytes: Int = sizeof(Int)) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
     }
 }
@@ -196,8 +212,8 @@ class HashBase {
     }
     
     /** Common part for hash calculation. Prepare header data. */
-    func prepare(_ len:Int = 64) -> NSMutableData {
-        var tmpMessage: NSMutableData = NSMutableData(data: self.message)
+    func prepare(len:Int = 64) -> NSMutableData {
+        let tmpMessage: NSMutableData = NSMutableData(data: self.message)
         
         // Step 1. Append Padding Bits
         tmpMessage.appendBytes([0x80]) // append one bit (UInt8 with one bit) to message
@@ -209,7 +225,7 @@ class HashBase {
             counter++
             msgLength++
         }
-        var bufZeros = UnsafeMutablePointer<UInt8>(calloc(counter, sizeof(UInt8)))
+        let bufZeros = UnsafeMutablePointer<UInt8>(calloc(counter, sizeof(UInt8)))
         tmpMessage.appendBytes(bufZeros, length: counter)
         
         return tmpMessage
@@ -247,22 +263,22 @@ class MD5 : HashBase {
     private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
     func calculate() -> NSData {
-        var tmpMessage = prepare()
+        let tmpMessage = prepare()
         
         // hash values
         var hh = h
         
         // Step 2. Append Length a 64-bit representation of lengthInBits
-        var lengthInBits = (message.length * 8)
-        var lengthBytes = lengthInBits.bytes(64 / 8)
-        tmpMessage.appendBytes(reverse(lengthBytes));
+        let lengthInBits = (message.length * 8)
+        let lengthBytes = lengthInBits.bytes(64 / 8)
+        tmpMessage.appendBytes(Array(lengthBytes.reverse()));
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
         var leftMessageBytes = tmpMessage.length
         for (var i = 0; i < tmpMessage.length; i = i + chunkSizeBytes, leftMessageBytes -= chunkSizeBytes) {
             let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
-            let bytes = tmpMessage.bytes;
+            //let bytes = tmpMessage.bytes;
             
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
             var M:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
@@ -305,7 +321,7 @@ class MD5 : HashBase {
                 dTemp = D
                 D = C
                 C = B
-                B = B &+ rotateLeft((A &+ F &+ k[j] &+ M[g]), s[j])
+                B = B &+ rotateLeft((A &+ F &+ k[j] &+ M[g]), n: s[j])
                 A = dTemp
             }
             
@@ -315,8 +331,8 @@ class MD5 : HashBase {
             hh[3] = hh[3] &+ D
         }
         
-        var buf: NSMutableData = NSMutableData();
-        hh.map({ (item) -> () in
+        let buf: NSMutableData = NSMutableData();
+        hh.forEach({ (item) -> () in
             var i:UInt32 = item.littleEndian
             buf.appendBytes(&i, length: sizeofValue(i))
         })
@@ -324,3 +340,5 @@ class MD5 : HashBase {
         return buf.copy() as! NSData;
     }
 }
+
+

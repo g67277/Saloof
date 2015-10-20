@@ -12,10 +12,10 @@ extension UIImageView {
     public func imageFromUrl(urlString: String) {
         if let url = NSURL(string: urlString) {
             let request = NSURLRequest(URL: url)
-            NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
-                (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-                self.image = UIImage(data: data)
-            }
+            NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {
+                (response, data, error) -> Void in
+                  self.image = UIImage(data: data!)
+            })
         }
     }
 }
@@ -34,10 +34,10 @@ class CardView: UIView {
 
     
     // Relay out subviews for auto constraints
-    override func layoutSublayersOfLayer(layer: CALayer!) {
+    override func layoutSublayersOfLayer(layer: CALayer) {
         super.layoutSublayersOfLayer(layer)
-        venueImageView!.roundCorners((UIRectCorner.TopLeft|UIRectCorner.TopRight), radius: 14)
-        venuePhoneLabel!.roundCorners((.BottomLeft  | .BottomRight), radius: 14)
+        venueImageView!.roundCorners(([UIRectCorner.TopLeft, UIRectCorner.TopRight]), radius: 14)
+        venuePhoneLabel!.roundCorners(([.BottomLeft, .BottomRight]), radius: 14)
     }
 
 

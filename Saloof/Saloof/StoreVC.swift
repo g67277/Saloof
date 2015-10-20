@@ -36,11 +36,11 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     func requestProductData(){
         
         if SKPaymentQueue.canMakePayments(){
-            let request = SKProductsRequest(productIdentifiers: self.productIdenifiers as Set<NSObject>)
+            let request = SKProductsRequest(productIdentifiers: self.productIdenifiers as Set<String>)
             request.delegate = self
             request.start()
         }else {
-            var alert = UIAlertController(title: "In-App Purchases Not Enabled", message: "Please enable In App Purchase in Settings", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "In-App Purchases Not Enabled", message: "Please enable In App Purchase in Settings", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.Default, handler: { alertAction in
                 alert.dismissViewControllerAnimated(true, completion: nil)
                 
@@ -59,43 +59,45 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         
     }
     
-    func productsRequest(request: SKProductsRequest!, didReceiveResponse response: SKProductsResponse!) {
+    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         
         var products = response.products // conains array of all the products
         
         if (products.count != 0){
             for var i = 0; i < products.count; i++ {
-                self.product = products[i] as? SKProduct
+                self.product = products[i]
+                //self.product = products[i] as? SKProduct
                 self.productsArray.append(product!)
                 tableView.reloadData()
             }
             
         }else{
-            println("No products found")
+            print("No products found", terminator: "")
         }
         
-        products = response.invalidProductIdentifiers
+        // TO DO handle errors
+        //products = response.invalidProductIdentifiers
         
-        for product in products {
+        //for _ in products {
             //println("Product not found: \(product)")
-        }
+        //}
         
     }
     
-    func paymentQueue(queue: SKPaymentQueue!, updatedTransactions transactions: [AnyObject]!) {
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
-        for transaction in transactions as! [SKPaymentTransaction] {
+        for transaction in transactions {
             
             switch transaction.transactionState {
                 
             case SKPaymentTransactionState.Purchased:
-                println("Transaction Approved")
-                println("Product Identifier: \(transaction.payment.productIdentifier)")
+                print("Transaction Approved", terminator: "")
+                print("Product Identifier: \(transaction.payment.productIdentifier)", terminator: "")
                 self.deliverProduct(transaction)
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
                 
             case SKPaymentTransactionState.Failed:
-                println("Transation Failed")
+                print("Transation Failed", terminator: "")
                 SKPaymentQueue.defaultQueue().finishTransaction(transaction)
                 aIView.startAnimation()
                 containerView.removeFromSuperview()
@@ -110,24 +112,24 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
         
         if transaction.payment.productIdentifier == "com.nazir.tier1" {
             
-            println("$10 purchased")
+            print("$10 purchased", terminator: "")
             saveTransation(50)
             // Unlock feature or add credits
         }else if transaction.payment.productIdentifier == "com.nazir.tier2" {
             
-            println("$20 purchased")
+            print("$20 purchased", terminator: "")
             saveTransation(100)
             // Add credits
             
         }else if transaction.payment.productIdentifier == "com.nazir.tier3" {
             
-            println("$50 purchased")
+            print("$50 purchased", terminator: "")
             saveTransation(250)
             
             // Unlock feature or add credits
         }else if transaction.payment.productIdentifier == "com.nazir.tier4" {
             
-            println("$75 purchased")
+            print("$75 purchased", terminator: "")
             saveTransation(375)
             
             // Add credits
@@ -140,10 +142,10 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     
     func saveTransation(price: Int){
         
-        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        var restId = prefs.stringForKey("restID")!
-        var token = prefs.stringForKey("TOKEN")!
-        println("about to upload \(price) to id: \(restId)")
+        let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let restId = prefs.stringForKey("restID")!
+        let token = prefs.stringForKey("TOKEN")!
+        print("about to upload \(price) to id: \(restId)", terminator: "")
         if bought{
             bought = false
             APICalls.uploadBalance(Double(price), restID: restId.uppercaseString, token: token)
@@ -161,7 +163,7 @@ class StoreVC: UIViewController, UITableViewDataSource, UITableViewDelegate, SKP
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell!
         cell.textLabel?.text = productsArray[indexPath.row].localizedTitle
         cell.detailTextLabel?.text = "$\(productsArray[indexPath.row].price)"
         

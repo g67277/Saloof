@@ -19,8 +19,8 @@ class DealCardCell: UICollectionViewCell {
     @IBOutlet weak var dealValue: UILabel!
     
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
     }
     
     override func awakeFromNib() {

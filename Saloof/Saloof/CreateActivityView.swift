@@ -12,7 +12,7 @@ public class CreateActivityView{
     
     class func createView(backgroundColor: UIColor?, frame: CGRect) -> (UIView){
         
-        var container = UIView(frame: frame)
+        let container = UIView(frame: frame)
         container.backgroundColor = backgroundColor
         container.alpha = 0.7
         

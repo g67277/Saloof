@@ -26,7 +26,7 @@ class SignInVC: UIViewController {
         // Do any additional setup after loading the view.
         
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         userNameField.attributedPlaceholder = NSAttributedString(string:"Username",
@@ -41,11 +41,11 @@ class SignInVC: UIViewController {
     override func viewDidAppear(animated: Bool) {
         
         if (prefs.objectForKey("TOKEN") == nil) || (prefs.objectForKey("restID") == nil) {
-            debugPrint("NO token or restaurant ID")
+            debugPrint("NO token or restaurant ID", terminator: "")
         } else{
             //self.performSegueWithIdentifier("toMain", sender: self)
-            var storyboard = UIStoryboard(name: "Business", bundle: nil)
-            var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
+            let storyboard = UIStoryboard(name: "Business", bundle: nil)
+            let controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")
             self.presentViewController(controller, animated: true, completion: nil)
         }
         
@@ -67,39 +67,39 @@ class SignInVC: UIViewController {
         
         if _sender.tag == 0{
             
-            if validation.validateInput(userNameField.text, check: 3, title: "Too Short", message: "Please enter a valid username")
-                && validation.validateInput(passwordField.text, check: 0, title: "Empty Password", message: "Please enter a password"){
+            if validation.validateInput(userNameField.text!, check: 3, title: "Too Short", message: "Please enter a valid username")
+                && validation.validateInput(passwordField.text!, check: 0, title: "Empty Password", message: "Please enter a password"){
                     
-                    var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+                    let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+                    let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
                     containerView.center = self.view.center
                     self.view.addSubview(containerView)
                     aIView.startAnimation()
                     
-                    var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
+                    let stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
                     
                     if Reachability.isConnectedToNetwork(){
                         authenticationCall.signIn(stringPost){ result in
                             if result{
-                                var token = self.prefs.stringForKey("TOKEN")
+                                let token = self.prefs.stringForKey("TOKEN")
                                 if self.prefs.boolForKey("ROLE"){
                                     APICalls.getMyRestaurant(token!, completion: { result in
                                         
                                         if result{
                                             dispatch_async(dispatch_get_main_queue()){
-                                                var storyboard = UIStoryboard(name: "Business", bundle: nil)
-                                                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")as! UIViewController
+                                                let storyboard = UIStoryboard(name: "Business", bundle: nil)
+                                                let controller = storyboard.instantiateViewControllerWithIdentifier("InitialBusinessView")
                                                 self.presentViewController(controller, animated: true, completion: nil)
                                             }
                                         }else{
                                             dispatch_async(dispatch_get_main_queue()){
-                                                var refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
-                                                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
+                                                let refreshAlert = UIAlertController(title: "Registration Not Complete", message: "You don't have a restaurant registered yet, do you want to register one now?", preferredStyle: UIAlertControllerStyle.Alert)
+                                                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction) in
                                                     self.performSegueWithIdentifier("toReg2", sender: nil)
                                                 }))
-                                                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction!) in
+                                                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction) in
                                                 }))
                                                 self.presentViewController(refreshAlert, animated: true, completion: nil)
                                             }
@@ -128,11 +128,11 @@ class SignInVC: UIViewController {
             if (prefs.objectForKey("TOKEN") == nil) {
                 self.performSegueWithIdentifier("toReg1", sender: nil)
             } else  {
-                var refreshAlert = UIAlertController(title: "Continue?", message: "Want to continue your last registration?", preferredStyle: UIAlertControllerStyle.Alert)
-                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction!) in
+                let refreshAlert = UIAlertController(title: "Continue?", message: "Want to continue your last registration?", preferredStyle: UIAlertControllerStyle.Alert)
+                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: {(action: UIAlertAction) in
                     self.performSegueWithIdentifier("toReg2", sender: nil)
                 }))
-                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction!) in
+                refreshAlert.addAction(UIAlertAction(title: "No", style: .Default, handler: {(action: UIAlertAction) in
                     self.performSegueWithIdentifier("toReg1", sender: nil)
                 }))
                 self.presentViewController(refreshAlert, animated: true, completion: nil)
@@ -151,7 +151,7 @@ class SignInVC: UIViewController {
         }else if (segue.identifier == "toReg1"){
             
         }else if (segue.identifier == "toReg2"){
-            var svc = segue.destinationViewController as! RegisterRestaurantVC2;
+            let svc = segue.destinationViewController as! RegisterRestaurantVC2;
             
             svc.continueSession = true
         }

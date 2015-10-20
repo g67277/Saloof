@@ -28,7 +28,7 @@ class RegisterRestaurantVC: UIViewController {
         // Do any additional setup after loading the view.
         
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         userName.attributedPlaceholder = NSAttributedString(string:"Username",
@@ -83,12 +83,12 @@ class RegisterRestaurantVC: UIViewController {
 //        passwordCField.text = "Test@123"
         // Delete above
         
-        if validation.validateInput(userName.text, check: 2, title: "Somethings Missing", message: "Please enter a valid username")
-            && validation.validateEmail(emailAddressField.text)
-            && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
+        if validation.validateInput(userName.text!, check: 2, title: "Somethings Missing", message: "Please enter a valid username")
+            && validation.validateEmail(emailAddressField.text!)
+            && validation.validatePassword(passwordField.text!, cpass: passwordCField.text!){
                 
-                var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+                let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+                let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                 aIView.center = containerView.center
                 containerView.addSubview(aIView)
                 containerView.center = self.view.center
@@ -96,9 +96,9 @@ class RegisterRestaurantVC: UIViewController {
                 aIView.startAnimation()
                 
                 if Reachability.isConnectedToNetwork(){
-                    var post:NSString = "{\"UserName\":\"\(userName.text)\",\"Email\":\"\(emailAddressField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"true\"}"
+                    let post:NSString = "{\"UserName\":\"\(userName.text)\",\"Email\":\"\(emailAddressField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"true\"}"
                     authenticationCall.registerUser(post) { result in
-                        var stringPost="grant_type=password&username=\(self.userName.text)&password=\(self.passwordField.text)"
+                        let stringPost="grant_type=password&username=\(self.userName.text)&password=\(self.passwordField.text)"
                         if result{
                             self.authenticationCall.signIn(stringPost){result in
                                 if result{

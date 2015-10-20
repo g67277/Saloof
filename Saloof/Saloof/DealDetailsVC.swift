@@ -38,7 +38,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     var deleteEnabled = true
     var img = UIImage()
     
-    var realm = Realm()
+    var realm = try! Realm()
     var apiCall = APICalls()
     let prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
@@ -109,7 +109,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         valueTF.attributedPlaceholder = NSAttributedString(string:"Deal's Value",
             attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
     }
     
@@ -122,7 +122,7 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     func textViewDidChange(textView: UITextView) {
         navigationController?.navigationBarHidden = true
-        var currentCount = 140 - count(descTF.text)
+        let currentCount = 140 - descTF.text.characters.count
         if currentCount <= 0{
             descTF.text = descTF.text.substringToIndex(descTF.text.endIndex.predecessor())
         }
@@ -190,51 +190,52 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     func saveDeal(){
         
-        if count(titleTF.text) > 0 && count(descTF.text) > 0 && count(valueTF.text) > 0 && hours > 0 {
+        if titleTF.text!.characters.count > 0 && descTF.text.characters.count > 0 && valueTF!.text!.characters.count > 0 && hours > 0 {
             
             // save here
-            var deal = BusinessDeal()
-            deal.title = titleTF.text
+            let deal = BusinessDeal()
+            deal.title = titleTF.text!
             deal.desc = descTF.text
-            deal.value = (valueTF.text as NSString).doubleValue
+            deal.value = Double(valueTF.text!)!
+            //deal.value = (valueTF.text as String).doubleValue
             deal.timeLimit = hours
             deal.restaurantID = prefs.stringForKey("restID")!
-            println(deal.restaurantID)
+            print(deal.restaurantID)
             deal.isActive = true
             if editingMode {
                 deal.id = dealID
             }else{
                 deal.id = NSUUID().UUIDString
-                println("creation id:\(deal.id)")
+                print("creation id:\(deal.id)")
             }
             
-            var call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"Active\":true}"
+            let call = "{\"DealId\":\"\(deal.id)\",\"VenueId\":\"\(deal.restaurantID)\",\"DealTitle\":\"\(deal.title)\",\"DealDescription\":\"\(deal.desc)\",\"DealValue\":\(deal.value),\"TimeLimit\":\(deal.timeLimit), \"Active\":true}"
             apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             realm.write{
                 self.realm.add(deal, update: self.editingMode)
             }
             
-            var count = prefs.integerForKey("DealCount")
+            let count = prefs.integerForKey("DealCount")
             prefs.setInteger(count + 1, forKey: "DealCount")
             prefs.synchronize()
-            println("saved")
+            print("saved")
             
-            var refreshAlert = UIAlertController(title: "Saved", message: "Deal has been saved", preferredStyle: UIAlertControllerStyle.Alert)
+            let refreshAlert = UIAlertController(title: "Saved", message: "Deal has been saved", preferredStyle: UIAlertControllerStyle.Alert)
             refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
                 self.navigationController?.popViewControllerAnimated(true)
             }))
             self.presentViewController(refreshAlert, animated: true, completion: nil)
             
             
-        }else  if count(titleTF.text) < 1{
+        }else  if titleTF.text!.characters.count < 1{
             titleTF.attributedPlaceholder = NSAttributedString(string:"Title Required",
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
             alertUser("No Title", message: "Please give your deal a title")
-        }else if count(descTF.text) < 1 {
+        }else if descTF.text.characters.count < 1 {
             descTF.text = "Description Required"
             alertUser("No Description", message: "Please give your deal a description")
             descTF.textColor = UIColor.lightGrayColor()
-        }else if count(valueTF.text) < 1 {
+        }else if valueTF.text!.characters.count < 1 {
             valueTF.attributedPlaceholder = NSAttributedString(string:"Value Required",
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
             alertUser("No Value", message: "Please give your deal a value")
@@ -247,31 +248,31 @@ class DealDetailsVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
         
         if dealID != ""{
             
-            var venueID = prefs.stringForKey("restID")!
-            var call = "{\"DealId\":\"\(dealID)\",\"VenueId\":\"\(venueID)\",\"DealTitle\":\"\(dealTitle)\",\"DealDescription\":\"\(desc)\",\"DealValue\":\(value),\"TimeLimit\":\(hours), \"Active\":false}"
+            let venueID = prefs.stringForKey("restID")!
+            let call = "{\"DealId\":\"\(dealID)\",\"VenueId\":\"\(venueID)\",\"DealTitle\":\"\(dealTitle)\",\"DealDescription\":\"\(desc)\",\"DealValue\":\(value),\"TimeLimit\":\(hours), \"Active\":false}"
             apiCall.uploadDeal(call, token: prefs.stringForKey("TOKEN")!)
             
-            var refreshAlert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this deal", preferredStyle: UIAlertControllerStyle.Alert)
-            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
-                var dealToDelete = self.realm.objectForPrimaryKey(BusinessDeal.self, key: self.dealID)
+            let refreshAlert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this deal", preferredStyle: UIAlertControllerStyle.Alert)
+            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction) in
+                let dealToDelete = self.realm.objectForPrimaryKey(BusinessDeal.self, key: self.dealID)
                 
                 self.realm.write{
                     self.realm.delete(dealToDelete!)
                 }
-                var count = self.prefs.integerForKey("DealCount")
+                let count = self.prefs.integerForKey("DealCount")
                 self.prefs.setInteger(count - 1, forKey: "DealCount")
                 self.prefs.synchronize()
                 
                 self.navigationController?.popViewControllerAnimated(true)
             }))
-            refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: {(action: UIAlertAction!) in
+            refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: {(action: UIAlertAction) in
             }))
             self.presentViewController(refreshAlert, animated: true, completion: nil)
         }
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self

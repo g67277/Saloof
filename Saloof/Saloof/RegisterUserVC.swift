@@ -25,7 +25,7 @@ class RegisterUserVC: UIViewController {
         // Do any additional setup after loading the view.
         
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         usernameField.attributedPlaceholder = NSAttributedString(string:"Username",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
@@ -48,15 +48,14 @@ class RegisterUserVC: UIViewController {
         if _sender.tag == 0{
             
             //sign up here
-            var testing = usernameField.text
             
-            if validation.validateInput(usernameField.text, check: 2, title: "Somethings Missing", message: "Please enter a valid username")
-                && validation.validateEmail(emailField.text)
-                && validation.validatePassword(passwordField.text, cpass: passwordCField.text){
-                    var post:NSString = "{\"UserName\":\"\(usernameField.text)\",\"Email\":\"\(emailField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"false\"}"
+            if validation.validateInput(usernameField.text!, check: 2, title: "Somethings Missing", message: "Please enter a valid username")
+                && validation.validateEmail(emailField.text!)
+                && validation.validatePassword(passwordField.text!, cpass: passwordCField.text!){
+                    let post:NSString = "{\"UserName\":\"\(usernameField.text)\",\"Email\":\"\(emailField.text)\",\"Password\":\"\(passwordField.text)\",\"ConfirmPassword\":\"\(passwordCField.text)\",\"IsBusiness\":\"false\"}"
                     
-                    var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+                    let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+                    let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
                     containerView.center = self.view.center
@@ -67,7 +66,7 @@ class RegisterUserVC: UIViewController {
                         authenticationCall.registerUser(post){ result in
                             
                             if result{
-                                var stringPost="grant_type=password&username=\(self.usernameField.text)&password=\(self.passwordField.text)"
+                                let stringPost="grant_type=password&username=\(self.usernameField.text)&password=\(self.passwordField.text)"
                                 
                                 self.authenticationCall.signIn(stringPost){ result in
                                     if result {

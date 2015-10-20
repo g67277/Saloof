@@ -14,7 +14,7 @@ public class JSONParser {
     
     
     class func parseJSON(json: JSON, source: String) {
-        let realm = Realm()
+        let realm = try! Realm()
         
         if let deals = json["deals"].array {
             for deal in deals {
@@ -42,15 +42,14 @@ public class JSONParser {
                     }
                     
                     // check for current object
-                    let realm = Realm()
                     // Query using a predicate string
-                    var dealPreviouslyDisplayed = realm.objectForPrimaryKey(VenueDeal.self, key: venueDeal.id)
+                    let dealPreviouslyDisplayed = realm.objectForPrimaryKey(VenueDeal.self, key: venueDeal.id)
                     if (dealPreviouslyDisplayed != nil) {
                         //println("This is a previously pulled deal, checking dates")
                         // we need to check the date
                         let expiresTime = dealPreviouslyDisplayed?.expirationDate
                         // see how much time has lapsed
-                        var compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
+                        let compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
                         if compareDates == NSComparisonResult.OrderedAscending {
                             // the deal has not expired yet
                         } else {

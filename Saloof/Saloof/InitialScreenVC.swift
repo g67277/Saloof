@@ -30,7 +30,7 @@ class InitialScreenVC: UIViewController {
             self.performSegueWithIdentifier("toUser", sender: self)
             
         } else{
-            debugPrint("Sides have not been chosen yet")
+            debugPrint("Sides have not been chosen yet", terminator: "")
         }
         
     }

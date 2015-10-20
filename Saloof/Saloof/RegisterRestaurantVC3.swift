@@ -36,7 +36,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         contactName.attributedPlaceholder = NSAttributedString(string:"Contact Person's Full Name",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
@@ -65,12 +65,12 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     
     func signUp(){
         
-        if validation.validateInput(contactName.text, check: 2, title: "Too Short", message: "Please enter a valid name")
+        if validation.validateInput(contactName.text!, check: 2, title: "Too Short", message: "Please enter a valid name")
             && validation.validateInput(descTextView.text, check: 5, title: "Too Short", message: "Please add some more details to the description")
             && validImage{
                 
-                var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+                let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+                let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                 aIView.center = containerView.center
                 containerView.addSubview(aIView)
                 containerView.center = self.view.center
@@ -78,10 +78,10 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                 aIView.startAnimation()
                 
                 imageName = self.randomStringWithLength(15) as String
-                var callPart2 = "{\"ContactName\":\"\(contactName.text)\""
-                var callPart3 = "\"ImageName\":\"\(imageName)\"}"
-                var completeCall = "\(callPart2), \(callPart1), \(callPart3)"
-                var token = prefs.stringForKey("TOKEN")
+                let callPart2 = "{\"ContactName\":\"\(contactName.text)\""
+                let callPart3 = "\"ImageName\":\"\(imageName)\"}"
+                let completeCall = "\(callPart2), \(callPart1), \(callPart3)"
+                let token = prefs.stringForKey("TOKEN")
                 if Reachability.isConnectedToNetwork(){
                     authentication.registerRestaurant(completeCall, token: token!){ result in
                         if result{
@@ -93,8 +93,8 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                                             dispatch_async(dispatch_get_main_queue()){
                                                 aIView.stopAnimation()
                                                 containerView.removeFromSuperview()
-                                                var refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
-                                                refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
+                                                let refreshAlert = UIAlertController(title: "Thank you!", message: "Your data has been sent for validation, we'll be in touch soon.  In the mean time, you can start setting up some amazing deals", preferredStyle: UIAlertControllerStyle.Alert)
+                                                refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction) in
                                                     self.backThree()
                                                 }))
                                                 self.presentViewController(refreshAlert, animated: true, completion: nil)
@@ -127,11 +127,11 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
         
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         
-        var randomString : NSMutableString = NSMutableString(capacity: len)
+        let randomString : NSMutableString = NSMutableString(capacity: len)
         
         for (var i=0; i < len; i++){
-            var length = UInt32 (letters.length)
-            var rand = arc4random_uniform(length)
+            let length = UInt32 (letters.length)
+            let rand = arc4random_uniform(length)
             randomString.appendFormat("%C", letters.characterAtIndex(Int(rand)))
         }
         
@@ -140,11 +140,11 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     
     func saveData(){
         
-        var realm = Realm()
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        let realm = try! Realm()
+        let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         
         realm.write({
-            data?.contactName = self.contactName.text
+            data?.contactName = self.contactName.text!
             data?.desc = self.descTextView.text
             data?.imgUri = self.imageName
         })
@@ -153,7 +153,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
     
     func backThree() {
         
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as! [UIViewController];
+        let viewControllers: [UIViewController] = self.navigationController!.viewControllers ;
         if continueSession{
             self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
         }else{
@@ -186,7 +186,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                     imagePicker.delegate = self
                     imagePicker.sourceType =
                         UIImagePickerControllerSourceType.Camera
-                    imagePicker.mediaTypes = [kUTTypeImage as NSString]
+                    imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = false
                     
                     self.presentViewController(imagePicker, animated: true,
@@ -206,7 +206,7 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
                     imagePicker.delegate = self
                     imagePicker.sourceType =
                         UIImagePickerControllerSourceType.PhotoLibrary
-                    imagePicker.mediaTypes = [kUTTypeImage as NSString]
+                    imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = false
                     self.presentViewController(imagePicker, animated: true,
                         completion: nil)
@@ -223,46 +223,46 @@ class RegisterRestaurantVC3: UIViewController, UINavigationControllerDelegate, U
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         
         self.dismissViewControllerAnimated(true, completion: nil)
         
-        if mediaType.isEqualToString(kUTTypeImage as! String) {
+        if mediaType.isEqualToString(kUTTypeImage as String) {
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
             imgView.image = image
             // Start new code here
             //jpegImg = UIImageJPEGRepresentation(image, 100)
             //pngImg = UIImagePNGRepresentation(image)
-            compressedImgData = UIImageJPEGRepresentation(image, 1)
+            compressedImgData = UIImageJPEGRepresentation(image, 1)!
             var ratio: CGFloat = 0.5
             var attempts = 6
-            println("Initial imageSize: \(compressedImgData.length)")
+            print("Initial imageSize: \(compressedImgData.length)")
             while compressedImgData.length > 80000 && attempts > 0 {
                 attempts = attempts - 1
                 ratio = ratio * 0.5
-                println("image Size before compression: \(compressedImgData.length)")
-                compressedImgData = UIImageJPEGRepresentation(image, ratio)
-                println("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
+                print("image Size before compression: \(compressedImgData.length)")
+                compressedImgData = UIImageJPEGRepresentation(image, ratio)!
+                print("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
             }
-            println("final image size: \(compressedImgData.length)")
+            print("final image size: \(compressedImgData.length)")
             
             
             // End new code here
             validImage = true
             
             if (newMedia == true) {
-                var imageData = UIImageJPEGRepresentation(imgView.image, 0.6)
-                var compressedJPGImage = UIImage(data: imageData)
+                let imageData = UIImageJPEGRepresentation(imgView.image!, 0.6)
+                let compressedJPGImage = UIImage(data: imageData!)
                 ALAssetsLibrary().writeImageToSavedPhotosAlbum(compressedJPGImage!.CGImage, orientation: ALAssetOrientation(rawValue: compressedJPGImage!.imageOrientation.rawValue)!,
                     completionBlock:{ (path:NSURL!, error:NSError!) -> Void in
                         self.imgUri = path
-                        println("\(path)")  //Here you will get your path
+                        print("\(path)")  //Here you will get your path
                 })
                 
-            } else if mediaType.isEqualToString(kUTTypeMovie as! String) {
+            } else if mediaType.isEqualToString(kUTTypeMovie as String) {
                 // Code to support video here
             }else{
                 imgUri = info[UIImagePickerControllerReferenceURL] as! NSURL

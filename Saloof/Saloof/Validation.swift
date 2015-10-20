@@ -13,7 +13,7 @@ public class Validation{
     //Validates entery lenght based on passed check integer
     func validateInput(input: String, check: Int, title: String, message: String) -> Bool{
         
-        if count(input) > check {
+        if input.characters.count > check {
             return true
         }else{
             displayAlert(title, message: message)
@@ -24,10 +24,10 @@ public class Validation{
     
     func validateAddress(street: String, city: String, zipcode: String, lat: Double, lng: Double) -> (formattedString: String, valid: Bool){
         
-        if count(street) > 6 {
+        if street.characters.count > 6 {
             
-            if count(city) > 2{
-                if count(zipcode) == 5 {
+            if city.characters.count > 2{
+                if zipcode.characters.count == 5 {
                     if lat != 0.0 && lng != 0.0 {
                         return ("\(street), \(city), \(zipcode)", true)
                     }else{
@@ -61,7 +61,7 @@ public class Validation{
     
     func validatePassword(pass: String, cpass: String) -> Bool{
         
-        if count(pass) > 5 {
+        if pass.characters.count > 5 {
             
             if pass == cpass{
                 return true
@@ -89,7 +89,7 @@ public class Validation{
     
     func validatePhone(phone: String, check: Int, title: String, message: String) -> Bool{
         
-        if count(phone) == check{
+        if phone.characters.count == check{
             return true
         }else{
             displayAlert(title, message: message)
@@ -110,7 +110,7 @@ public class Validation{
         request.timeoutInterval = 10.0
         
         NSURLConnection.sendAsynchronousRequest(request, queue:NSOperationQueue.mainQueue(), completionHandler:
-            {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            {(response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 let rsp = response as! NSHTTPURLResponse?
@@ -123,13 +123,13 @@ public class Validation{
     
     func formatHours(weekO: String, weekC: String, weekendO: String, weekendC: String) -> (weekdayHours: String, weekendHours: String){
         
-        var weekdayString = "\(weekO)-\(weekC)"
-        var weekendString = "\(weekendO)-\(weekendC)"
+        let weekdayString = "\(weekO)-\(weekC)"
+        let weekendString = "\(weekendO)-\(weekendC)"
         return (weekdayString, weekendString)
     }
     
     func displayAlert(title: String, message: String){
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self

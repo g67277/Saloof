@@ -18,17 +18,17 @@ class UserProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // close search when user taps outside search field
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
 
         emailTextfield.attributedPlaceholder = NSAttributedString(string:"Email Address",
             attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
         
         // "Saloof.UserName")
-        var userName = prefs.stringForKey("Saloof.UserName")
+        let userName = prefs.stringForKey("Saloof.UserName")
         userNameLabel.text = userName
         // Add the second button to the nav bar
-        var logOutButton = UIBarButtonItem(title: "Log Out", style: .Plain, target: self, action:"logUserOut")
+        let logOutButton = UIBarButtonItem(title: "Log Out", style: .Plain, target: self, action:"logUserOut")
         self.navigationItem.rightBarButtonItem = logOutButton
         // Do any additional setup after loading the view.
     }
@@ -52,9 +52,9 @@ class UserProfileVC: UIViewController {
     }
     
     @IBAction func onReset(sender: AnyObject) {
-        if validation.validateEmail(emailTextfield.text){
-            if authenticationCall.resetPassword(emailTextfield.text){
-                var refreshAlert = UIAlertController(title: "Done", message: "Check your email for a reset link", preferredStyle: UIAlertControllerStyle.Alert)
+        if validation.validateEmail(emailTextfield.text!){
+            if authenticationCall.resetPassword(emailTextfield.text!){
+                let refreshAlert = UIAlertController(title: "Done", message: "Check your email for a reset link", preferredStyle: UIAlertControllerStyle.Alert)
                 refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
                     self.navigationController?.popViewControllerAnimated(true)
                 }))

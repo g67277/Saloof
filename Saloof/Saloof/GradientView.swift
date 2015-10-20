@@ -36,7 +36,7 @@ class GradientView: UIView {
     }
     
     // Relay out subviews for auto constraints
-    override func layoutSublayersOfLayer(layer: CALayer!) {
+    override func layoutSublayersOfLayer(layer: CALayer) {
         super.layoutSublayersOfLayer(layer)
         gradient.frame = self.bounds
     }

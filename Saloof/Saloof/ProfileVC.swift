@@ -49,7 +49,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         let image = UIImage(named: "navBarLogo")
         navigationItem.titleView = UIImageView(image: image)
         
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         categoryArray = categories.loadCategories()
@@ -60,39 +60,39 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     
     func loadElements(){
         
-        var realm = Realm()
+        //var realm = Realm()
         
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         
         RestaurantTitleLabel.text = data?.restaurantName
-        var name = data?.contactName
+        let name = data?.contactName
         contactField.text = name
-        var category = data?.category
+        let category = data?.category
         catButton.setTitle(category, forState: UIControlState.Normal)
-        var price = data?.priceTier
+        let price = data?.priceTier
         priceControls.selectedSegmentIndex = price! - 1
-        var week = data?.weekdayHours
-        var weekend = data?.weekendHours
+        let week = data?.weekdayHours
+        let weekend = data?.weekendHours
         parseHours(week!, weekend: weekend!)
         imgView.image = profileImg
         
     }
     
     func parseHours(week: String, weekend: String){
-        var delimiter = "-"
+        let delimiter = "-"
         if week != "" {
             let trimmedString = week.stringByReplacingOccurrencesOfString(" ", withString: "")
-            var weekO = trimmedString.componentsSeparatedByString(delimiter)[0]
-            var weekCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
-            var weekC = trimmedString.substringFromIndex(weekCIndex!)
+            let weekO = trimmedString.componentsSeparatedByString(delimiter)[0]
+            let weekCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
+            let weekC = trimmedString.substringFromIndex(weekCIndex!)
             weekdayO.setTitle("\(weekO)", forState: .Normal)
             weekdayC.setTitle("\(weekC)", forState: .Normal)
         }
         if weekend != ""{
             let trimmedString = weekend.stringByReplacingOccurrencesOfString(" ", withString: "")
-            var weeknO = trimmedString.componentsSeparatedByString(delimiter)[0]
-            var weeknCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
-            var weeknC = trimmedString.substringFromIndex(weeknCIndex!)
+            let weeknO = trimmedString.componentsSeparatedByString(delimiter)[0]
+            let weeknCIndex = trimmedString.rangeOfString("-", options: .BackwardsSearch)?.endIndex
+            let weeknC = trimmedString.substringFromIndex(weeknCIndex!)
             weekendO.setTitle("\(weeknO)", forState: .Normal)
             weekendC.setTitle("\(weeknC)", forState: .Normal)
         }
@@ -101,20 +101,20 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     
     
     func saveData(){
-        var validation = Validation()
-        var category = self.catButton.titleLabel?.text
-        var wkO = self.weekdayO.titleLabel?.text
-        var wkC = self.weekdayC.titleLabel?.text
-        var wknO = self.weekendO.titleLabel?.text
-        var wknC = self.weekendC.titleLabel?.text
+        let validation = Validation()
+        let category = self.catButton.titleLabel?.text
+        let wkO = self.weekdayO.titleLabel?.text
+        let wkC = self.weekdayC.titleLabel?.text
+        let wknO = self.weekendO.titleLabel?.text
+        let wknC = self.weekendC.titleLabel?.text
         weekdayString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekdayHours
         weekendString = validation.formatHours(wkO!, weekC: wkC!, weekendO: wknO!, weekendC: wknC!).weekendHours
 
-        var realm = Realm()
-        var data = Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
+        let realm = try! Realm()
+        let data = try! Realm().objectForPrimaryKey(ProfileModel.self, key: prefs.stringForKey("restID")!)
         uploadChanges(data!)
         realm.write({
-            data?.contactName = self.contactField.text
+            data?.contactName = self.contactField.text!
             data?.category = category!
             data?.priceTier = self.priceControls.selectedSegmentIndex + 1
             if wkO != nil{
@@ -138,52 +138,52 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func uploadChanges(data : ProfileModel){
         
         var contactNameUpdate = data.contactName
-        var imageUpated = data.imgUri
-        var streetUpdate = data.streetAddress
-        var cityUpdate = data.city
-        var zipcodeUpdate = data.zipcode
-        var phoneNumUpdate = data.phoneNum
+        let imageUpated = data.imgUri
+        let streetUpdate = data.streetAddress
+        let cityUpdate = data.city
+        let zipcodeUpdate = data.zipcode
+        let phoneNumUpdate = data.phoneNum
         var priceUpdate = data.priceTier
-        var restaurantNameUpdate = data.restaurantName
-        var latUpdate = data.lat
-        var lngUpate = data.lng
-        var selectedCat = catButton.titleLabel?.text
-        var categoryUpdate = selectedCat!
-        var websiteUpdate = data.website
+        let restaurantNameUpdate = data.restaurantName
+        let latUpdate = data.lat
+        let lngUpate = data.lng
+        let selectedCat = catButton.titleLabel?.text
+        let categoryUpdate = selectedCat!
+        let websiteUpdate = data.website
         
-        if count(contactField.text) > 0 {
-            contactNameUpdate = contactField.text
+        if contactField.text!.characters.count > 0 {
+            contactNameUpdate = contactField.text!
         }
         if selectedPrice > 0 {
             priceUpdate = selectedPrice
         }
         
-        var restID = prefs.stringForKey("restID")!
-        println(priceUpdate)
+        let restID = prefs.stringForKey("restID")!
+        print(priceUpdate)
         
-        var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-        var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+        let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+        let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
         aIView.center = containerView.center
         containerView.addSubview(aIView)
         containerView.center = self.view.center
         self.view.addSubview(containerView)
         aIView.startAnimation()
         
-        var call = "{\"VenueId\":\"\(restID)\",\"ContactName\":\"\(contactNameUpdate)\",\"StreetName\":\"\(streetUpdate)\",\"City\":\"\(cityUpdate)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcodeUpdate)\",\"PhoneNumber\":\"\(phoneNumUpdate)\",\"PriceTier\":\(priceUpdate),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantNameUpdate)\",\"Lat\":\"\(latUpdate)\",\"Lng\":\"\(lngUpate)\",\"CategoryName\":\"\(categoryUpdate)\",\"Website\":\"\(websiteUpdate)\",\"ImageName\":\"\(imageUpated)\"}"
+        let call = "{\"VenueId\":\"\(restID)\",\"ContactName\":\"\(contactNameUpdate)\",\"StreetName\":\"\(streetUpdate)\",\"City\":\"\(cityUpdate)\",\"State\":\"DC\",\"ZipCode\":\"\(zipcodeUpdate)\",\"PhoneNumber\":\"\(phoneNumUpdate)\",\"PriceTier\":\(priceUpdate),\"WeekdaysHours\":\"\(weekdayString)\",\"WeekEndHours\":\"\(weekendString)\",\"RestaurantName\":\"\(restaurantNameUpdate)\",\"Lat\":\"\(latUpdate)\",\"Lng\":\"\(lngUpate)\",\"CategoryName\":\"\(categoryUpdate)\",\"Website\":\"\(websiteUpdate)\",\"ImageName\":\"\(imageUpated)\"}"
         
-        var token = prefs.stringForKey("TOKEN")
+        let token = prefs.stringForKey("TOKEN")
         
         if Reachability.isConnectedToNetwork(){
-            var authentication = AuthenticationCalls()
+            let authentication = AuthenticationCalls()
             authentication.registerRestaurant(call, token: token!){ result in
                 if result {
                     if self.newImage{
                         self.newImage = false
-                        var apiCall = APICalls()
+                        let apiCall = APICalls()
                         apiCall.uploadImg(self.compressedImgData, imgName: imageUpated){ result in
                             dispatch_async(dispatch_get_main_queue()){
                                 aIView.stopAnimation()
-                                var alertView:UIAlertView = UIAlertView()
+                                let alertView:UIAlertView = UIAlertView()
                                 alertView.title = "Saved"
                                 alertView.delegate = self
                                 alertView.addButtonWithTitle("OK")
@@ -194,7 +194,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                     }else{
                         dispatch_async(dispatch_get_main_queue()){
                             aIView.stopAnimation()
-                            var alertView:UIAlertView = UIAlertView()
+                            let alertView:UIAlertView = UIAlertView()
                             alertView.title = "Saved"
                             alertView.delegate = self
                             alertView.addButtonWithTitle("OK")
@@ -206,7 +206,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                 }
             }
         }else{
-            var alertView:UIAlertView = UIAlertView()
+            let alertView:UIAlertView = UIAlertView()
             alertView.title = "Offline!"
             alertView.message = "Looks like you're offline, your changes have been saved locally, please try uploading later"
             alertView.delegate = self
@@ -257,9 +257,9 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                 
                 self.catButton.setTitle("\(index)", forState: UIControlState.Normal)
                 
-                println("value = \(value)")
-                println("index = \(index)")
-                println("picker = \(picker)")
+                print("value = \(value)")
+                print("index = \(index)")
+                print("picker = \(picker)")
                 return
                 }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
             
@@ -278,9 +278,9 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                     self.weekendC.setTitle("\(index)", forState: UIControlState.Normal)
                 }
                 
-                println("value = \(value)")
-                println("index = \(index)")
-                println("picker = \(picker)")
+                print("value = \(value)")
+                print("index = \(index)")
+                print("picker = \(picker)")
                 return
                 }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
             
@@ -338,7 +338,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                     imagePicker.delegate = self
                     imagePicker.sourceType =
                         UIImagePickerControllerSourceType.Camera
-                    imagePicker.mediaTypes = [kUTTypeImage as NSString]
+                    imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = false
                     
                     self.presentViewController(imagePicker, animated: true,
@@ -358,7 +358,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
                     imagePicker.delegate = self
                     imagePicker.sourceType =
                         UIImagePickerControllerSourceType.PhotoLibrary
-                    imagePicker.mediaTypes = [kUTTypeImage as NSString]
+                    imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = false
                     self.presentViewController(imagePicker, animated: true,
                         completion: nil)
@@ -375,41 +375,41 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         
         self.dismissViewControllerAnimated(true, completion: nil)
         
-        if mediaType.isEqualToString(kUTTypeImage as! String) {
+        if mediaType.isEqualToString(kUTTypeImage as String) {
             let image = info[UIImagePickerControllerOriginalImage]
                 as! UIImage
             imgView.image = image
-            compressedImgData = UIImageJPEGRepresentation(image, 1)
+            compressedImgData = UIImageJPEGRepresentation(image, 1)!
             var ratio: CGFloat = 0.5
             var attempts = 6
-            println("Initial imageSize: \(compressedImgData.length)")
+            print("Initial imageSize: \(compressedImgData.length)")
             while compressedImgData.length > 80000 && attempts > 0 {
                 attempts = attempts - 1
                 ratio = ratio * 0.5
-                println("image Size before compression: \(compressedImgData.length)")
-                compressedImgData = UIImageJPEGRepresentation(image, ratio)
-                println("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
+                print("image Size before compression: \(compressedImgData.length)")
+                compressedImgData = UIImageJPEGRepresentation(image, ratio)!
+                print("image Size after compression: \(compressedImgData.length) with ratio: \(ratio)")
             }
-            println("final image size: \(compressedImgData.length)")
+            print("final image size: \(compressedImgData.length)")
             
             newImage = true
             validImage = true
             
             if (newMedia == true) {
-                var imageData = UIImageJPEGRepresentation(imgView.image, 0.6)
-                var compressedJPGImage = UIImage(data: imageData)
+                let imageData = UIImageJPEGRepresentation(imgView.image!, 0.6)
+                let compressedJPGImage = UIImage(data: imageData!)
                 ALAssetsLibrary().writeImageToSavedPhotosAlbum(compressedJPGImage!.CGImage, orientation: ALAssetOrientation(rawValue: compressedJPGImage!.imageOrientation.rawValue)!,
                     completionBlock:{ (path:NSURL!, error:NSError!) -> Void in
                        
                 })
                 
-            } else if mediaType.isEqualToString(kUTTypeMovie as! String) {
+            } else if mediaType.isEqualToString(kUTTypeMovie as String) {
                 // Code to support video here
             }
         }
@@ -441,10 +441,10 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     //Email view methods
     @IBAction func launchEmail(sender: AnyObject) {
         
-        var emailTitle = "Change of Info"
-        var messageBody = "For safety and security reasons, a restaurant address, phone number and website are required to be validated before the listing is updated on Saloof.  Please add your changes to this form, and we will update this restaurant's info as soon as possible. \n\n Address: \n\n Phone Number: \n\n Website: \n \nThank you!\n\n Saloof\n Find Customers Faster and Easier than ever"
-        var toRecipents = ["nazir.shuqair@gmail.com"]
-        var mc: MFMailComposeViewController = MFMailComposeViewController()
+        let emailTitle = "Change of Info"
+        let messageBody = "For safety and security reasons, a restaurant address, phone number and website are required to be validated before the listing is updated on Saloof.  Please add your changes to this form, and we will update this restaurant's info as soon as possible. \n\n Address: \n\n Phone Number: \n\n Website: \n \nThank you!\n\n Saloof\n Find Customers Faster and Easier than ever"
+        let toRecipents = ["nazir.shuqair@gmail.com"]
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
         mc.mailComposeDelegate = self
         mc.setSubject(emailTitle)
         mc.setMessageBody(messageBody, isHTML: false)
@@ -453,22 +453,22 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         self.presentViewController(mc, animated: true, completion: nil)
     }
     
-    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError) {
-        switch result.value {
-        case MFMailComposeResultCancelled.value:
-            println("Mail cancelled")
-        case MFMailComposeResultSaved.value:
-            println("Mail saved")
-        case MFMailComposeResultSent.value:
-            println("Mail sent")
-            var alertView:UIAlertView = UIAlertView()
+    func mailComposeController(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, error:NSError?) {
+        switch result.rawValue {
+        case MFMailComposeResultCancelled.rawValue:
+            print("Mail cancelled")
+        case MFMailComposeResultSaved.rawValue:
+            print("Mail saved")
+        case MFMailComposeResultSent.rawValue:
+            print("Mail sent")
+            let alertView:UIAlertView = UIAlertView()
             alertView.title = "Sent"
             alertView.message = "We've recived your request and will proccess it shortly"
             alertView.delegate = self
             alertView.addButtonWithTitle("OK")
             alertView.show()
-        case MFMailComposeResultFailed.value:
-            println("Mail sent failure: %@", [error.localizedDescription])
+        case MFMailComposeResultFailed.rawValue:
+            print("Mail sent failure: %@", [error!.localizedDescription])
         default:
             break
         }

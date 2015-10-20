@@ -38,7 +38,7 @@ class UserTutorialVC: UIViewController, KolodaViewDataSource, KolodaViewDelegate
     // This method creates a break between the tableview updating and returning a new deal to add to the view
     func swipeRight() {
         let timeDelay = seconds * Double(NSEC_PER_SEC)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.kolodaView.swipe(SwipeResultDirection.Right)
             self.swipeleft()
@@ -47,7 +47,7 @@ class UserTutorialVC: UIViewController, KolodaViewDataSource, KolodaViewDelegate
     
     func swipeleft() {
         let timeDelay = seconds * Double(NSEC_PER_SEC)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.kolodaView.swipe(SwipeResultDirection.Left)
             self.swipeTap1()
@@ -56,7 +56,7 @@ class UserTutorialVC: UIViewController, KolodaViewDataSource, KolodaViewDelegate
     
     func swipeTap1() {
         let timeDelay = seconds * Double(NSEC_PER_SEC)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         favBtn.image = UIImage(named: "tutorialFavBut")
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.kolodaView.swipe(SwipeResultDirection.Right)
@@ -68,7 +68,7 @@ class UserTutorialVC: UIViewController, KolodaViewDataSource, KolodaViewDelegate
         favBtn.image = UIImage(named: "tutorialFavButUn")
         rejectBtn.image = UIImage(named: "tutorialRejectBtn")
         let timeDelay = seconds * Double(NSEC_PER_SEC)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.kolodaView.swipe(SwipeResultDirection.Left)
             self.rejectBtn.image = UIImage(named: "tutorialRejectBtnUn")

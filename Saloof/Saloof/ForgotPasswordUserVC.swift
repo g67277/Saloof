@@ -19,7 +19,7 @@ class ForgotPasswordUserVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         emailTextField.attributedPlaceholder = NSAttributedString(string:"Email Address",
@@ -35,9 +35,9 @@ class ForgotPasswordUserVC: UIViewController {
         
         if _sender.tag == 0 {
             
-            if validation.validateEmail(emailTextField.text){
-                if authenticationCall.resetPassword(emailTextField.text){
-                    var refreshAlert = UIAlertController(title: "Done", message: "Check your email for a reset link", preferredStyle: UIAlertControllerStyle.Alert)
+            if validation.validateEmail(emailTextField.text!){
+                if authenticationCall.resetPassword(emailTextField.text!){
+                    let refreshAlert = UIAlertController(title: "Done", message: "Check your email for a reset link", preferredStyle: UIAlertControllerStyle.Alert)
                     refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: {(action: UIAlertAction!) in
                         self.navigationController?.popViewControllerAnimated(true)
                     }))

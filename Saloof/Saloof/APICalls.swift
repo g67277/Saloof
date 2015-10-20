@@ -17,33 +17,31 @@ public class APICalls {
     
     class func getMyRestaurant(token: NSString, completion: Bool -> ()){
         
-        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/MyVenue")!
+        let url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/MyVenue")!
         
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        var reponseError: NSError?
-        var response: NSURLResponse?
+        let reponseError: NSError?
         let queue:NSOperationQueue = NSOperationQueue()
             
-            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
                 /* Your code */
                 let res = response as! NSHTTPURLResponse!
                 if res != nil{
-                println(res.statusCode)
-                if res.statusCode >= 200 && res.statusCode < 300{
-                    var error: NSError?
+                print(res.statusCode)
+                if res.statusCode >= 200 && res.statusCode < 300 {
                     
                     let json = JSON(data: urlData!)
                     
                     if(json["Id"] != nil){
                         
                         debugPrint("Data Recieved")
-                        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                        let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
                         prefs.setObject(json["Id"].string, forKey: "restID")
                         prefs.synchronize()
                         DataSaving.saveRestaurantProfile(json)
@@ -59,7 +57,7 @@ public class APICalls {
                             debugPrint("Unknown Error")
                         }
                         
-                        var alertView:UIAlertView = UIAlertView()
+                        let alertView:UIAlertView = UIAlertView()
                         alertView.title = "Sign in Failed!"
                         alertView.message = error_msg as String
                         alertView.delegate = self
@@ -68,10 +66,10 @@ public class APICalls {
                         completion(false)
                     }
                 }else {
-                    var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                    let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
                     if prefs.stringForKey("TOKEN") == nil || prefs.stringForKey("TOKEN") == ""{
                         dispatch_async(dispatch_get_main_queue()){
-                            var alertView:UIAlertView = UIAlertView()
+                            let alertView:UIAlertView = UIAlertView()
                             alertView.title = "Sign in Failed!"
                             alertView.message = "Connection Failure"
                             if let error = reponseError {
@@ -86,7 +84,7 @@ public class APICalls {
                 }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
-                        var alertView:UIAlertView = UIAlertView()
+                        let alertView:UIAlertView = UIAlertView()
                         alertView.title = "Our bad"
                         alertView.message = "Looks like we are updating the server, please try again later"
                         alertView.delegate = self
@@ -100,13 +98,13 @@ public class APICalls {
     
     func uploadDeal(call: NSString, token: String){
         
-        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal")!
+        let url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal")!
         
-        var postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
+        let postData:NSData = call.dataUsingEncoding(NSASCIIStringEncoding)!
         
-        var postLength:NSString = String( call.length)
+        let postLength:NSString = String( call.length)
         
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.HTTPBody = postData
         request.timeoutInterval = 60
@@ -115,22 +113,20 @@ public class APICalls {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        var reponseError: NSError?
-        var response: NSURLResponse?
         
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
-            /* Your code */
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil{
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300{
-                    println("Deal uploaded")
-                }else{
-                    var error: NSError?
-                    let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
-                    println(jsonData["error_description"] as? String)
+                    print("Deal uploaded")
+                } else {
+                    
+                    //var error: NSError?
+                    //let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                    //print(jsonData["error_description"] as? String)
                 }
             }
         })
@@ -139,29 +135,28 @@ public class APICalls {
 
     func getBalance(id: String, token: String, completion: JSON -> ()){
         
-        var callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=\(id)"
-        var url:NSURL = NSURL(string: callString)!
+        let callString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/BalanceSummary?id=\(id)"
+        let url:NSURL = NSURL(string: callString)!
         
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        var reponseError: NSError?
-        var response: NSURLResponse?
+        
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             /* Your code */
             let res = response as! NSHTTPURLResponse!
             if res != nil{
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300{
                     let json = JSON(data: urlData!)
                     if json != nil{
-                        println("business home data recived")
+                        print("business home data recived")
                         completion(json)
                     }
                 }
@@ -170,22 +165,23 @@ public class APICalls {
         
     }
     
+    
     func uploadImg(jpgImg: NSData, imgName: String, completion: Bool -> ()){
         
         let url = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Image"
-        println("Size of image to be uploaded: \(jpgImg.length)")
+        print("Size of image to be uploaded: \(jpgImg.length)")
         
         sendFile(url, fileName: imgName, data: jpgImg, completionHandler: { (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
             
             let res = response as! NSHTTPURLResponse!
             
-            println("uploaded")
-            println(res.statusCode)
+            print("uploaded")
+            print(res.statusCode)
             if res.statusCode == 200{
                 completion(true)
             }else{
                 let json = JSON(data: urlData!)
-                println(json["error_message"])
+                print(json["error_message"])
                 completion(false)
             }
         })
@@ -193,34 +189,31 @@ public class APICalls {
     
     class func uploadBalance(credits: Double, restID: String, token: String){
         
-            var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(Int(credits))"
+            let call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=\(restID)&credit=\(Int(credits))"
             //var call = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/AddCredit?venueId=B1287897-C687-4724-8A21-9BFA7023A881&credit=5"
-            println(call)
-            var url:NSURL = NSURL(string: call)!
+            print(call)
+            let url:NSURL = NSURL(string: call)!
             
         
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-
-        
-            var reponseError: NSError?
-            var response: NSURLResponse?
             let queue:NSOperationQueue = NSOperationQueue()
             
-            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
                 /* Your code */
                 let res = response as! NSHTTPURLResponse!
                 if res != nil{
-                    println(res.statusCode)
+                    print(res.statusCode)
                     if res.statusCode >= 200 && res.statusCode < 300{
                         print("Credits uploaded")
-                    }else{
-                        var error: NSError?
-                        let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
+                    } else {
+                        print("Unable to upload credits")
+                        //var error: NSError?
+                        //let jsonData:NSDictionary = NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers , error: &error) as! NSDictionary
                     }
                 }
             })
@@ -229,36 +222,53 @@ public class APICalls {
     
     class func getLocalVenues(token: NSString, venueParameters: NSString, completion: Bool -> ()){
         
-        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+        let url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
         //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&\(venueParameters)")!
         //println("Getting Venues URL: \(url)")
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        var reponseError: NSError?
-        var response: NSURLResponse?
+        //var reponseError: NSError?
+        //var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
-                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-                    
+                    do {
+                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSDictionary
+                        // use jsonData
+                        if let returnedVenues = JSONObject as? [AnyObject] {
+                            print("Saloof returned \(returnedVenues.count) venues")
+                            
+                            for venue in returnedVenues {
+                                let venueJson = JSON(venue)
+                                APICalls.parseJSONVenues(venueJson)
+                            }
+                            completion (true)
+                        }
+
+                    } catch {
+                        // report error
+                         completion (false)
+                    }
+                    //let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: [])
+                    /*
                     if let returnedVenues = JSONObject as? [AnyObject] {
-                        println("Saloof returned \(returnedVenues.count) venues")
+                        print("Saloof returned \(returnedVenues.count) venues")
                     
                         for venue in returnedVenues {
                             let venueJson = JSON(venue)
                             APICalls.parseJSONVenues(venueJson)
                         }
                         completion (true)
-                    }
+                    }*/
                 } else {
                     completion (false)
                 }
@@ -271,26 +281,42 @@ public class APICalls {
     
     class func getSaloofDeals(token: NSString, venueParameters: NSString, completion: Bool -> ()){
         
-        var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
+        let url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/\(venueParameters)")!
         //var url:NSURL = NSURL(string: "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/venue/GetVenuesByPriceNLocation?priceTier=0&\(venueParameters)")!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        var reponseError: NSError?
-        var response: NSURLResponse?
+        //var reponseError: NSError?
+        //var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
-                    let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
-                    
+                    do {
+                        let JSONObject: AnyObject? = try NSJSONSerialization.JSONObjectWithData(urlData!, options:NSJSONReadingOptions.MutableContainers ) as! NSDictionary
+                        // use jsonData
+                        if let returnedVenues = JSONObject as? [AnyObject] {
+                            for venue in returnedVenues {
+                                let venueJson = JSON(venue)
+                                // Parse the JSON file using SwiftlyJSON
+                                APICalls.parseJSONDeals(venueJson)
+                            }
+                            completion (true)
+                        }
+                    } catch {
+                        // report error
+                        completion (false)
+                    }
+
+                   // let JSONObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(urlData!, options: nil, error: nil)
+                    /*
                     if let returnedVenues = JSONObject as? [AnyObject] {
                         for venue in returnedVenues {
                             let venueJson = JSON(venue)
@@ -298,7 +324,7 @@ public class APICalls {
                             APICalls.parseJSONDeals(venueJson)
                         }
                         completion (true)
-                    }
+                    }*/
                 } else {
                     completion (false)
                 }
@@ -310,30 +336,28 @@ public class APICalls {
     class func  updateLikeCountForVenue (venue: String, didLike: Bool, completion: Bool -> ()) {
         
     //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=CB29A448-84C9-4630-A0B0-06497A613DA6&like=true
-        var didLikeString = (didLike) ? "true" : "false"
-        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=\(venue)&like=\(didLikeString)"
-        println(baseUrlString)
-        var url:NSURL = NSURL(string: baseUrlString)!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let didLikeString = (didLike) ? "true" : "false"
+        let baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Like?id=\(venue)&like=\(didLikeString)"
+        print(baseUrlString)
+        let url:NSURL = NSURL(string: baseUrlString)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        var reponseError: NSError?
-        var response: NSURLResponse?
+
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
-                    var testString = (didLike) ? "increased" : "decreased"
-                    println("\(testString) this venue's like count")
+                    let testString = (didLike) ? "increased" : "decreased"
+                    print("\(testString) this venue's like count")
                     completion (true)
                 } else {
-                    println("unable to like venue")
+                    print("unable to like venue")
                     completion (false)
                 }
             } else {
@@ -346,28 +370,23 @@ public class APICalls {
     class func  updateFavoriteCountForVenue (venue: String, didFav: Bool, completion: Bool -> ()) {
         
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Favourite?id=CB29A448-84C9-4630-A0B0-06497A613DA6&favourite=true
-        var didFavString = (didFav) ? "true" : "false"
-        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Favourite?id=\(venue)&favourite=\(didFavString)"
-        println(baseUrlString)
-        var url:NSURL = NSURL(string: baseUrlString)!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let didFavString = (didFav) ? "true" : "false"
+        let baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Venue/Favourite?id=\(venue)&favourite=\(didFavString)"
+        print(baseUrlString)
+        let url:NSURL = NSURL(string: baseUrlString)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.timeoutInterval = 60
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        var reponseError: NSError?
-        var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
                 //println("Retrieved status code for favoriting")
                 //println("Favorited item: status code: \(res.statusCode)")
                 if res.statusCode >= 200 && res.statusCode < 300 {
-                     var testString = (didFav) ? "increased" : "decreased"
-                   // println("\(testString) this venue's favorite count")
                     completion (true)
                 } else {
                     //println("unable to favorite venue")
@@ -383,23 +402,21 @@ public class APICalls {
     class func shouldDecrementCreditForDeal (deal: String, token: String, completion: Bool -> ()) {
         
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Purchase?dealId=E1D72619-C35E-4F47-949A-0227AF1957B8
-        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Purchase?dealId=\(deal)"
-        println(baseUrlString)
-        var url:NSURL = NSURL(string: baseUrlString)!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Purchase?dealId=\(deal)"
+        print(baseUrlString)
+        let url:NSURL = NSURL(string: baseUrlString)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 60
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        var reponseError: NSError?
-        var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
-                println(res.statusCode)
+                print(res.statusCode)
                 if res.statusCode >= 200 && res.statusCode < 300 {
                     debugPrint("Deal purchase successful")
                     completion (true)
@@ -419,20 +436,18 @@ public class APICalls {
     class func shouldSwapCreditForDeal (originalDeal: String, token: String, newDeal:String, completion: Bool -> ()) {
         
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Swap?originalDealId=E1D72619-C35E-4F47-949A-0227AF1957B8&newDealId=0F2A43BF-B902-4243-BB67-188B3F9EDE05
-        var baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Swap?originalDealId=\(originalDeal)&newDealId=\(newDeal)"
-        println(baseUrlString)
-        var url:NSURL = NSURL(string: baseUrlString)!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let baseUrlString = "http://ec2-52-2-195-214.compute-1.amazonaws.com/api/Deal/Swap?originalDealId=\(originalDeal)&newDealId=\(newDeal)"
+        print(baseUrlString)
+        let url:NSURL = NSURL(string: baseUrlString)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 60
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        var reponseError: NSError?
-        var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
             let res = response as! NSHTTPURLResponse!
             if res != nil {
                 //println(res.statusCode)
@@ -452,19 +467,44 @@ public class APICalls {
     }
     
     class func shouldFetchFoursquareLocations(foursquareURl: NSString, completion: Bool -> ()){
-        var apiUrl = "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&venuePhotos=1&limit=10\(foursquareURl)"
-        var url:NSURL = NSURL(string: apiUrl as String)!
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
+        let apiUrl = "https://api.foursquare.com/v2/venues/explore?&client_id=KNSDVZA1UWUPSYC1QDCHHTLD3UG5HDMBR5JA31L3PHGFYSA0&client_secret=U40WCCSESYMKAI4UYAWGK2FMVE3CBMS0FTON0KODNPEY0LBR&openNow=1&v=20150101&venuePhotos=1&limit=10\(foursquareURl)"
+        let url:NSURL = NSURL(string: apiUrl as String)!
+        let request:NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
-        var reponseError: NSError?
-        var response: NSURLResponse?
+        //var reponseError: NSError?
+       // var response: NSURLResponse?
         let queue:NSOperationQueue = NSOperationQueue()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse!, urlData: NSData!, error: NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler:{ (response: NSURLResponse?, urlData: NSData?, error: NSError?) -> Void in
+            
             if  let response = NSData(contentsOfURL: url) {
-                let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response,
-                    options: NSJSONReadingOptions(0),
-                    error: nil) as! NSDictionary)["response"]
+                do {
+                    let JSONObject: AnyObject? = try (NSJSONSerialization.JSONObjectWithData(response, options:NSJSONReadingOptions(rawValue: 0)) as! NSDictionary)["response"]
+                    // use jsonData
+                    if let object: AnyObject = JSONObject {
+                        // haveItems = true
+                        var groups = object["groups"] as! [AnyObject]
+                        //  get array of items
+                        let venues = groups[0]["items"] as! [AnyObject]
+                        for item in venues {
+                            // get the venue
+                            if let venue = item["venue"] as? [String: AnyObject] {
+                                //println(venue)
+                                let venueJson = JSON(venue)
+                                // Parse the JSON file using SwiftlyJSON
+                                //parseJSON(venueJson, source: Constants.sourceTypeFoursquare)
+                                self.parseFoursquareJSON(venueJson, source: Constants.sourceTypeFoursquare)
+                            }
+                        }
+                        print("Foursquare returned \(venues.count) venues")
+                        completion(true)
+                    }
+                } catch {
+                    // report error
+                    completion (false)
+                }
+                /*
+                let json: AnyObject? = (NSJSONSerialization.JSONObjectWithData(response, options: NSJSONReadingOptions(0), error: nil) as! NSDictionary)["response"]
                 if let object: AnyObject = json {
                     // haveItems = true
                     var groups = object["groups"] as! [AnyObject]
@@ -480,9 +520,9 @@ public class APICalls {
                             self.parseFoursquareJSON(venueJson, source: Constants.sourceTypeFoursquare)
                         }
                     }
-                    println("Foursquare returned \(venues.count) venues")
+                    print("Foursquare returned \(venues.count) venues")
                     completion(true)
-                }
+                }*/
                 //offsetCount = offsetCount + 10
             } else {
                 completion (false)
@@ -508,7 +548,7 @@ public class APICalls {
         var distanceInMiles = distanceInMeters / 1609.344
         // make sure it is greater than 0
         distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
-        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        let formattedDistance : String = String(format: "%.01f", distanceInMiles)
         venue.distance = formattedDistance
         
         let imageUrlString = json["defaultPicUrl"].stringValue
@@ -529,7 +569,7 @@ public class APICalls {
         let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
         //http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/nYmm3rydT6pgwlY.jpg
         venue.imageUrl = formattedImageUrl
-        let realm = Realm()
+        let realm = try!  Realm()
         realm.write {
             //realm.add(venue)
             realm.create(Venue.self, value: venue, update: true)
@@ -547,18 +587,18 @@ public class APICalls {
         let imageName = imagePrefix + "400x400" +  imageSuffix
         // Address
         venue.imageUrl = imagePrefix + "400x400" +  imageSuffix
-        var locationStreet = json["location"]["address"].stringValue
-        var locationCity = json["location"]["city"].stringValue
-        var locationState = json["location"]["state"].stringValue
-        var locationZip = json["location"]["postalCode"].stringValue
-        var address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
+        let locationStreet = json["location"]["address"].stringValue
+        let locationCity = json["location"]["city"].stringValue
+        let locationState = json["location"]["state"].stringValue
+        let locationZip = json["location"]["postalCode"].stringValue
+        let address = locationStreet + "\n" + locationCity + ", " + locationState + "  " + locationZip
         venue.address = address
         venue.hours = json["hours"]["status"].stringValue
-        var distanceInMeters = json["location"]["distance"].floatValue
+        let distanceInMeters = json["location"]["distance"].floatValue
         var distanceInMiles = distanceInMeters / 1609.344
         // make sure it is greater than 0
         distanceInMiles = (distanceInMiles > 0) ? distanceInMiles : 0
-        var formattedDistance : String = String(format: "%.01f", distanceInMiles)
+        let formattedDistance : String = String(format: "%.01f", distanceInMiles)
         venue.distance = formattedDistance
         venue.priceTier = json["price"]["tier"].intValue
         //println("Price tier: \(venue.priceTier)")
@@ -579,7 +619,7 @@ public class APICalls {
             venue.image = venueImage
             venue.hasImage = true
         }
-        let realm = Realm()
+        let realm = try! Realm()
         realm.write {
             realm.create(Venue.self, value: venue, update: true)
         }
@@ -608,15 +648,15 @@ public class APICalls {
                     let formattedImageUrl = "http://ec2-52-2-195-214.compute-1.amazonaws.com/Images/\(imageUrlString).jpg"
                     venueDeal.venueImageUrl = formattedImageUrl
                     // check for current object
-                    let realm = Realm()
+                    let realm = try! Realm()
                     // Query using a predicate string
-                    var dealPreviouslyDisplayed = realm.objectForPrimaryKey(VenueDeal.self, key: venueDeal.id)
+                    let dealPreviouslyDisplayed = realm.objectForPrimaryKey(VenueDeal.self, key: venueDeal.id)
                     if (dealPreviouslyDisplayed != nil) {
                         //println("This is a previously pulled deal, checking dates")
                         // we need to check the date
                         let expiresTime = dealPreviouslyDisplayed?.expirationDate
                         // see how much time has lapsed
-                        var compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
+                        let compareDates: NSComparisonResult = NSDate().compare(expiresTime!)
                         if compareDates == NSComparisonResult.OrderedAscending {
                             // the deal has not expired yet
                         } else {
@@ -694,7 +734,7 @@ public class APICalls {
     // you can shorten it, but i left it as-is for clarity
     // and as an example
     func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
-        var fullData = NSMutableData()
+        let fullData = NSMutableData()
         
         // 1 - Boundary should start with --
         let lineOne = "--" + boundary + "\r\n"

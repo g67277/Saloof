@@ -54,11 +54,11 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     // top deal timer
     @IBOutlet weak var timeLimitLabel: TTCounterLabel!
-    let realm = Realm()
+    let realm = try! Realm()
     var plistObjects: [AnyObject] = []
     // get access to all the current deals
-    var validDeals2 = Realm().objects(Venue)
-    var validDeals = Realm().objects(VenueDeal)
+    var validDeals2 = try! Realm().objects(Venue)
+    var validDeals = try! Realm().objects(VenueDeal)
     var haveItems: Bool = false;
     var loadSingleDeal: Bool = false
     
@@ -96,7 +96,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     override func viewWillAppear(animated: Bool) {
         // delete expired deals
-        var expiredDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(2)")
+        let expiredDeals = try! Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(2)")
         realm.write {
             self.realm.delete(expiredDeals)
         }
@@ -128,12 +128,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var pickerView = UIPickerView()
+        let pickerView = UIPickerView()
         pickerView.delegate = self
         priceTextField.inputView = pickerView
         
         let image = UIImage(named: "navBarLogo")
-        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        let homeButton =  UIButton(type: UIButtonType.Custom)
         homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
         homeButton.setImage(image, forState: UIControlState.Normal)
         homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -180,9 +180,9 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     }
     
     func getCurrentSavedDealId() {
-        var currentSavedDeal = realm.objects(SavedDeal).first
+        let currentSavedDeal = realm.objects(SavedDeal).first
         if (currentSavedDeal != nil) {
-            println("The user has a saved deal")
+            print("The user has a saved deal")
             // make sure the deal is not expired
             let valid = checkDealIsValid(currentSavedDeal!)
             if valid {
@@ -220,12 +220,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // this method handles the price picker view to make sure the curser is not displayed
     @IBAction func openPricePicker(sender: AnyObject) {
         priceTextField.tintColor = UIColor.clearColor()
-        println("pressed price")
+        print("pressed price")
         if priceTextField.isFirstResponder() {
-            println("is responder")
+            print("is responder")
             priceTextField.resignFirstResponder()
         } else {
-            println("becomming responder")
+            print("becomming responder")
             priceTextField.becomeFirstResponder()
         }
     }
@@ -239,13 +239,13 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func checkForPreviouslySavedDeal() {
         // check if user already has a saved deal
-        var currentSavedDeal = realm.objects(SavedDeal).first
+        let currentSavedDeal = realm.objects(SavedDeal).first
         if (currentSavedDeal != nil) {
-            println("The user has a saved deal")
+            print("The user has a saved deal")
             // make sure the deal is not expired
             let valid = checkDealIsValid(currentSavedDeal!)
             if valid {
-                println("The user has a saved deal")
+                print("The user has a saved deal")
                 // display an alert requesting if they want to switch
                 let alertController = UIAlertController(title: "Swap Deals?", message: "Would you like to swap \(currentSavedDeal!.name) for \(selectedDeal!.name)", preferredStyle: .Alert)
                 // Add button action to swap
@@ -258,7 +258,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                     APICalls.shouldSwapCreditForDeal(currentSavedDeal?.id as String!, token: self.token, newDeal: self.selectedDeal?.id as String!, completion:{ result in
                         if result {
                             dispatch_async(dispatch_get_main_queue()){
-                                println("Favorited this venue")
+                                print("Favorited this venue")
                                 self.removeCurrentLocalNotification(currentSavedDeal!.dealId)
                                 self.realm.write {
                                     self.realm.delete(currentSavedDeal!)
@@ -267,7 +267,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                             }
                         } else {
                             dispatch_async(dispatch_get_main_queue()){
-                                println("unable to decrement Deal credits")
+                                print("unable to decrement Deal credits")
                             }
                             
                         }
@@ -281,12 +281,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 realm.write {
                     self.realm.delete(currentSavedDeal!)
                 }
-                println("Deleted expired deal and saving new one")
+                print("Deleted expired deal and saving new one")
                 // save this deal as the saved deal
                 saveNewDeal(false)
             }
         } else {
-            println("Setting a new saved deal")
+            print("Setting a new saved deal")
             // save this deal as the saved deal
             saveNewDeal(false)
         }
@@ -296,7 +296,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         // we need to check the date
         let expiresTime = savedDeal.expirationDate
         // see how much time has lapsed
-        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        let compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
             return true
@@ -330,7 +330,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.realm.create(SavedDeal.self, value: newDeal, update: true)
             }
             // alert user deal was saved
-            var alertView:UIAlertView = UIAlertView()
+            let alertView:UIAlertView = UIAlertView()
             alertView.title = "Deal Saved!"
             alertView.delegate = self
             alertView.addButtonWithTitle("OK")
@@ -343,21 +343,21 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             // temporaily set it for 1 minute from now
             let calendar = NSCalendar.autoupdatingCurrentCalendar()
             //var beforeExpireDate = calendar.dateByAddingUnit(.CalendarUnitMinute, value: -15, toDate: originalDate, options: nil)
-            var now = NSDate()
-            var soon = calendar.dateByAddingUnit(.CalendarUnitMinute, value: 1, toDate: now, options: nil)
+            let now = NSDate()
+            let soon = calendar.dateByAddingUnit([.Minute], value: 1, toDate: now, options: [])
             // self.selectedDeal!.expirationDate
             self.setCurrentDealLocalNotification(self.selectedDeal!.name, expireDate: soon!, dealId: self.selectedDeal!.dealId)
-            println("Set up local notification")
+            print("Set up local notification")
             // if the user swapped, they already have credits updated
             if !didSwap {
                 APICalls.shouldDecrementCreditForDeal(self.selectedDeal!.id as String, token: self.token, completion:{ result in
                     if result {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("Deal credits decremented")
+                            print("Deal credits decremented")
                         }
                     } else {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("unable to decrement Deal credits")
+                            print("unable to decrement Deal credits")
                         }
                         
                     }
@@ -368,17 +368,17 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func removeCurrentLocalNotification(dealId: String) {
         // see if we still have a notification for this deal scheduled, and delete if found
-        for notification in UIApplication.sharedApplication().scheduledLocalNotifications as! [UILocalNotification] {
+        for notification in UIApplication.sharedApplication().scheduledLocalNotifications! {
             if (notification.userInfo!["dealId"] as! String == dealId) {
                 UIApplication.sharedApplication().cancelLocalNotification(notification)
-                 println("Cancelled local notification")
+                 print("Cancelled local notification")
                 break
             }
         }
     }
     
     func setCurrentDealLocalNotification(dealName: String, expireDate: NSDate, dealId: String) {
-        var notification = UILocalNotification()
+        let notification = UILocalNotification()
         notification.alertBody = "The \"\(dealName)\" deal is about to expire!"
         notification.alertAction = "View"
         notification.fireDate = expireDate
@@ -427,10 +427,10 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
 
         } else if sender.tag == 3 {
             // see if we have a saved deal
-            println("user pressed saved deal button")
-            var deal = realm.objects(SavedDeal).first
+            print("user pressed saved deal button")
+            let deal = realm.objects(SavedDeal).first
             if (deal != nil) {
-                println("Saved deal")
+                print("Saved deal")
                 self.savedDeal = deal!
                 collectionCardView.hidden = true
                 cardButtonsView.hidden = true
@@ -439,7 +439,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 setUpSavedDeal()
                 
             } else {
-                println("No saved deals")
+                print("No saved deals")
                 let alertController = UIAlertController(title: "No Saved Deal", message: "Either your deal expired, or you haven't saved one yet.", preferredStyle: .Alert)
                 // Add button action to swap
                 let cancelMove = UIAlertAction(title: "Ok", style: .Default, handler: {
@@ -488,7 +488,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             // Once we are done with the array, hide the indicator, set the topDealReached, display the top
             // deal in the featured section
             topDealReached = true
-            println("Top deal reached")
+            print("Top deal reached")
             self.actContainer.removeFromSuperview()
             self.actIndicator.stopAnimation()
             if dealList.count > 0 {
@@ -513,7 +513,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // This method creates a break between the tableview updating and returning a new deal to add to the view
     func delayLoad() {
         let timeDelay = Double(arc4random_uniform(1500000000) + 100000000)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.biddingStart()
             self.collectionView.reloadData()
@@ -524,7 +524,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // This delay starts the spinner giving the appearance a new deal is loading, then removes it and updates the list with a new deal
     func delayReload() {
         let timeDelay = Double(arc4random_uniform(1500000000) + 300000000)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(timeDelay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.topDeal = self.validDeals[self.topBidIndex]
             self.collectionView.reloadData()
@@ -556,15 +556,13 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         // get the height of the view
-        var height: CGFloat = collectionCardView.bounds.height * 0.75
-        var width = height * 1.9
+        let height: CGFloat = collectionCardView.bounds.height * 0.75
+        let width = height * 1.9
         
         return CGSizeMake(width, height)
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath){
-        
-        var cell : UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath)!
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         collectionView.deselectItemAtIndexPath(indexPath, animated: true)
         let deal: VenueDeal = dealList[indexPath.row]
         // set the timer to this deal
@@ -613,7 +611,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         let now = NSDate()
         let expires = deal.expirationDate
         let calendar = NSCalendar.currentCalendar()
-        let datecomponenets = calendar.components(NSCalendarUnit.CalendarUnitSecond, fromDate: now, toDate: expires, options: nil)
+        let datecomponenets = calendar.components(NSCalendarUnit.Second, fromDate: now, toDate: expires, options: [])
         let seconds = datecomponenets.second * 1000
         if seconds > 0 {
             timeLimitLabel.countDirection = 1
@@ -632,7 +630,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         let now = NSDate()
         let expires = deal.expirationDate
         let calendar = NSCalendar.currentCalendar()
-        let datecomponenets = calendar.components(NSCalendarUnit.CalendarUnitSecond, fromDate: now, toDate: expires, options: nil)
+        let datecomponenets = calendar.components(NSCalendarUnit.Second, fromDate: now, toDate: expires, options: [])
         let seconds = datecomponenets.second * 1000
         timeLimitLabel.countDirection = 1
         timeLimitLabel.startValue = UInt64(seconds)
@@ -649,7 +647,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         actIndicator.startAnimation()
         dealList.removeAll()
         // delete any current venues
-        var pulledVenues = Realm().objects(VenueDeal)
+        let pulledVenues = try! Realm().objects(VenueDeal)
         if pulledVenues.count < 1 {
             realm.write {
                 self.realm.delete(pulledVenues)
@@ -670,7 +668,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                     self.loadInitialDeals()
                 }
             } else if let err = error {
-                println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                print("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
                 self.actIndicator.stopAnimation()
                 self.actContainer.removeFromSuperview()
                 self.alertUser("", message: "Sorry, but we are having trouble finding where you are right now. Please check your location settings.")
@@ -684,21 +682,21 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         if searchBarButton != nil{
             searchBarButton.enabled = false
         }
-        var token = prefs.stringForKey("TOKEN")
+        let token = prefs.stringForKey("TOKEN")
         //var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
-        var urlParameters: String = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
+        let urlParameters: String = "venue/GetVenuesByPriceNLocation?priceTier=0&\(userLocation)"
     
         APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
             if result {
                 dispatch_async(dispatch_get_main_queue()){
                     self.refreshDataArray()
-                    println("Refreshing data array from initial load")
+                    print("Refreshing data array from initial load")
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()){
                     self.actContainer.removeFromSuperview()
                     self.actIndicator.stopAnimation()
-                    println("Unable to retrieve deals")
+                    print("Unable to retrieve deals")
                 }
             }
         })
@@ -710,12 +708,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         haveItems = true
         //FINISHED CREATING DATA OBJECTS
         //get a list of all deal objects in Realm
-        validDeals = Realm().objects(VenueDeal)
-        println("We have \(validDeals.count) returned deals")
+        validDeals = try! Realm().objects(VenueDeal)
+        print("We have \(validDeals.count) returned deals")
         if validDeals.count > 0 {
-            println("Have valid deals")
+            print("Have valid deals")
             //Sort all deals by value
-            let sortedDeals = Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
+            let sortedDeals = try! Realm().objects(VenueDeal).filter("\(Constants.dealValid) = \(1)").sorted("value", ascending:true)
             validDeals = sortedDeals
             self.actIndicator.stopAnimation()
             saveSwapButton.enabled = true
@@ -724,8 +722,8 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         } else {
             self.actContainer.removeFromSuperview()
             self.actIndicator.stopAnimation()
-            println("No results returned")
-            var searchMessage = (searchQuery) ? "\(searchString)" : ""
+            print("No results returned")
+            let searchMessage = (searchQuery) ? "\(searchString)" : ""
             var priceMessage = (searchPrice) ? "\(searchString)" : ""
             if searchPrice {
                 switch searchString {
@@ -767,7 +765,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         return pickerDataSource.count;
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerDataSource[row]
     }
     
@@ -803,12 +801,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         let titleData = pickerDataSource[row]
-        var myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+        let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 14.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         return myTitle
     }
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int,
-        reusingView view: UIView!) -> UIView {
+        reusingView view: UIView?) -> UIView {
             var pickerLabel = view as! UILabel!
             if view == nil {  //if no label there yet
                 pickerLabel = UILabel()
@@ -829,7 +827,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     func didSelectPricePoint() {
         UIView.transitionWithView(self.searchDisplayOverview, duration: 0.5, options:
-            .CurveEaseOut | .TransitionCrossDissolve, animations: {
+            [.CurveEaseOut, .TransitionCrossDissolve], animations: {
                 //...animations
             }, completion: {_ in
                 self.resetView(true)
@@ -839,7 +837,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     
     func resetView(shouldSearch: Bool) {
-        println("resetting view")
+        print("resetting view")
         //activityIndicator.startAnimation()
         searchDisplayOverview.hidden = true
         //searchPrice = shouldSearch
@@ -895,7 +893,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                     completion(true)
                 }
             } else if let err = error {
-                println("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
+                print("Unable to get user location: \(err.localizedDescription) error code: \(err.code)")
                 self.actContainer.removeFromSuperview()
                 self.actIndicator.stopAnimation()
                 self.manager = nil
@@ -905,10 +903,10 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     }
     
     func fetchNewDeals() {
-        var token = prefs.stringForKey("TOKEN")
+        let token = prefs.stringForKey("TOKEN")
         let searchTerm = (searchQuery) ? "category=\(searchString)" : ""
         let priceTier = (searchPrice) ? "priceTier=\(searchString)" : ""
-        var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+        let userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
         var urlParameters: String = ""
         if searchQuery {
             urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
@@ -921,14 +919,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
             if result{
                 dispatch_async(dispatch_get_main_queue()){
-                    println("refreshing data array from get local deals by price")
+                    print("refreshing data array from get local deals by price")
                     self.actIndicator.stopAnimation()
                     self.actContainer.removeFromSuperview()
                     self.refreshDataArray()
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue()){
-                    println("No new deals")
+                    print("No new deals")
                     self.actIndicator.stopAnimation()
                     self.actContainer.removeFromSuperview()
                 }
@@ -941,7 +939,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     func pullNewSearchResults (pricePoint: Bool) {
         self.navigationController?.view.addSubview(actContainer)
         actIndicator.startAnimation()
-        println("pulling new search")
+        print("pulling new search")
         dealList.removeAll()
         collectionView.reloadData()
         // delete any current venues
@@ -949,7 +947,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             searchBarButton.enabled = false
         }
         
-        var pulledVenues = Realm().objects(VenueDeal)
+        let pulledVenues = try! Realm().objects(VenueDeal)
         realm.write {
             self.realm.delete(pulledVenues)
 
@@ -957,7 +955,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         haveLocation = false
         updateCurrentLocation() { result in
             if result {
-                println("Have location, searching")
+                print("Have location, searching")
                 // reset values
                 self.lastDealRestId = ""
                 self.topBidIndex = 0
@@ -966,13 +964,13 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.pageController.currentPage = 0
                 self.pageController.numberOfPages = 0
                 
-                var token = self.prefs.stringForKey("TOKEN")
+                let token = self.prefs.stringForKey("TOKEN")
                 if self.searchQuery {
                     self.searchString = self.searchString.stringByReplacingOccurrencesOfString(" ", withString: "%20", options: NSStringCompareOptions.LiteralSearch, range: nil)
                 }
                 let searchTerm = (self.searchQuery) ? "category=\(self.searchString)" : ""
                 let priceTier = (self.searchPrice) ? "priceTier=\(self.searchString)" : ""
-                var userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
+                let userLocation = "lat=\(self.location.coordinate.latitude)&lng=\(self.location.coordinate.longitude)"
                 var urlParameters: String = ""
                 if self.searchQuery {
                     urlParameters = "venue/GetVenuesByCategoryNLocation?\(searchTerm)&\(userLocation)"
@@ -985,14 +983,14 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 APICalls.getSaloofDeals(token!, venueParameters: urlParameters, completion: { result in
                     if result{
                         dispatch_async(dispatch_get_main_queue()){
-                            println("refreshing data array from get local deals by price")
+                            print("refreshing data array from get local deals by price")
                             self.actIndicator.stopAnimation()
                             self.actContainer.removeFromSuperview()
                             self.refreshDataArray()
                         }
                     } else {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("No new deals")
+                            print("No new deals")
                             self.actIndicator.stopAnimation()
                             self.actContainer.removeFromSuperview()
                         }
@@ -1001,7 +999,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
                 self.searchDisplayOverview.hidden = true
 
             } else {
-                println("Unable to get the users location")
+                print("Unable to get the users location")
                 self.actIndicator.stopAnimation()
                 self.actContainer.removeFromSuperview()
                 self.alertUser("", message: "Sorry, but we are having trouble finding where you are right now. Please check your location settings.")
@@ -1013,12 +1011,12 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     //  ---------------------  UITEXTFIELD DELEGATE  ---------------------------------
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == 4 {
-            println("User searching price")
+            print("User searching price")
             burgerTextField.text = ""
             burgerTextField.attributedPlaceholder = NSAttributedString(string:"Burger",
                 attributes:[NSForegroundColorAttributeName: UIColor(red:0.93, green:0.93, blue:0.93, alpha:0.85)])
         } else if textField.tag == 3 {
-            println("User searching tag")
+            print("User searching tag")
             // user searching query
             textField.placeholder = ""
             priceTextField.attributedPlaceholder = NSAttributedString(string:"$",
@@ -1028,7 +1026,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        println("Textfield returned")
+        print("Textfield returned")
         textField.endEditing(true)
         //self.view.endEditing(true)
         self.navigationItem.setRightBarButtonItem(searchBarButton, animated: true)
@@ -1036,7 +1034,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         if textField.tag == 3 {
             // Search
             if textField.text != "" {
-                searchString = textField.text
+                searchString = textField.text!
                 searchQuery = true
                 searchPrice = false
                 textField.text = ""
@@ -1049,7 +1047,7 @@ class VenueDealsVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self

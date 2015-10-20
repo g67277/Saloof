@@ -26,7 +26,7 @@ class SignInUserVC: UIViewController {
         // Do any additional setup after loading the view.
         
         // Addes guesture to hide keyboard when tapping on the view
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         userNameField.attributedPlaceholder = NSAttributedString(string:"Username",
@@ -40,20 +40,20 @@ class SignInUserVC: UIViewController {
     override func viewDidAppear(animated: Bool) {
         
         if (prefs.objectForKey("TOKEN") == nil) {
-            debugPrint("NO token")
+            debugPrint("NO token", terminator: "")
         } else {
             let hasPreviousLaunch = NSUserDefaults.standardUserDefaults().boolForKey("Saloof.User.First.Launch")
             if hasPreviousLaunch  {
-                var storyboard = UIStoryboard(name: "User", bundle: nil)
-                var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
+                let storyboard = UIStoryboard(name: "User", bundle: nil)
+                let controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")
                 self.presentViewController(controller, animated: true, completion: nil)
             }
             else {
                 // Set it as first launch
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "Saloof.User.First.Launch")
                 // load tutorial
-                var storyboard = UIStoryboard(name: "Main", bundle: nil)
-                var controller = storyboard.instantiateViewControllerWithIdentifier("userTutorialVC")as! UIViewController
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewControllerWithIdentifier("userTutorialVC")
                 self.presentViewController(controller, animated: true, completion: nil)
             }
         }
@@ -71,18 +71,18 @@ class SignInUserVC: UIViewController {
         if _sender.tag == 0{
             
             
-            if validation.validateInput(userNameField.text, check: 3, title: "Too Short", message: "Please enter a valid username")
-                && validation.validateInput(passwordField.text, check: 0, title: "Empty Password", message: "Please enter a password"){
+            if validation.validateInput(userNameField.text!, check: 3, title: "Too Short", message: "Please enter a valid username")
+                && validation.validateInput(passwordField.text!, check: 0, title: "Empty Password", message: "Please enter a password"){
                     
-                    var containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
-                    var aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
+                    let containerView = CreateActivityView.createView(UIColor.blackColor(), frame: self.view.frame)
+                    let aIView = CustomActivityView(frame: CGRect (x: 0, y: 0, width: 100, height: 100), color: UIColor.whiteColor(), size: CGSize(width: 100, height: 100))
                     aIView.center = containerView.center
                     containerView.addSubview(aIView)
                     containerView.center = self.view.center
                     self.view.addSubview(containerView)
                     aIView.startAnimation()
                     
-                    var stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
+                    let stringPost="grant_type=password&username=\(userNameField.text)&password=\(passwordField.text)"
                     if Reachability.isConnectedToNetwork(){
                         authenticationCall.signIn(stringPost){ result in
                             
@@ -93,8 +93,8 @@ class SignInUserVC: UIViewController {
                                     self.userNameField.text = ""
                                     self.passwordField.text = ""
                                     self.prefs.setObject(self.userNameField.text, forKey: "USERNAME")
-                                    var storyboard = UIStoryboard(name: "User", bundle: nil)
-                                    var controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")as! UIViewController
+                                    let storyboard = UIStoryboard(name: "User", bundle: nil)
+                                    let controller = storyboard.instantiateViewControllerWithIdentifier("InitialUserController")
                                     self.presentViewController(controller, animated: true, completion: nil)
                                 }
                             }else{

@@ -18,7 +18,7 @@ class FoodCategories: NSObject {
     func loadCategories() -> (Array<String>){
         
         
-        var categoryArray = [
+        let categoryArray = [
             "Afghan Restaurant",
             "African Restaurant",
             "American Restaurant",

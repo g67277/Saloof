@@ -38,7 +38,7 @@ class FavoriteVenue: Object {
         }
         set(newImage) {
             if(newImage != nil) {
-                imageData = UIImagePNGRepresentation(newImage)
+                imageData = UIImagePNGRepresentation(newImage!)!
             } else {
                 hasImage = false
             }

@@ -29,7 +29,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         super.viewDidLoad()
         tableview.rowHeight = 105
         let image = UIImage(named: "navBarLogo")
-        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        let homeButton =  UIButton(type: UIButtonType.Custom)
         homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
         homeButton.setImage(image, forState: UIControlState.Normal)
         homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -39,8 +39,8 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func updateFavoritesList() {
         venueList.removeAll()
         // delete any rejected favorite venues
-        var realm = Realm()
-        var rejectedVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(2)")
+        let realm = try! Realm()
+        let rejectedVenues = try! Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(2)")
         for eachVenue in rejectedVenues {
             DPImageCache.removeCachedImage(eachVenue.imageUrl)
         }
@@ -48,7 +48,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             realm.delete(rejectedVenues)
         }
         // get all the active ones
-         var favoriteVenues = Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
+        let favoriteVenues = try! Realm().objects(FavoriteVenue).filter("\(Constants.realmFilterFavorites) = \(1)")
         for venue in favoriteVenues {
             venueList.append(venue)
         }
@@ -57,7 +57,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func returnHome() {
-        println("User wants to return home")
+        print("User wants to return home")
         self.performSegueWithIdentifier("returnHomeFromFavorites", sender: self)
     }
     
@@ -80,7 +80,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("favoritesCell") as! FavoritesCell
+        let cell:FavoritesCell = tableView.dequeueReusableCellWithIdentifier("favoritesCell") as! FavoritesCell
         let venue: FavoriteVenue = venueList[indexPath.row]
         if venue.sourceType == Constants.sourceTypeSaloof {
             cell.setUpLikesBar(venue.likes, favorites: venue.favorites, price: venue.priceTier, distance: venue.distance)
@@ -106,8 +106,8 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     // Pass the selected restaurant object to the detail view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "restaurantDetailSegue" {
-            if let indexPath = self.tableview.indexPathForSelectedRow() {
-                var venue: FavoriteVenue = venueList[indexPath.row]
+            if let indexPath = self.tableview.indexPathForSelectedRow {
+                let venue: FavoriteVenue = venueList[indexPath.row]
                 let destinationVC = segue.destinationViewController as! VenueDetailVC
                 destinationVC.favVenue = venue
                 destinationVC.isFavorite = true
@@ -117,8 +117,8 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     @IBAction func shouldPushToSavedDeal(sender: AnyObject) {
         // Check to make sure we have a saved deal
-        let realm = Realm()
-        var savedDeal = realm.objects(SavedDeal).first
+        let realm = try! Realm()
+        let savedDeal = realm.objects(SavedDeal).first
         if (savedDeal != nil) {
             let valid = checkDealIsValid(savedDeal!)
             if valid {
@@ -139,7 +139,7 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self
@@ -149,10 +149,10 @@ class UserFavoritesVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func checkDealIsValid (savedDeal: SavedDeal) -> Bool {
         // we need to check the date
-        var realm = Realm()
+        let realm = try! Realm()
         let expiresTime = savedDeal.expirationDate
         // see how much time has lapsed
-        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        let compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
             return true

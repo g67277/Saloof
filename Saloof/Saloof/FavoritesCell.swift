@@ -32,8 +32,8 @@ class FavoritesCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
     }
     
     override func awakeFromNib() {
@@ -60,9 +60,9 @@ class FavoritesCell: UITableViewCell {
     func setUpFoursquareBar(price: Int, distance: String) {
         likesBarView.hidden = true
         foursquareBarView.hidden = false
-        println("price \(price)")
+        print("price \(price)", terminator: "")
         // Number Labels
-        if var tierLabel = fsPriceLabel {
+        if var _ = fsPriceLabel {
             var priceString = ""
             switch price {
             case 0:
@@ -80,7 +80,7 @@ class FavoritesCell: UITableViewCell {
             }
             fsPriceLabel.text = priceString
         }
-        if var distanceLab = fsDistanceLabel {
+        if let distanceLab = fsDistanceLabel {
             distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         
@@ -93,7 +93,7 @@ class FavoritesCell: UITableViewCell {
         likesLabel.text = " \(likes)"
         favoritesLabel.text = " \(favorites)"
         // Number Labels
-        if var tierLabel = priceLabel {
+        if var _ = priceLabel {
             var priceString = ""
             switch price {
             case 0:
@@ -111,8 +111,8 @@ class FavoritesCell: UITableViewCell {
             }
             priceLabel.text = priceString
         }
-        if var distanceLab = distanceLabel {
-            var distance = distance
+        if let distanceLab = distanceLabel {
+            let distance = distance
             distanceLab.text = (distance == "1.0") ? "\(distance) mile" : "\(distance) miles"
         }
         

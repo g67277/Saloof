@@ -42,7 +42,7 @@ class VenueDetailVC: UIViewController {
     @IBOutlet var favoriteButton: UIButton!
     @IBOutlet var dealImage: UIImageView!
     
-    let realm = Realm()
+    let realm = try! Realm()
     var thisVenue: Venue?
     var favVenue: FavoriteVenue?
     // Determines if came from favoritesVC
@@ -56,7 +56,7 @@ class VenueDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let image = UIImage(named: "navBarLogo")
-        var homeButton =  UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        let homeButton =  UIButton(type: UIButtonType.Custom)
         homeButton.frame = CGRectMake(0, 0, 100, 40) as CGRect
         homeButton.setImage(image, forState: UIControlState.Normal)
         homeButton.addTarget(self, action: Selector("returnHome"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -67,13 +67,13 @@ class VenueDetailVC: UIViewController {
         if isFavorite {
                 if let venue: FavoriteVenue = favVenue {
                 thisVenueId = venue.identifier
-                    println("Id: \(thisVenueId)")
+                    print("Id: \(thisVenueId)")
                 setUpFavoriteVenue(venue)
             }
         } else {
             if let venue: Venue = thisVenue {
                 thisVenueId = venue.identifier
-                 println("Id: \(thisVenueId)")
+                 print("Id: \(thisVenueId)")
                 setUpVenue(venue)
             }
         }
@@ -96,31 +96,30 @@ class VenueDetailVC: UIViewController {
     }
     
     func returnHome() {
-        println("User wants to return home")
+        print("User wants to return home")
         self.performSegueWithIdentifier("returnToUserHome", sender: self)
     }
 
     
     func setUpVenue(venue: Venue) {
-        if var locationLabel = locationName {
+        if let locationLabel = locationName {
             locationLabel.text = venue.name
         }
-        if var phoneLabel = phoneTextView {
+        if let phoneLabel = phoneTextView {
             phoneLabel.text = (venue.phone == "") ? "Unavailable" : venue.phone
         }
-        if var addressTextView = addressTextview {
+        if let addressTextView = addressTextview {
             addressTextView.text = (venue.address == "") ? "Unavailable" : venue.address
         }
-        if var websiteTextView = websiteUrlTextView {
+        if let websiteTextView = websiteUrlTextView {
             websiteTextView.text = (venue.webUrl == "") ? "Unavailable" : venue.webUrl
         }
-        if var statusLabel = hoursStatusLabel {
-            let hours = venue.hours
+        if let statusLabel = hoursStatusLabel {
             // set the status for the hours, or "Is Open" if one was not provided (only open locations are displayed)
             statusLabel.text = (venue.hours == "") ? "Is Open": venue.hours
         }
         
-        if var imageView = locationImage {
+        if let imageView = locationImage {
             imageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
         }
         
@@ -131,16 +130,16 @@ class VenueDetailVC: UIViewController {
             // Set up the value
             let valueFloat:Float = venue.defaultDealValue, valueFormat = ".2"
             dealValueLabel.text = "Value: $\(valueFloat.format(valueFormat))"
-            if var dealTitle = dealTitleLabel {
+            if let dealTitle = dealTitleLabel {
                 dealTitle.text = venue.defaultDealTitle
             }
-            if var dealDes = dealDescLabel {
+            if let dealDes = dealDescLabel {
                 dealDes.text = venue.defaultDealDesc
             }
-            if var favsLabel = favoritesLabel {
+            if let favsLabel = favoritesLabel {
                 favsLabel.text = "\(venue.favorites)"
             }
-            if var likeLabel = likesLabel {
+            if let likeLabel = likesLabel {
                 likeLabel.text = "\(venue.likes)"
             }
             
@@ -148,9 +147,9 @@ class VenueDetailVC: UIViewController {
             fullStatsView.hidden = false
             
             // Number Labels
-            if var tierLabel = priceTierlabel {
-                var priceTierValue = venue.priceTier
-                println(venue.priceTier)
+            if let tierLabel = priceTierlabel {
+                let priceTierValue = venue.priceTier
+                print(venue.priceTier)
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -167,13 +166,13 @@ class VenueDetailVC: UIViewController {
                 }
             }
             
-            if var distanceLabel = locationDistanceLabel {
+            if let distanceLabel = locationDistanceLabel {
                 // get the number of miles between the current user and the location,
-                var distance = venue.distance
+                let distance = venue.distance
                 distanceLabel.text  = distance
             }
             
-            if var dealImageView = dealImage {
+            if let dealImageView = dealImage {
                 dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
             }
             
@@ -184,7 +183,7 @@ class VenueDetailVC: UIViewController {
 
         } else {
             // make sure the user didn't favorite this location
-            var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+            let favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
             // see if we have a favorite venue with this id
             if favoriteVenue != nil {
                 clearFavoriteButton.enabled = true
@@ -203,9 +202,9 @@ class VenueDetailVC: UIViewController {
             clearLikeButton.enabled = false
             likeButton.hidden = true
             // Number Labels
-            if var tierLabel = fsPriceLabel {
-                var priceTierValue = venue.priceTier
-                println(venue.priceTier)
+            if let tierLabel = fsPriceLabel {
+                let priceTierValue = venue.priceTier
+                print(venue.priceTier)
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -222,9 +221,9 @@ class VenueDetailVC: UIViewController {
                 }
             }
             
-            if var distanceLabel = fsDistanceLabel {
+            if let distanceLabel = fsDistanceLabel {
                 // get the number of miles between the current user and the location,
-                var distance = venue.distance
+                let distance = venue.distance
                 distanceLabel.text  = distance
             }
         }
@@ -232,25 +231,24 @@ class VenueDetailVC: UIViewController {
     }
     
     func setUpFavoriteVenue(venue:FavoriteVenue) {
-        if var locationLabel = locationName {
+        if let locationLabel = locationName {
             locationLabel.text = venue.name
         }
-        if var phoneLabel = phoneTextView {
+        if let phoneLabel = phoneTextView {
             phoneLabel.text = (venue.phone == "") ? "Unavailable" : venue.phone
         }
-        if var addressTextView = addressTextview {
+        if let addressTextView = addressTextview {
             addressTextView.text = (venue.address == "") ? "Unavailable" : venue.address
         }
-        if var websiteTextView = websiteUrlTextView {
+        if let websiteTextView = websiteUrlTextView {
             websiteTextView.text = (venue.webUrl == "") ? "Unavailable" : venue.webUrl
         }
-        if var statusLabel = hoursStatusLabel {
-            let hours = venue.hours
+        if let statusLabel = hoursStatusLabel {
             // set the status for the hours, or "Is Open" if one was not provided (only open locations are displayed)
             statusLabel.text = (venue.hours == "") ? "Is Open": venue.hours
         }
         
-        if var imageView = locationImage {
+        if let imageView = locationImage {
             imageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
         }
         
@@ -259,16 +257,16 @@ class VenueDetailVC: UIViewController {
             // Set up the value
             let valueFloat:Float = venue.defaultDealValue, valueFormat = ".2"
             dealValueLabel.text = "Value: $\(valueFloat.format(valueFormat))"
-            if var dealTitle = dealTitleLabel {
+            if let dealTitle = dealTitleLabel {
                 dealTitle.text = venue.defaultDealTitle
             }
-            if var dealDes = dealDescLabel {
+            if let dealDes = dealDescLabel {
                 dealDes.text = venue.defaultDealDesc
             }
-            if var favsLabel = favoritesLabel {
+            if let favsLabel = favoritesLabel {
                 favsLabel.text = "\(venue.favorites)"
             }
-            if var likeLabel = likesLabel {
+            if let likeLabel = likesLabel {
                 likeLabel.text = "\(venue.likes)"
             }
             
@@ -276,8 +274,8 @@ class VenueDetailVC: UIViewController {
             fullStatsView.hidden = false
             
             // Number Labels
-            if var tierLabel = priceTierlabel {
-                var priceTierValue = venue.priceTier
+            if let tierLabel = priceTierlabel {
+                let priceTierValue = venue.priceTier
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -294,13 +292,13 @@ class VenueDetailVC: UIViewController {
                 }
             }
             
-            if var distanceLabel = locationDistanceLabel {
+            if let distanceLabel = locationDistanceLabel {
                 // get the number of miles between the current user and the location,
-                var distance = venue.distance
+                let distance = venue.distance
                 distanceLabel.text  = distance
             }
             
-            if var dealImageView = dealImage {
+            if let dealImageView = dealImage {
                 dealImageView.setImageCacheWithAddress(venue.imageUrl, placeHolderImage: UIImage (named: "placeholder")!)
             }
             setUpLikeNFavoriteButtons()
@@ -312,7 +310,7 @@ class VenueDetailVC: UIViewController {
             
         } else {
             // make sure this venue isn't on the favorite list
-            var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+            let favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
             // see if we have a favorite venue with this id
             if favoriteVenue != nil {
                 clearFavoriteButton.enabled = true
@@ -331,8 +329,8 @@ class VenueDetailVC: UIViewController {
             clearLikeButton.enabled = false
             likeButton.hidden = true
             // Number Labels
-            if var tierLabel = fsPriceLabel {
-                var priceTierValue = venue.priceTier
+            if let tierLabel = fsPriceLabel {
+                let priceTierValue = venue.priceTier
                 switch priceTierValue {
                 case 0:
                     tierLabel.text = ""
@@ -349,9 +347,9 @@ class VenueDetailVC: UIViewController {
                 }
             }
             
-            if var distanceLabel = fsDistanceLabel {
+            if let distanceLabel = fsDistanceLabel {
                 // get the number of miles between the current user and the location,
-                var distance = venue.distance
+                let distance = venue.distance
                 distanceLabel.text  = distance
             }
         }
@@ -370,7 +368,7 @@ class VenueDetailVC: UIViewController {
     
     // -------------------- LIKING / UNLIKING  / FAVORITING  / UNFAVORITING  ----------------------
     func setUpLikeNFavoriteButtons() {        
-        var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+        let favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
         // see if we have a favorite venue with this id
             if favoriteVenue != nil {
             // set the favorite button on
@@ -388,7 +386,7 @@ class VenueDetailVC: UIViewController {
                 }
         }
         // see if this id is stored as a liked venue
-        var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
+        let likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
         if likedVenue != nil {
             // set the liked button on
             doesLike = true
@@ -402,16 +400,16 @@ class VenueDetailVC: UIViewController {
     
     
     @IBAction func onClick(sender: UIButton) {
-        println("This venue id: \(thisVenueId)")
+        print("This venue id: \(thisVenueId)")
         // like == 2, favorite == 3
         if sender.tag == 2 {
             if doesLike {
-                println("Unliking")
+                print("Unliking")
                 self.doesLike = false
                 self.likeButton.selected = false
                 self.shouldUpdateLikeCountForVenue(false)
                 // unlike/unselect this venue
-                var likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
+                let likedVenue = realm.objectForPrimaryKey(LikedVenue.self, key: thisVenueId)
                 if likedVenue != nil {
                     realm.write {
                         self.realm.delete(likedVenue!)
@@ -421,18 +419,18 @@ class VenueDetailVC: UIViewController {
                 APICalls.updateLikeCountForVenue(thisVenueId, didLike: false, completion: { result in
                     if result {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("User unliked this venue")
+                            print("User unliked this venue")
                         }
                     }
                 })
 
             } else {
-                println("Liking")
+                print("Liking")
                 likeButton.selected = true
                 doesLike = true
                 self.shouldUpdateLikeCountForVenue(true)
                 // like and select
-                var newVenueLike = LikedVenue()
+                let newVenueLike = LikedVenue()
                 newVenueLike.likedId = thisVenueId
                 realm.write {
                     realm.create(LikedVenue.self, value: newVenueLike, update: true)
@@ -441,7 +439,7 @@ class VenueDetailVC: UIViewController {
                 APICalls.updateLikeCountForVenue(thisVenueId, didLike: true, completion: { result in
                     if result {
                         dispatch_async(dispatch_get_main_queue()){
-                            println("User liked this venue")
+                            print("User liked this venue")
                         }
                     }
                 })
@@ -449,13 +447,13 @@ class VenueDetailVC: UIViewController {
         } else if sender.tag == 3 {
             // remove this venue
             if doesFavorite {
-                println("unfavoriting")
+                print("unfavoriting")
                 if isFourSquareFavorite {
-                    println("foursquare location")
+                    print("foursquare location")
                     isFourSquareFavorite = false
                     self.favoriteButton.hidden = true
                     self.doesFavorite = false
-                    var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                    let favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                     if favVenue != nil {
                         realm.write {
                             //self.realm.delete(favVenue!)
@@ -468,7 +466,7 @@ class VenueDetailVC: UIViewController {
                     self.doesFavorite = false
                     self.shouldUpdateFavoriteCountForVenue(false)
                     // unlike/unselect this venue
-                    var favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                    let favVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                     if favVenue != nil {
                         realm.write {
                             //self.realm.delete(favVenue!)
@@ -481,24 +479,24 @@ class VenueDetailVC: UIViewController {
                     APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: false, completion: { result in
                         if result {
                             dispatch_async(dispatch_get_main_queue()){
-                                println("User unfavorited this venue")
+                                print("User unfavorited this venue")
                             }
                         }
                     })
                 }
             } else {
-                println("favoriting")
+                print("favoriting")
                 self.shouldUpdateFavoriteCountForVenue(true)
                 // fav and select
                 doesFavorite = true
                 favoriteButton.selected = true
                 // make sure there is a favorite venue saved
-                var favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
+                let favoriteVenue = realm.objectForPrimaryKey(FavoriteVenue.self, key: thisVenueId)
                 if favoriteVenue == nil {
                     if isFavorite {
-                        println("Resaving venue as favorite")
+                        print("Resaving venue as favorite")
                         // create the whole object
-                        var favorite = FavoriteVenue()
+                        let favorite = FavoriteVenue()
                         // create from the current favorite object
                         favorite.name = favVenue!.name
                         favorite.phone = favVenue!.phone
@@ -527,8 +525,8 @@ class VenueDetailVC: UIViewController {
                         }
                         
                     } else {
-                        println("Saving new venue from tinder ui as favorite")
-                        var favorite = FavoriteVenue()
+                        print("Saving new venue from tinder ui as favorite")
+                        let favorite = FavoriteVenue()
                         // create from the current favorite object
                         favorite.name = thisVenue!.name
                         favorite.phone = thisVenue!.phone
@@ -559,7 +557,7 @@ class VenueDetailVC: UIViewController {
                 }
                 APICalls.updateFavoriteCountForVenue(thisVenueId, didFav: true, completion: { result in
                     if result {
-                        println("user favorited this venue")
+                        print("user favorited this venue")
                     }
                 })
                 
@@ -612,7 +610,7 @@ class VenueDetailVC: UIViewController {
             }
         }
         // update the label
-        if var likeLabel = likesLabel {
+        if let likeLabel = likesLabel {
             likeLabel.text = "\(updatedCount)"
         }
     }
@@ -661,7 +659,7 @@ class VenueDetailVC: UIViewController {
             }
         }
         // update the label
-        if var favLab = favoritesLabel {
+        if let favLab = favoritesLabel {
             favLab.text = "\(updatedCount)"
         }
     }
@@ -689,7 +687,7 @@ class VenueDetailVC: UIViewController {
             venueDeal.hasImage = thisVenue!.hasImage
             venueDeal.image = thisVenue!.image
         }
-        let realm = Realm()
+        let realm = try! Realm()
         realm.write {
             realm.create(VenueDeal.self, value: venueDeal, update: true)
         }
@@ -699,8 +697,8 @@ class VenueDetailVC: UIViewController {
     
     @IBAction func shouldPushToSavedDeal(sender: AnyObject) {
         // Check to make sure we have a saved deal
-        let realm = Realm()
-        var savedDeal = realm.objects(SavedDeal).first
+        let realm = try! Realm()
+        let savedDeal = realm.objects(SavedDeal).first
         if (savedDeal != nil) {
             if (savedDeal != nil) {
                 let valid = checkDealIsValid(savedDeal!)
@@ -722,17 +720,17 @@ class VenueDetailVC: UIViewController {
     
     func checkDealIsValid (savedDeal: SavedDeal) -> Bool {
         // we need to check the date
-        var realm = Realm()
+        let realm = try! Realm()
         let expiresTime = savedDeal.expirationDate
         // see how much time has lapsed
-        var compareDates: NSComparisonResult = NSDate().compare(expiresTime)
+        let compareDates: NSComparisonResult = NSDate().compare(expiresTime)
         if compareDates == NSComparisonResult.OrderedAscending {
             // the deal has not expired yet
-            println("This deal is still good")
+            print("This deal is still good")
             return true
         } else {
             //the deal has expired
-            println("This deal has expired, deleting it")
+            print("This deal has expired, deleting it")
             realm.write {
                 realm.delete(savedDeal)
             }
@@ -762,7 +760,7 @@ class VenueDetailVC: UIViewController {
     }
     
     func alertUser(title: String, message: String) {
-        var alertView:UIAlertView = UIAlertView()
+        let alertView:UIAlertView = UIAlertView()
         alertView.title = title
         alertView.message = message
         alertView.delegate = self
